@@ -8,13 +8,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace childhood_games_pack
-{
-    public partial class MainMenuForm : Form
-    {
-        public MainMenuForm()
-        {
+
+namespace childhood_games_pack {
+    public partial class MainMenuForm : Form {
+        public MainMenuForm() {
             InitializeComponent();
+        }
+
+        private void tanksGameButton_Click(object sender, EventArgs e) {
+            tanks.TanksMainForm tanks = new tanks.TanksMainForm(this);
+            tanks.Show();
+            Hide();
         }
     }
 }
