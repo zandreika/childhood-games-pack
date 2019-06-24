@@ -1,6 +1,6 @@
 ﻿namespace childhood_games_pack
 {
-    partial class Form1
+    partial class MainMenuForm
     {
         /// <summary>
         /// Обязательная переменная конструктора.
@@ -28,10 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.SuspendLayout();
+            // 
+            // MainMenuForm
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            this.ClientSize = new System.Drawing.Size(496, 530);
+            this.Name = "MainMenuForm";
+            this.Text = "Menu";
+            this.ResumeLayout(false);
+
         }
 
         #endregion
