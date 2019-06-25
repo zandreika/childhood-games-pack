@@ -54,6 +54,18 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tanks\CompTankForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tanks\CompTankForm.Designer.cs">
+      <DependentUpon>CompTankForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="tanks\UserTankForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tanks\UserTankForm.Designer.cs">
+      <DependentUpon>UserTankForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="tanks\TanksMainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,7 +83,14 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="tanks\CompTankForm.resx">
+      <DependentUpon>CompTankForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tanks\UserTankForm.resx">
+      <DependentUpon>UserTankForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="tanks\TanksMainForm.resx">
       <DependentUpon>TanksMainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -87,6 +106,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tanks\res\light_tank.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tanks\res\medium_tank.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tanks\res\heavy_tank.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
