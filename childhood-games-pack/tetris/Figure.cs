@@ -124,6 +124,16 @@ namespace childhood_games_pack.tetris {
         }
 
 
+        public int GetTopmostCoordinate() {
+            int res = cubes[0].Y;
+            for(int i = 1; i < cubes.Count; i++) {
+                if(cubes[i].Y < res) {
+                    res = cubes[i].Y;
+                }
+            }
+            return res;
+        }
+
         private int GetLeftmostCubeIndex() {
             int res = 0;
             for(int i = 1; i < cubes.Count; i++) {
@@ -157,14 +167,14 @@ namespace childhood_games_pack.tetris {
         }
 
 
-        public void StepLeft(List<Point> ocсupiedCubes) {
+        public void StepLeft(List<KeyValuePair<Point, Brush>> ocсupiedCubes) {
             int leftIndex = GetLeftmostCubeIndex();
             if (cubes[leftIndex].X <= workspace.Left) {
                 return;
             }
             for (int i = 0; i < cubes.Count; i++) {
                 for (int j = 0; j < ocсupiedCubes.Count; j++) {
-                    if (cubes[i].X - CUBE_SIZE == ocсupiedCubes[j].X && cubes[i].Y == ocсupiedCubes[j].Y) {
+                    if (cubes[i].X - CUBE_SIZE == ocсupiedCubes[j].Key.X && cubes[i].Y == ocсupiedCubes[j].Key.Y) {
                         return;
                     }
                 }
@@ -175,14 +185,14 @@ namespace childhood_games_pack.tetris {
         }
 
 
-        public void StepRight(List<Point> ocсupiedCubes) {
+        public void StepRight(List<KeyValuePair<Point, Brush>> ocсupiedCubes) {
             int rightIndex = GetRightmostCubeIndex();
             if (cubes[rightIndex].X + 2*CUBE_SIZE >= workspace.Right) {
                 return;
             }
             for (int i = 0; i < cubes.Count; i++) {
                 for (int j = 0; j < ocсupiedCubes.Count; j++) {
-                    if (cubes[i].X + CUBE_SIZE == ocсupiedCubes[j].X && cubes[i].Y == ocсupiedCubes[j].Y) {
+                    if (cubes[i].X + CUBE_SIZE == ocсupiedCubes[j].Key.X && cubes[i].Y == ocсupiedCubes[j].Key.Y) {
                         return;
                     }
                 }
@@ -193,7 +203,7 @@ namespace childhood_games_pack.tetris {
         }
 
 
-        public void StepDown(List<Point> ocсupiedCubes) {
+        public void StepDown(List<KeyValuePair<Point, Brush>> ocсupiedCubes) {
             int bottomIndex = GetBottommostCubeIndex();
             if(cubes[bottomIndex].Y + 2*CUBE_SIZE >= workspace.Bottom ) {
                 isStay = true;
@@ -201,7 +211,7 @@ namespace childhood_games_pack.tetris {
             }
             for(int i = 0; i < cubes.Count; i++) {
                 for(int j = 0; j < ocсupiedCubes.Count; j++) {
-                    if(cubes[i].X == ocсupiedCubes[j].X && cubes[i].Y + CUBE_SIZE == ocсupiedCubes[j].Y) {
+                    if(cubes[i].X == ocсupiedCubes[j].Key.X && cubes[i].Y + CUBE_SIZE == ocсupiedCubes[j].Key.Y) {
                         isStay = true;
                         return;
                     }

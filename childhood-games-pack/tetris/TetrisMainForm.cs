@@ -12,9 +12,9 @@ namespace childhood_games_pack.tetris {
         
         private Figure currentFigure;
 
-        private List<Point> cubes = new List<Point>();
+        //private List<Point> cubes = new List<Point>();
 
-        //private List<KeyValuePair<Point, Brush>> cubes = new List<KeyValuePair<Point, Brush>>();
+        private List<KeyValuePair<Point, Brush>> cubes = new List<KeyValuePair<Point, Brush>>();
 
         public TetrisMainForm(MainMenuForm mainMenu) {
             InitializeComponent();
@@ -30,15 +30,21 @@ namespace childhood_games_pack.tetris {
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
             while (true) {
                 if (currentFigure.isStay) {
+                    if(currentFigure.GetTopmostCoordinate() <= 0) {
+                        MessageBox.Show("You lose");
+                        return;
+                    }
+
                     for(int i = 0; i < currentFigure.cubes.Count; i++) {
-                        cubes.Add(currentFigure.cubes[i]);
+                        KeyValuePair<Point, Brush> cube = new KeyValuePair<Point, Brush>(currentFigure.cubes[i], currentFigure.GetBrushByFigureType());
+                        cubes.Add(cube);
                     }
                     Random random = new Random();
                     currentFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I + random.Next() % Enum.GetNames(typeof(FIGURE_TYPE)).Length);
                 }
                 currentFigure.StepDown(cubes);
-                tetrisGamePanel.Invalidate();
-                Thread.Sleep(200);
+                tetrisGamePanel.Refresh();
+                Thread.Sleep(500);
             }
 
         }
@@ -83,7 +89,9 @@ namespace childhood_games_pack.tetris {
                 tetrisGamePanelCanvas.FillRectangle(currentFigure.GetBrushByFigureType(), rect);
             }
             for (int i = 0; i < cubes.Count; i++) {
-                tetrisGamePanelCanvas.DrawRectangle(Pens.Black, new Rectangle(cubes[i], new Size(currentFigure.CUBE_SIZE, currentFigure.CUBE_SIZE)));
+                Rectangle rect = new Rectangle(cubes[i].Key, new Size(currentFigure.CUBE_SIZE, currentFigure.CUBE_SIZE));
+                tetrisGamePanelCanvas.DrawRectangle(Pens.Black, rect);
+                tetrisGamePanelCanvas.FillRectangle(cubes[i].Value, rect);
             }
         }
     }
