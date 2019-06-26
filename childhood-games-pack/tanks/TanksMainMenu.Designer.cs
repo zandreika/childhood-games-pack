@@ -1,5 +1,5 @@
 ﻿namespace childhood_games_pack.tanks {
-    partial class TanksMainForm {
+    partial class TanksMainMenu {
         /// <summary>
         /// Required designer variable.
         /// </summary>

@@ -16,7 +16,7 @@ namespace childhood_games_pack {
         }
 
         private void tanksGameButton_Click(object sender, EventArgs e) {
-            tanks.TanksMainForm tanks = new tanks.TanksMainForm(this);
+            tanks.TanksMainMenu tanks = new tanks.TanksMainMenu(this);
             tanks.Show();
             Hide();
         }

@@ -1,5 +1,5 @@
 ﻿namespace childhood_games_pack.tanks {
-    partial class CompTankForm {
+    partial class CompTank {
         /// <summary>
         /// Required designer variable.
         /// </summary>

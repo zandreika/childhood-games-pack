@@ -23,7 +23,14 @@ namespace childhood_games_pack.tanks {
         HIGHT = 3
     }
 
-    public partial class TanksMainForm : Form {
+    public enum DIRECTION : int {
+        U   = 1,
+        D   = 2,
+        L   = 3,
+        R   = 4
+    }
+
+    public partial class TanksMainMenu : Form {
         private enum GAME_STATUS : int {
             LEVEL_SELECT = 1,
             GAME = 2
@@ -36,7 +43,7 @@ namespace childhood_games_pack.tanks {
         private Point userSpot = new Point(500, 600);
         private Point compSpot = new Point(500, 0);
         
-        public TanksMainForm(MainMenuForm mainMenu) {
+        public TanksMainMenu(MainMenuForm mainMenu) {
             InitializeComponent();
 
             buttons.Add(level1Button);
@@ -65,8 +72,8 @@ namespace childhood_games_pack.tanks {
         }
 
         private void levelOneConfigure() {
-            UserTankForm userTank = new UserTankForm(TANK_TYPE.HEAVY, SPEED_LEVEL.LOW, userSpot);
-            CompTankForm comTank = new CompTankForm(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot);
+            UserTank userTank = new UserTank(TANK_TYPE.HEAVY, SPEED_LEVEL.LOW, userSpot, this);
+            CompTank comTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot);
 
             Controls.Add(userTank);
             Controls.Add(comTank);

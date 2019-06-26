@@ -4,13 +4,15 @@ using System.Windows.Forms;
 
 
 namespace childhood_games_pack.tanks {
-    public partial class UserTankForm : Form {
+    public partial class UserTank : Form {
+        private TanksMainMenu parent;
         private TANK_TYPE type;
         private SPEED_LEVEL speedLevel;
+        private DIRECTION direction;
 
-        private int step = 20; // pxl
+        private int step; // pxl
 
-        public UserTankForm(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot) {
+        public UserTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot, TanksMainMenu parent) {
             InitializeComponent();
             SetTopLevel(false);
             AutoSize = false;
@@ -18,7 +20,11 @@ namespace childhood_games_pack.tanks {
 
             this.type = type;
             this.speedLevel = speedLevel;
-            
+            this.parent = parent;
+
+            step = 20;
+            direction = DIRECTION.U;
+
             shape();
             Location = spot;
         }
@@ -27,7 +33,7 @@ namespace childhood_games_pack.tanks {
         private void shape() {
             switch (type) {
                 case TANK_TYPE.LIGHT:
-                    BackgroundImage = Properties.Resources.light_tank;
+                    BackgroundImage = Properties.Resources.light_utank_u;
                     break;
 
                 case TANK_TYPE.MEDIUM:
@@ -47,19 +53,31 @@ namespace childhood_games_pack.tanks {
         private void TankForm_KeyDown(object sender, KeyEventArgs e) {
             switch (e.KeyCode) {
                 case Keys.W:
+                    BackgroundImage = Properties.Resources.light_utank_u;
+                    direction = DIRECTION.U;
                     Location = new Point(Location.X, Location.Y - step);
                     break;
 
                 case Keys.S:
+                    BackgroundImage = Properties.Resources.light_utank_d;
+                    direction = DIRECTION.D;
                     Location = new Point(Location.X, Location.Y + step);
                     break;
 
                 case Keys.A:
+                    BackgroundImage = Properties.Resources.light_utank_l;
+                    direction = DIRECTION.L;
                     Location = new Point(Location.X - step, Location.Y);
                     break;
 
                 case Keys.D:
+                    BackgroundImage = Properties.Resources.light_utank_r;
+                    direction = DIRECTION.R;
                     Location = new Point(Location.X + step, Location.Y);
+                    break;
+
+                case Keys.Space:
+                    new Bullet(parent, direction, Location);
                     break;
             }
         }
