@@ -5,7 +5,7 @@ using System.Threading;
 
 
 namespace childhood_games_pack.tanks {
-    public partial class CompTankForm : Form {
+    public partial class CompTank : Form {
         private enum DIRECTIONS : int {
             UP      = 1,
             DOWN    = 2,
@@ -19,7 +19,7 @@ namespace childhood_games_pack.tanks {
         private int step; // pxl
         private int stepTimer; // ms
 
-        public CompTankForm(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot) {
+        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot) {
             InitializeComponent();
             SetTopLevel(false);
             AutoSize = false;
