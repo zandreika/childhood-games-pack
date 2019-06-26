@@ -20,5 +20,12 @@ namespace childhood_games_pack {
             tanks.Show();
             Hide();
         }
+
+        private void TetrisGameButton_Click(object sender, EventArgs e) {
+            tetris.TetrisMainForm tetris = new tetris.TetrisMainForm(this);
+            tetris.Show();
+            Hide();
+            tetris.StartGame();
+        }
     }
 }
