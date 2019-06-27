@@ -20,6 +20,7 @@ namespace childhood_games_pack.tetris {
             InitializeComponent();
             this.mainMenu = mainMenu;
             this.tetrisGamePanelCanvas = tetrisGamePanel.CreateGraphics();
+            
         }
 
         public void StartGame() {
@@ -29,6 +30,10 @@ namespace childhood_games_pack.tetris {
 
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
             while (true) {
+                if (backgroundWorker1.CancellationPending) {
+                    return;
+                }
+
                 if (currentFigure.isStay) {
                     if(currentFigure.GetTopmostCoordinate() <= 0) {
                         MessageBox.Show("You lose");
@@ -42,39 +47,72 @@ namespace childhood_games_pack.tetris {
                     Random random = new Random();
                     currentFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I + random.Next() % Enum.GetNames(typeof(FIGURE_TYPE)).Length);
                 }
+
                 currentFigure.StepDown(cubes);
-                tetrisGamePanel.Refresh();
-                Thread.Sleep(500);
+
+                Point startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate(), currentFigure.GetTopmostCoordinate() - currentFigure.CUBE_SIZE);
+                Size sizeRedraw = new Size(currentFigure.GetRightmostCoordinate() - currentFigure.GetLeftmostCoordinate() + currentFigure.CUBE_SIZE, currentFigure.GetBottommostCoordinate() - currentFigure.GetTopmostCoordinate() + currentFigure.CUBE_SIZE);
+                Rectangle invRect = new Rectangle(startRedrawPoint, sizeRedraw);
+
+                tetrisGamePanel.Invalidate(invRect);
+                Thread.Sleep(200);
             }
 
         }
 
         private void TetrisMainForm_FormClosed(object sender, FormClosedEventArgs e) {
+            backgroundWorker1.CancelAsync();
             mainMenu.Show();
         }
 
 
         private void TetrisMainForm_KeyDown(object sender, KeyEventArgs e) {
             if (!currentFigure.isStay) {
+                Point startRedrawPoint;
+                Size sizeRedraw;
+                Rectangle invRect;
                 switch (e.KeyCode) {
                     case Keys.A:
                     case Keys.Left:
                         currentFigure.StepLeft(cubes);
-                        tetrisGamePanel.Invalidate();
+                        startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate(), currentFigure.GetTopmostCoordinate());
+                        sizeRedraw = new Size(currentFigure.GetRightmostCoordinate() - currentFigure.GetLeftmostCoordinate() + 2*currentFigure.CUBE_SIZE, currentFigure.GetBottommostCoordinate() - currentFigure.GetTopmostCoordinate() + currentFigure.CUBE_SIZE);
+                        invRect = new Rectangle(startRedrawPoint, sizeRedraw);
+
+                        tetrisGamePanel.Invalidate(invRect);
                         break;
 
                     case Keys.D:
                     case Keys.Right:
                         currentFigure.StepRight(cubes);
-                        tetrisGamePanel.Invalidate();
+
+                        startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate() - currentFigure.CUBE_SIZE, currentFigure.GetTopmostCoordinate());
+                        sizeRedraw = new Size(currentFigure.GetRightmostCoordinate() - currentFigure.GetLeftmostCoordinate() + currentFigure.CUBE_SIZE, currentFigure.GetBottommostCoordinate() - currentFigure.GetTopmostCoordinate() + currentFigure.CUBE_SIZE);
+                        invRect = new Rectangle(startRedrawPoint, sizeRedraw);
+
+                        tetrisGamePanel.Invalidate(invRect);
                         break;
 
                     case Keys.S:
                     case Keys.Down:
                         currentFigure.StepDown(cubes);
-                        tetrisGamePanel.Invalidate();
+
+                        startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate(), currentFigure.GetTopmostCoordinate() - currentFigure.CUBE_SIZE);
+                        sizeRedraw = new Size(currentFigure.GetRightmostCoordinate() - currentFigure.GetLeftmostCoordinate() + currentFigure.CUBE_SIZE, currentFigure.GetBottommostCoordinate() - currentFigure.GetTopmostCoordinate() + currentFigure.CUBE_SIZE);
+                        invRect = new Rectangle(startRedrawPoint, sizeRedraw);
+
+                        tetrisGamePanel.Invalidate(invRect);
                         break;
 
+                    case Keys.Space:
+                        currentFigure.Rotate();
+
+                        startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate() - 3 * currentFigure.CUBE_SIZE, currentFigure.GetTopmostCoordinate() - 3*currentFigure.CUBE_SIZE);
+                        sizeRedraw = new Size(8 * currentFigure.CUBE_SIZE, 8 * currentFigure.CUBE_SIZE);
+                        invRect = new Rectangle(startRedrawPoint, sizeRedraw);
+
+                        tetrisGamePanel.Invalidate(invRect);
+                        break;
                     default:
                         break;
                 }
@@ -85,13 +123,13 @@ namespace childhood_games_pack.tetris {
 
             for (int i = 0; i < currentFigure.cubes.Count; i++) {
                 Rectangle rect = new Rectangle(currentFigure.cubes[i], new Size(currentFigure.CUBE_SIZE, currentFigure.CUBE_SIZE));
-                tetrisGamePanelCanvas.DrawRectangle(Pens.Black, rect);
                 tetrisGamePanelCanvas.FillRectangle(currentFigure.GetBrushByFigureType(), rect);
+                tetrisGamePanelCanvas.DrawRectangle(Pens.Black, rect);  
             }
             for (int i = 0; i < cubes.Count; i++) {
                 Rectangle rect = new Rectangle(cubes[i].Key, new Size(currentFigure.CUBE_SIZE, currentFigure.CUBE_SIZE));
-                tetrisGamePanelCanvas.DrawRectangle(Pens.Black, rect);
                 tetrisGamePanelCanvas.FillRectangle(cubes[i].Value, rect);
+                tetrisGamePanelCanvas.DrawRectangle(Pens.Black, rect);
             }
         }
     }
