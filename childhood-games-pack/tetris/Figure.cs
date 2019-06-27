@@ -10,6 +10,7 @@ using System.Threading;
 
 namespace childhood_games_pack.tetris {
     public enum FIGURE_TYPE { I, J, L, O, S, T, Z };
+    public enum FIGURE_ROTATE_TYPE { NORMAL, ROTATE_90, ROTATE_180, ROTATE_270 };
     
 
     public class Figure {
@@ -18,6 +19,7 @@ namespace childhood_games_pack.tetris {
         public List<Point> cubes;
         public bool isStay = false;
         public int CUBE_SIZE = 20;
+        private FIGURE_ROTATE_TYPE rotateType = FIGURE_ROTATE_TYPE.NORMAL;
 
         public Figure(Panel workspace, FIGURE_TYPE figureType) {
             this.workspace = workspace;
@@ -39,24 +41,24 @@ namespace childhood_games_pack.tetris {
                     break;
                 }
                 case FIGURE_TYPE.J: {
-                    cubes.Add(new Point(3 * CUBE_SIZE, -2* CUBE_SIZE));
-                    cubes.Add(new Point(3 * CUBE_SIZE, -CUBE_SIZE));
-                    cubes.Add(new Point(4 * CUBE_SIZE, -CUBE_SIZE));
                     cubes.Add(new Point(5 * CUBE_SIZE, -CUBE_SIZE));
+                    cubes.Add(new Point(4 * CUBE_SIZE, -CUBE_SIZE));
+                    cubes.Add(new Point(3 * CUBE_SIZE, -CUBE_SIZE));
+                    cubes.Add(new Point(3 * CUBE_SIZE, -2 * CUBE_SIZE));
 
                     break;
                 }
-                case FIGURE_TYPE.L: {
-                    cubes.Add(new Point(5 * CUBE_SIZE, -2 * CUBE_SIZE));
+                case FIGURE_TYPE.L: {  
                     cubes.Add(new Point(3 * CUBE_SIZE, -CUBE_SIZE));
                     cubes.Add(new Point(4 * CUBE_SIZE, -CUBE_SIZE));
                     cubes.Add(new Point(5 * CUBE_SIZE, -CUBE_SIZE));
+                    cubes.Add(new Point(5 * CUBE_SIZE, -2 * CUBE_SIZE));
 
                     break;
                 }
                 case FIGURE_TYPE.O: {
-                    cubes.Add(new Point(4 * CUBE_SIZE, -2 * CUBE_SIZE));
                     cubes.Add(new Point(5 * CUBE_SIZE, -2 * CUBE_SIZE));
+                    cubes.Add(new Point(4 * CUBE_SIZE, -2 * CUBE_SIZE));
                     cubes.Add(new Point(4 * CUBE_SIZE, -CUBE_SIZE));
                     cubes.Add(new Point(5 * CUBE_SIZE, -CUBE_SIZE));
 
@@ -133,6 +135,37 @@ namespace childhood_games_pack.tetris {
             }
             return res;
         }
+
+        public int GetLeftmostCoordinate() {
+            int res = cubes[0].X;
+            for (int i = 1; i < cubes.Count; i++) {
+                if (cubes[i].X < res) {
+                    res = cubes[i].X;
+                }
+            }
+            return res;
+        }
+
+        public int GetRightmostCoordinate() {
+            int res = cubes[0].X;
+            for (int i = 1; i < cubes.Count; i++) {
+                if (cubes[i].X > res) {
+                    res = cubes[i].X;
+                }
+            }
+            return res + CUBE_SIZE;
+        }
+
+        public int GetBottommostCoordinate() {
+            int res = cubes[0].Y;
+            for (int i = 1; i < cubes.Count; i++) {
+                if (cubes[i].Y > res) {
+                    res = cubes[i].Y;
+                }
+            }
+            return res + CUBE_SIZE;
+        }
+
 
         private int GetLeftmostCubeIndex() {
             int res = 0;
@@ -222,5 +255,234 @@ namespace childhood_games_pack.tetris {
             }
         }
 
+
+        public void Rotate() {
+            switch (figureType) {
+                case FIGURE_TYPE.I: {
+                    switch (rotateType) {
+                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+
+                            cubes[0] = new Point(cubes[0].X - 2 * CUBE_SIZE, cubes[0].Y + 3 * CUBE_SIZE);
+                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 2 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X, cubes[2].Y + 1 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y);
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+
+                            cubes[0] = new Point(cubes[0].X + 2 * CUBE_SIZE, cubes[0].Y - 3 * CUBE_SIZE);
+                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 2 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X, cubes[2].Y - 1 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y);
+                            break;
+                        }
+                        default:
+                            throw new Exception("Wrong rotate type of Figure");
+                    }
+                    break;
+                }
+                case FIGURE_TYPE.J: {
+                    switch (rotateType) {
+                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y - 2 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X + 3 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
+                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y + 2 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y + 3 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
+                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y + 2 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X - 3 * CUBE_SIZE, cubes[3].Y + 1 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y - 2 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y - 3 * CUBE_SIZE);
+
+                            break;
+                        }
+                        default:
+                            throw new Exception("Wrong rotate type of Figure");
+                    }
+                    break;
+                }
+                case FIGURE_TYPE.L: {
+                    switch (rotateType) {
+                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            cubes[0] = new Point(cubes[0].X + 1 * CUBE_SIZE, cubes[0].Y - 3 * CUBE_SIZE);
+                            cubes[1] = new Point(cubes[1].X, cubes[1].Y - 2 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
+                            cubes[0] = new Point(cubes[0].X + 3 * CUBE_SIZE, cubes[0].Y + 1 * CUBE_SIZE);
+                            cubes[1] = new Point(cubes[1].X + 2 * CUBE_SIZE, cubes[1].Y);
+                            cubes[2] = new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
+                            cubes[0] = new Point(cubes[0].X - 1 * CUBE_SIZE, cubes[0].Y + 3 * CUBE_SIZE);
+                            cubes[1] = new Point(cubes[1].X, cubes[1].Y + 2 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            cubes[0] = new Point(cubes[0].X - 3 * CUBE_SIZE, cubes[0].Y - 1 * CUBE_SIZE);
+                            cubes[1] = new Point(cubes[1].X - 2 * CUBE_SIZE, cubes[1].Y);
+                            cubes[2] = new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE);
+
+                            break;
+                        }
+                        default:
+                            throw new Exception("Wrong rotate type of Figure");
+                    }
+                    break;
+                }
+                case FIGURE_TYPE.O:
+                    break;
+                case FIGURE_TYPE.S: {
+                    switch (rotateType) {
+                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X, cubes[2].Y - 2 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y - 3 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
+                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y);
+                            cubes[3] = new Point(cubes[3].X + 3 * CUBE_SIZE, cubes[3].Y + 1 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
+                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X, cubes[2].Y + 2 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y + 3 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y);
+                            cubes[3] = new Point(cubes[3].X - 3 * CUBE_SIZE, cubes[3].Y - 1 * CUBE_SIZE);
+
+                            break;
+                        }
+                        default:
+                            throw new Exception("Wrong rotate type of Figure");
+                    }
+                    break;
+                }
+                case FIGURE_TYPE.T: {
+                    switch (rotateType) {
+                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            cubes[1] = new Point(cubes[1].X, cubes[1].Y - 2 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X - 2 * CUBE_SIZE, cubes[3].Y);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
+                            cubes[1] = new Point(cubes[1].X + 2 * CUBE_SIZE, cubes[1].Y);
+                            cubes[2] = new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X, cubes[3].Y - 2 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
+                            cubes[1] = new Point(cubes[1].X, cubes[1].Y + 2 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X + 2 * CUBE_SIZE, cubes[3].Y);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            cubes[1] = new Point(cubes[1].X - 2 * CUBE_SIZE, cubes[1].Y);
+                            cubes[2] = new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X, cubes[3].Y + 2 * CUBE_SIZE);
+
+                            break;
+                        }
+                        default:
+                            throw new Exception("Wrong rotate type of Figure");
+                    }
+                    break;
+                }
+                case FIGURE_TYPE.Z: {
+                    switch (rotateType) {
+                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y);
+                            cubes[3] = new Point(cubes[3].X - 3 * CUBE_SIZE, cubes[3].Y + 1 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
+                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X, cubes[2].Y - 2 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y - 3 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
+                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y);
+                            cubes[3] = new Point(cubes[3].X + 3 * CUBE_SIZE, cubes[3].Y - 1 * CUBE_SIZE);
+
+                            break;
+                        }
+                        case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
+                            cubes[2] = new Point(cubes[2].X, cubes[2].Y + 2 * CUBE_SIZE);
+                            cubes[3] = new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y + 3 * CUBE_SIZE);
+
+                            break;
+                        }
+                        default:
+                            throw new Exception("Wrong rotate type of Figure");
+                    }
+                    break;
+                }
+                default:
+                    throw new Exception("Wrong type of Figure");
+            }
+        }
     }
 }
