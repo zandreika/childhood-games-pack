@@ -11,31 +11,40 @@ namespace childhood_games_pack.tetris {
     public partial class TetrisMainForm : Form {
         private MainMenuForm mainMenu;
         private Graphics tetrisGamePanelCanvas;
-        
+        private Graphics nextFigurePanelCanvas;
+
         private Figure currentFigure;
+        private Figure nextFigure;
 
         private List<KeyValuePair<Point, Brush>> cubes = new List<KeyValuePair<Point, Brush>>();
-        private int[,] occupatedMap = new int[20,10];
+        private byte[,] occupatedMap = new byte[20,10];
 
         private int gameSpeed;
+        private int gameScore;
 
         public TetrisMainForm(MainMenuForm mainMenu) {
             InitializeComponent();
             this.mainMenu = mainMenu;
-            this.tetrisGamePanelCanvas = tetrisGamePanel.CreateGraphics();
-            
+            tetrisGamePanelCanvas = tetrisGamePanel.CreateGraphics();
+            nextFigurePanelCanvas = nextFigurePanel.CreateGraphics();
         }
 
         public void StartGame() {
             gameSpeed = (int)GAME_SPEED.LOW;
+            gameScore = 0;
+
             for (int i = 0; i < occupatedMap.GetLength(0); i++) {
                 for (int j = 0; j < occupatedMap.GetLength(1); j++) {
                     occupatedMap[i, j] = 0;
                 }
             }
+            currentFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I);
+            nextFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.J);
 
             restartGameButton.Hide();
-            currentFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I);
+            nextFigurePanel.Invalidate();
+            ScoreLabel.Text = gameScore.ToString();
+
             backgroundWorker1.RunWorkerAsync();
         }
 
@@ -53,6 +62,7 @@ namespace childhood_games_pack.tetris {
                         return;
                     }
 
+                    int rows_to_del = 0;
 
                     // add current figure cubes into panel cubes list
                     for(int i = 0; i < currentFigure.cubes.Count; i++) {
@@ -64,14 +74,16 @@ namespace childhood_games_pack.tetris {
                     // find 10 cubes in a row
                     // and shift upper cubes
                     for (int i = occupatedMap.GetLength(0) - 1; i > 0; i--) {
-                        int need_del = 0;
+                        int cubes_in_row = 0;
                         for (int j = 0; j < occupatedMap.GetLength(1); j++) {
                             if (occupatedMap[i, j] == 1)
-                                need_del++;
+                                cubes_in_row++;
                             else
                                 break;
                         }
-                        if (need_del == 10) {
+                        if (cubes_in_row == occupatedMap.GetLength(1)) {
+                            rows_to_del++;
+
                             for (int k = 0; k < occupatedMap.GetLength(1); k++) {
                                 occupatedMap[i, k] = 0;
                                 occupatedMap[0, k] = 0;
@@ -91,8 +103,6 @@ namespace childhood_games_pack.tetris {
                                 }
                             }
 
-                            tetrisGamePanel.Invalidate();
-
                             for (int f1 = i; f1 > 0; f1--) {
                                 for(int f2 = 0; f2 < occupatedMap.GetLength(1); f2++) {
                                     occupatedMap[f1, f2] = occupatedMap[f1 - 1, f2];
@@ -104,8 +114,45 @@ namespace childhood_games_pack.tetris {
                             
                     }
 
+                    switch (rows_to_del) {
+                        case 1:
+                            gameScore += 100;
+                            break;
+                        case 2:
+                            gameScore += 300;
+                            break;
+                        case 3:
+                            gameScore += 700;
+                            break;
+                        case 4:
+                            gameScore += 1500;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if(gameScore > 5000) {
+                        gameSpeed = (int)GAME_SPEED.INCREDIBLE;
+                    }
+                    else if(gameSpeed > 3000) {
+                        gameSpeed = (int)GAME_SPEED.HIGH;
+                    }
+                    else if(gameSpeed > 1500) {
+                        gameSpeed = (int)GAME_SPEED.MEDIUM;
+                    }
+                    else {
+                        gameSpeed = (int)GAME_SPEED.LOW;
+                    }
+
                     Random random = new Random();
-                    currentFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I + random.Next() % Enum.GetNames(typeof(FIGURE_TYPE)).Length);
+                    currentFigure = nextFigure;
+                    nextFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I + random.Next() % Enum.GetNames(typeof(FIGURE_TYPE)).Length);
+
+                    if (rows_to_del > 0) {
+                        tetrisGamePanel.Invalidate();
+                    }
+                    nextFigurePanel.Invalidate();
+                    ScoreLabel.Text = gameScore.ToString();
                 }
 
                 currentFigure.StepDown(cubes);
@@ -164,7 +211,8 @@ namespace childhood_games_pack.tetris {
                         tetrisGamePanel.Invalidate(invRect);
                         break;
 
-                    case Keys.Space:
+                    case Keys.W:
+                    case Keys.Up:
                         if (currentFigure.Rotate(cubes)) {
 
                             startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate() - 2 * currentFigure.CUBE_SIZE, currentFigure.GetTopmostCoordinate() - 3 * currentFigure.CUBE_SIZE);
@@ -199,6 +247,14 @@ namespace childhood_games_pack.tetris {
             tetrisGamePanel.Invalidate();
             restartGameButton.Enabled = false;
             StartGame();
+        }
+
+        private void NextFigurePanel_Paint(object sender, PaintEventArgs e) {
+            for (int i = 0; i < nextFigure.cubes.Count; i++) {
+                Rectangle rect = new Rectangle(new Point(nextFigure.cubes[i].X - 40, nextFigure.cubes[i].Y + 100), new Size(nextFigure.CUBE_SIZE, nextFigure.CUBE_SIZE));
+                nextFigurePanelCanvas.FillRectangle(nextFigure.GetBrushByFigureType(), rect);
+                nextFigurePanelCanvas.DrawRectangle(Pens.Black, rect);
+            }
         }
     }
 }
