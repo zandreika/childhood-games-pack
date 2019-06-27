@@ -24,6 +24,7 @@ namespace childhood_games_pack.tetris {
         }
 
         public void StartGame() {
+            restartGameButton.Hide();
             currentFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I);
             backgroundWorker1.RunWorkerAsync();
         }
@@ -37,6 +38,7 @@ namespace childhood_games_pack.tetris {
                 if (currentFigure.isStay) {
                     if(currentFigure.GetTopmostCoordinate() <= 0) {
                         MessageBox.Show("You lose");
+                        restartGameButton.Show();
                         return;
                     }
 
@@ -55,7 +57,7 @@ namespace childhood_games_pack.tetris {
                 Rectangle invRect = new Rectangle(startRedrawPoint, sizeRedraw);
 
                 tetrisGamePanel.Invalidate(invRect);
-                Thread.Sleep(200);
+                Thread.Sleep(500);
             }
 
         }
@@ -105,13 +107,14 @@ namespace childhood_games_pack.tetris {
                         break;
 
                     case Keys.Space:
-                        currentFigure.Rotate();
+                        if (currentFigure.Rotate(cubes)) {
 
-                        startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate() - 3 * currentFigure.CUBE_SIZE, currentFigure.GetTopmostCoordinate() - 3*currentFigure.CUBE_SIZE);
-                        sizeRedraw = new Size(8 * currentFigure.CUBE_SIZE, 8 * currentFigure.CUBE_SIZE);
-                        invRect = new Rectangle(startRedrawPoint, sizeRedraw);
+                            startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate() - 3 * currentFigure.CUBE_SIZE, currentFigure.GetTopmostCoordinate() - 3 * currentFigure.CUBE_SIZE);
+                            sizeRedraw = new Size(8 * currentFigure.CUBE_SIZE, 8 * currentFigure.CUBE_SIZE);
+                            invRect = new Rectangle(startRedrawPoint, sizeRedraw);
 
-                        tetrisGamePanel.Invalidate(invRect);
+                            tetrisGamePanel.Invalidate(invRect);
+                        }
                         break;
                     default:
                         break;
@@ -131,6 +134,13 @@ namespace childhood_games_pack.tetris {
                 tetrisGamePanelCanvas.FillRectangle(cubes[i].Value, rect);
                 tetrisGamePanelCanvas.DrawRectangle(Pens.Black, rect);
             }
+        }
+
+        private void RestartGameButton_Click(object sender, EventArgs e) {
+            cubes = new List<KeyValuePair<Point, Brush>>();
+            tetrisGamePanel.Invalidate();
+            restartGameButton.Enabled = false;
+            StartGame();
         }
     }
 }

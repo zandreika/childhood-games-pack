@@ -25,6 +25,7 @@
         private void InitializeComponent() {
             this.tetrisGamePanel = new System.Windows.Forms.Panel();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.restartGameButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tetrisGamePanel
@@ -38,14 +39,26 @@
             // 
             // backgroundWorker1
             // 
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker1_DoWork);
             this.backgroundWorker1.WorkerSupportsCancellation = true;
+            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.BackgroundWorker1_DoWork);
+            // 
+            // restartGameButton
+            // 
+            this.restartGameButton.Location = new System.Drawing.Point(285, 114);
+            this.restartGameButton.Name = "restartGameButton";
+            this.restartGameButton.Size = new System.Drawing.Size(75, 25);
+            this.restartGameButton.TabIndex = 1;
+            this.restartGameButton.TabStop = false;
+            this.restartGameButton.Text = "restart";
+            this.restartGameButton.UseVisualStyleBackColor = true;
+            this.restartGameButton.Click += new System.EventHandler(this.RestartGameButton_Click);
             // 
             // TetrisMainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(563, 450);
+            this.Controls.Add(this.restartGameButton);
             this.Controls.Add(this.tetrisGamePanel);
             this.Name = "TetrisMainForm";
             this.Text = "TetrisMainForm";
@@ -59,5 +72,6 @@
 
         private System.Windows.Forms.Panel tetrisGamePanel;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Button restartGameButton;
     }
 }
