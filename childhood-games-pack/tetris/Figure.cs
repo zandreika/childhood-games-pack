@@ -256,26 +256,66 @@ namespace childhood_games_pack.tetris {
         }
 
 
-        public void Rotate() {
+        public bool Rotate(List<KeyValuePair<Point, Brush>> ocсupiedCubes) {
             switch (figureType) {
                 case FIGURE_TYPE.I: {
                     switch (rotateType) {
                         case FIGURE_ROTATE_TYPE.NORMAL: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[0].X - 2 * CUBE_SIZE, cubes[0].Y + 3 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X, cubes[2].Y + 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if( newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[0] = newPoints[0];
+                            cubes[1] = newPoints[1];
+                            cubes[2] = newPoints[2];
+                            cubes[3] = newPoints[3];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
 
-                            cubes[0] = new Point(cubes[0].X - 2 * CUBE_SIZE, cubes[0].Y + 3 * CUBE_SIZE);
-                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 2 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X, cubes[2].Y + 1 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y);
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[0].X + 2 * CUBE_SIZE, cubes[0].Y - 3 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X, cubes[2].Y - 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[0] = newPoints[0];
+                            cubes[1] = newPoints[1];
+                            cubes[2] = newPoints[2];
+                            cubes[3] = newPoints[3];
+
                             rotateType = FIGURE_ROTATE_TYPE.NORMAL;
 
-                            cubes[0] = new Point(cubes[0].X + 2 * CUBE_SIZE, cubes[0].Y - 3 * CUBE_SIZE);
-                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 2 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X, cubes[2].Y - 1 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y);
                             break;
                         }
                         default:
@@ -286,34 +326,110 @@ namespace childhood_games_pack.tetris {
                 case FIGURE_TYPE.J: {
                     switch (rotateType) {
                         case FIGURE_ROTATE_TYPE.NORMAL: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y - 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X + 3 * CUBE_SIZE, cubes[1].Y - 2 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
-                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y - 2 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X + 3 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y + 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y + 3 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
-                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y + 2 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y + 3 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y + 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X - 3 * CUBE_SIZE, cubes[3].Y + 1 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
-                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y + 2 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X - 3 * CUBE_SIZE, cubes[3].Y + 1 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y - 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y - 3 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.NORMAL;
-                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y - 2 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y - 3 * CUBE_SIZE);
 
                             break;
                         }
@@ -325,34 +441,110 @@ namespace childhood_games_pack.tetris {
                 case FIGURE_TYPE.L: {
                     switch (rotateType) {
                         case FIGURE_ROTATE_TYPE.NORMAL: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[0].X + 1 * CUBE_SIZE, cubes[0].Y - 3 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[1].X, cubes[1].Y - 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[0] = newPoints[0];
+                            cubes[1] = newPoints[1];
+                            cubes[2] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
-                            cubes[0] = new Point(cubes[0].X + 1 * CUBE_SIZE, cubes[0].Y - 3 * CUBE_SIZE);
-                            cubes[1] = new Point(cubes[1].X, cubes[1].Y - 2 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[0].X + 3 * CUBE_SIZE, cubes[0].Y + 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[1].X + 2 * CUBE_SIZE, cubes[1].Y));
+                            newPoints.Add(new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[0] = newPoints[0];
+                            cubes[1] = newPoints[1];
+                            cubes[2] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
-                            cubes[0] = new Point(cubes[0].X + 3 * CUBE_SIZE, cubes[0].Y + 1 * CUBE_SIZE);
-                            cubes[1] = new Point(cubes[1].X + 2 * CUBE_SIZE, cubes[1].Y);
-                            cubes[2] = new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[0].X - 1 * CUBE_SIZE, cubes[0].Y + 3 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[1].X, cubes[1].Y + 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[0] = newPoints[0];
+                            cubes[1] = newPoints[1];
+                            cubes[2] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
-                            cubes[0] = new Point(cubes[0].X - 1 * CUBE_SIZE, cubes[0].Y + 3 * CUBE_SIZE);
-                            cubes[1] = new Point(cubes[1].X, cubes[1].Y + 2 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[0].X - 3 * CUBE_SIZE, cubes[0].Y - 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[1].X - 2 * CUBE_SIZE, cubes[1].Y));
+                            newPoints.Add(new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[0] = newPoints[0];
+                            cubes[1] = newPoints[1];
+                            cubes[2] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.NORMAL;
-                            cubes[0] = new Point(cubes[0].X - 3 * CUBE_SIZE, cubes[0].Y - 1 * CUBE_SIZE);
-                            cubes[1] = new Point(cubes[1].X - 2 * CUBE_SIZE, cubes[1].Y);
-                            cubes[2] = new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE);
 
                             break;
                         }
@@ -366,34 +558,110 @@ namespace childhood_games_pack.tetris {
                 case FIGURE_TYPE.S: {
                     switch (rotateType) {
                         case FIGURE_ROTATE_TYPE.NORMAL: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X, cubes[2].Y - 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y - 3 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
-                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X, cubes[2].Y - 2 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y - 3 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y));
+                            newPoints.Add(new Point(cubes[3].X + 3 * CUBE_SIZE, cubes[3].Y + 1 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
-                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y);
-                            cubes[3] = new Point(cubes[3].X + 3 * CUBE_SIZE, cubes[3].Y + 1 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X, cubes[2].Y + 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y + 3 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
-                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X, cubes[2].Y + 2 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y + 3 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y));
+                            newPoints.Add(new Point(cubes[3].X - 3 * CUBE_SIZE, cubes[3].Y - 1 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.NORMAL;
-                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y);
-                            cubes[3] = new Point(cubes[3].X - 3 * CUBE_SIZE, cubes[3].Y - 1 * CUBE_SIZE);
 
                             break;
                         }
@@ -405,34 +673,110 @@ namespace childhood_games_pack.tetris {
                 case FIGURE_TYPE.T: {
                     switch (rotateType) {
                         case FIGURE_ROTATE_TYPE.NORMAL: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X, cubes[1].Y - 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X - 2 * CUBE_SIZE, cubes[3].Y));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
-                            cubes[1] = new Point(cubes[1].X, cubes[1].Y - 2 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X - 2 * CUBE_SIZE, cubes[3].Y);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X + 2 * CUBE_SIZE, cubes[1].Y));
+                            newPoints.Add(new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X, cubes[3].Y - 2 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
-                            cubes[1] = new Point(cubes[1].X + 2 * CUBE_SIZE, cubes[1].Y);
-                            cubes[2] = new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X, cubes[3].Y - 2 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X, cubes[1].Y + 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X + 2 * CUBE_SIZE, cubes[3].Y));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
-                            cubes[1] = new Point(cubes[1].X, cubes[1].Y + 2 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X + 2 * CUBE_SIZE, cubes[3].Y);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X - 2 * CUBE_SIZE, cubes[1].Y));
+                            newPoints.Add(new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X, cubes[3].Y + 2 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.NORMAL;
-                            cubes[1] = new Point(cubes[1].X - 2 * CUBE_SIZE, cubes[1].Y);
-                            cubes[2] = new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X, cubes[3].Y + 2 * CUBE_SIZE);
 
                             break;
                         }
@@ -444,34 +788,110 @@ namespace childhood_games_pack.tetris {
                 case FIGURE_TYPE.Z: {
                     switch (rotateType) {
                         case FIGURE_ROTATE_TYPE.NORMAL: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y));
+                            newPoints.Add(new Point(cubes[3].X - 3 * CUBE_SIZE, cubes[3].Y + 1 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
-                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y);
-                            cubes[3] = new Point(cubes[3].X - 3 * CUBE_SIZE, cubes[3].Y + 1 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X, cubes[2].Y - 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y - 3 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
-                            cubes[1] = new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X, cubes[2].Y - 2 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X - 1 * CUBE_SIZE, cubes[3].Y - 3 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y));
+                            newPoints.Add(new Point(cubes[3].X + 3 * CUBE_SIZE, cubes[3].Y - 1 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
-                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y);
-                            cubes[3] = new Point(cubes[3].X + 3 * CUBE_SIZE, cubes[3].Y - 1 * CUBE_SIZE);
 
                             break;
                         }
                         case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                            List<Point> newPoints = new List<Point>();
+                            newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[2].X, cubes[2].Y + 2 * CUBE_SIZE));
+                            newPoints.Add(new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y + 3 * CUBE_SIZE));
+
+                            for (int i = 0; i < newPoints.Count; i++) {
+                                if (newPoints[i].X + CUBE_SIZE > workspace.Width || newPoints[i].X < 0 ||
+                                        newPoints[i].Y + CUBE_SIZE > workspace.Height) {
+                                    return false;
+                                }
+
+                                for (int j = 0; j < ocсupiedCubes.Count; j++) {
+                                    if ((newPoints[i].X == ocсupiedCubes[j].Key.X && newPoints[i].Y == ocсupiedCubes[j].Key.Y)) {
+                                        return false;
+                                    }
+                                }
+                            }
+
+                            cubes[1] = newPoints[0];
+                            cubes[2] = newPoints[1];
+                            cubes[3] = newPoints[2];
+
                             rotateType = FIGURE_ROTATE_TYPE.NORMAL;
-                            cubes[1] = new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE);
-                            cubes[2] = new Point(cubes[2].X, cubes[2].Y + 2 * CUBE_SIZE);
-                            cubes[3] = new Point(cubes[3].X + 1 * CUBE_SIZE, cubes[3].Y + 3 * CUBE_SIZE);
 
                             break;
                         }
@@ -483,6 +903,7 @@ namespace childhood_games_pack.tetris {
                 default:
                     throw new Exception("Wrong type of Figure");
             }
+            return true;
         }
     }
 }
