@@ -15,21 +15,26 @@ namespace childhood_games_pack.tanks {
 
         private TANK_TYPE type;
         private SPEED_LEVEL speedLevel;
+        private TanksGame game;
 
         private int step; // pxl
         private int stepTimer; // ms
 
-        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot) {
+        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot, TanksGame game) {
             InitializeComponent();
             SetTopLevel(false);
             AutoSize = false;
 
             this.type = type;
             this.speedLevel = speedLevel;
+            this.game = game;
 
             speedInit();
             shape();
+
             Location = spot;
+            Size = new Size(game.tankWidth, game.tankHeight);
+
             walkAndAttackWorker.RunWorkerAsync();
         }
 
@@ -60,7 +65,7 @@ namespace childhood_games_pack.tanks {
         private void shape() {
             switch (type) {
                 case TANK_TYPE.LIGHT:
-                    BackgroundImage = Properties.Resources.light_tank;
+                    BackgroundImage = Properties.Resources.light_ctank_u;
                     break;
 
                 case TANK_TYPE.MEDIUM:
@@ -84,18 +89,22 @@ namespace childhood_games_pack.tanks {
                 DIRECTIONS direction = (DIRECTIONS)(rnd.Next() % 4);
                 switch (direction) {
                     case DIRECTIONS.UP:
+                        BackgroundImage = Properties.Resources.light_ctank_u;
                         Location = new Point(Location.X, Location.Y - step);
                         break;
 
                     case DIRECTIONS.DOWN:
+                        BackgroundImage = Properties.Resources.light_ctank_d;
                         Location = new Point(Location.X, Location.Y + step);
                         break;
 
                     case DIRECTIONS.LEFT:
+                        BackgroundImage = Properties.Resources.light_ctank_l;
                         Location = new Point(Location.X - step, Location.Y);
                         break;
 
                     case DIRECTIONS.RIGHT:
+                        BackgroundImage = Properties.Resources.light_ctank_r;
                         Location = new Point(Location.X + step, Location.Y);
                         break;
                 }

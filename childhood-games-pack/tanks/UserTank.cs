@@ -5,14 +5,14 @@ using System.Windows.Forms;
 
 namespace childhood_games_pack.tanks {
     public partial class UserTank : Form {
-        private TanksMainMenu parent;
+        private TanksGame game;
         private TANK_TYPE type;
         private SPEED_LEVEL speedLevel;
         private DIRECTION direction;
 
         private int step; // pxl
 
-        public UserTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot, TanksMainMenu parent) {
+        public UserTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot, TanksGame game) {
             InitializeComponent();
             SetTopLevel(false);
             AutoSize = false;
@@ -20,13 +20,14 @@ namespace childhood_games_pack.tanks {
 
             this.type = type;
             this.speedLevel = speedLevel;
-            this.parent = parent;
+            this.game = game;
 
             step = 20;
             direction = DIRECTION.U;
 
             shape();
             Location = spot;
+            Size = new Size(game.tankWidth, game.tankHeight);
         }
 
         //! Change shape of form depending on the tank-type.
@@ -77,7 +78,7 @@ namespace childhood_games_pack.tanks {
                     break;
 
                 case Keys.Space:
-                    new Bullet(parent, direction, Location);
+                    new Bullet(game, direction, Location);
                     break;
             }
         }

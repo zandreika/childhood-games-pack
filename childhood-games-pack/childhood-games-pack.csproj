@@ -73,11 +73,11 @@
     <Compile Include="tanks\UserTank.Designer.cs">
       <DependentUpon>UserTank.cs</DependentUpon>
     </Compile>
-    <Compile Include="tanks\TanksMainMenu.cs">
+    <Compile Include="tanks\TanksGame.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="tanks\TanksMainMenu.Designer.cs">
-      <DependentUpon>TanksMainMenu.cs</DependentUpon>
+    <Compile Include="tanks\TanksGame.Designer.cs">
+      <DependentUpon>TanksGame.cs</DependentUpon>
     </Compile>
     <Compile Include="tetris\Figure.cs" />
     <Compile Include="tetris\TetrisMainForm.cs">
@@ -108,8 +108,8 @@
     <EmbeddedResource Include="tanks\UserTank.resx">
       <DependentUpon>UserTank.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="tanks\TanksMainMenu.resx">
-      <DependentUpon>TanksMainMenu.cs</DependentUpon>
+    <EmbeddedResource Include="tanks\TanksGame.resx">
+      <DependentUpon>TanksGame.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="tetris\TetrisMainForm.resx">
       <DependentUpon>TetrisMainForm.cs</DependentUpon>
@@ -147,6 +147,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="tanks\res\light_utank_u.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tanks\res\light_ctank_d.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tanks\res\light_ctank_l.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tanks\res\light_ctank_r.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tanks\res\light_ctank_u.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

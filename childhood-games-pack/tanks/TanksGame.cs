@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+
 
 namespace childhood_games_pack.tanks {
     public enum TANK_TYPE : int {
@@ -30,20 +26,27 @@ namespace childhood_games_pack.tanks {
         R   = 4
     }
 
-    public partial class TanksMainMenu : Form {
+    public partial class TanksGame : Form {
         private enum GAME_STATUS : int {
             LEVEL_SELECT = 1,
             GAME = 2
         }
-        
+
+        public int tankHeight = 50;
+        public int tankWidth = 50;
+        public int bulletHeight = 8;
+        public int bulletWidth = 8;
+
+        public List<CompTank> compTanks = new List<CompTank>();
+
         private MainMenuForm mainMenu;
         private GAME_STATUS gameStatus;
         private List<Button> buttons = new List<Button>();
 
-        private Point userSpot = new Point(500, 600);
-        private Point compSpot = new Point(500, 0);
+        private Point userSpot = new Point(500, 500);
+        private Point compSpot = new Point(500, 100);
         
-        public TanksMainMenu(MainMenuForm mainMenu) {
+        public TanksGame(MainMenuForm mainMenu) {
             InitializeComponent();
 
             buttons.Add(level1Button);
@@ -72,14 +75,19 @@ namespace childhood_games_pack.tanks {
         }
 
         private void levelOneConfigure() {
-            UserTank userTank = new UserTank(TANK_TYPE.HEAVY, SPEED_LEVEL.LOW, userSpot, this);
-            CompTank comTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot);
-
+            UserTank userTank = new UserTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, userSpot, this);
             Controls.Add(userTank);
-            Controls.Add(comTank);
-
-            comTank.Show();
             userTank.Show();
+
+            int spotDifference = -400;
+            for (int i = 0; i < 10; i++) {
+                CompTank compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, new Point(compSpot.X + spotDifference, compSpot.Y), this);
+                compTanks.Add(compTank);
+                Controls.Add(compTank);
+                compTank.Show();
+
+                spotDifference += 50;
+            }
 
             userTank.Focus();
         }
