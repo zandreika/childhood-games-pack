@@ -6,12 +6,7 @@ using System.Threading;
 
 namespace childhood_games_pack.tanks {
     public partial class CompTank : Form {
-        private enum DIRECTIONS : int {
-            UP      = 1,
-            DOWN    = 2,
-            LEFT    = 3,
-            RIGHT   = 4
-        }
+        public DIRECTION direction = DIRECTION.D;
 
         private TANK_TYPE type;
         private SPEED_LEVEL speedLevel;
@@ -19,22 +14,22 @@ namespace childhood_games_pack.tanks {
 
         private int step; // pxl
         private int stepTimer; // ms
-
-        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot, TanksGame game) {
+        
+        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot) {
             InitializeComponent();
             SetTopLevel(false);
             AutoSize = false;
 
             this.type = type;
             this.speedLevel = speedLevel;
-            this.game = game;
+            this.game = TanksGame.gameRef;
 
             speedInit();
             shape();
 
             Location = spot;
-            Size = new Size(game.tankWidth, game.tankHeight);
-
+            Size = new Size(TanksGame.tankWidth, TanksGame.tankHeight);
+            
             walkAndAttackWorker.RunWorkerAsync();
         }
 
@@ -86,26 +81,56 @@ namespace childhood_games_pack.tanks {
             Random rnd = new Random();
 
             while (true) {
-                DIRECTIONS direction = (DIRECTIONS)(rnd.Next() % 4);
+                direction = (DIRECTION)(rnd.Next() % 4);
+                int isNeedShot = rnd.Next() % 3000;
+
+                if (isNeedShot < 1000) {
+                    TanksGame.ShootKeyDown(Keys.B);
+                }
+
                 switch (direction) {
-                    case DIRECTIONS.UP:
+                    case DIRECTION.U:
                         BackgroundImage = Properties.Resources.light_ctank_u;
-                        Location = new Point(Location.X, Location.Y - step);
+
+                        Point newUpLoc = new Point(Location.X, Location.Y - step);
+                        if (newUpLoc.Y <= 0) {
+                            break;
+                        }
+
+                        Location = newUpLoc;
                         break;
 
-                    case DIRECTIONS.DOWN:
+                    case DIRECTION.D:
                         BackgroundImage = Properties.Resources.light_ctank_d;
-                        Location = new Point(Location.X, Location.Y + step);
+
+                        Point newDownLoc = new Point(Location.X, Location.Y + step);
+                        if (newDownLoc.Y >= 600) {
+                            break;
+                        }
+
+                        Location = newDownLoc;
                         break;
 
-                    case DIRECTIONS.LEFT:
+                    case DIRECTION.L:
                         BackgroundImage = Properties.Resources.light_ctank_l;
-                        Location = new Point(Location.X - step, Location.Y);
+
+                        Point newLeftLoc = new Point(Location.X - step, Location.Y);
+                        if (newLeftLoc.X <= 0) {
+                            break;
+                        }
+
+                        Location = newLeftLoc;
                         break;
 
-                    case DIRECTIONS.RIGHT:
+                    case DIRECTION.R:
                         BackgroundImage = Properties.Resources.light_ctank_r;
-                        Location = new Point(Location.X + step, Location.Y);
+
+                        Point newRightLoc = new Point(Location.X + step, Location.Y);
+                        if (newRightLoc.X >= 1200) {
+                            break;
+                        }
+
+                        Location = newRightLoc;
                         break;
                 }
 

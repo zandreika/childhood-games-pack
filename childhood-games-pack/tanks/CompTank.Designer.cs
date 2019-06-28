@@ -30,14 +30,14 @@
             // 
             this.walkAndAttackWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.walkAndAttackWorker_DoWork);
             // 
-            // CompTankForm
+            // CompTank
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::childhood_games_pack.Properties.Resources.light_tank;
             this.ClientSize = new System.Drawing.Size(60, 60);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "CompTankForm";
+            this.Name = "CompTank";
             this.Text = "TankCompForm";
             this.ResumeLayout(false);
 

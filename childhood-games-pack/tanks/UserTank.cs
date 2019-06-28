@@ -10,9 +10,10 @@ namespace childhood_games_pack.tanks {
         private SPEED_LEVEL speedLevel;
         private DIRECTION direction;
 
+        private Random rnd = new Random();
         private int step; // pxl
 
-        public UserTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot, TanksGame game) {
+        public UserTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot) {
             InitializeComponent();
             SetTopLevel(false);
             AutoSize = false;
@@ -20,14 +21,14 @@ namespace childhood_games_pack.tanks {
 
             this.type = type;
             this.speedLevel = speedLevel;
-            this.game = game;
+            this.game = TanksGame.gameRef;
 
             step = 20;
             direction = DIRECTION.U;
 
             shape();
             Location = spot;
-            Size = new Size(game.tankWidth, game.tankHeight);
+            Size = new Size(TanksGame.tankWidth, TanksGame.tankHeight);
         }
 
         //! Change shape of form depending on the tank-type.
@@ -56,29 +57,62 @@ namespace childhood_games_pack.tanks {
                 case Keys.W:
                     BackgroundImage = Properties.Resources.light_utank_u;
                     direction = DIRECTION.U;
-                    Location = new Point(Location.X, Location.Y - step);
+
+                    Point newUpLoc = new Point(Location.X, Location.Y - step);
+                    if (newUpLoc.Y <= 0) {
+                        break;
+                    }
+
+                    Location = newUpLoc;
                     break;
 
                 case Keys.S:
                     BackgroundImage = Properties.Resources.light_utank_d;
                     direction = DIRECTION.D;
-                    Location = new Point(Location.X, Location.Y + step);
+
+                    Point newDownLoc = new Point(Location.X, Location.Y + step);
+                    if (newDownLoc.Y >= 600) {
+                        break;
+                    }
+
+                    Location = newDownLoc;
                     break;
 
                 case Keys.A:
                     BackgroundImage = Properties.Resources.light_utank_l;
                     direction = DIRECTION.L;
-                    Location = new Point(Location.X - step, Location.Y);
+
+                    Point newLeftLoc = new Point(Location.X - step, Location.Y);
+                    if (newLeftLoc.X <= 0) {
+                        break;
+                    }
+
+                    Location = newLeftLoc;
                     break;
 
                 case Keys.D:
                     BackgroundImage = Properties.Resources.light_utank_r;
                     direction = DIRECTION.R;
-                    Location = new Point(Location.X + step, Location.Y);
+
+                    Point newRightLoc = new Point(Location.X + step, Location.Y);
+                    if (newRightLoc.X >= 1200) {
+                        break;
+                    }
+
+                    Location = newRightLoc;
                     break;
 
                 case Keys.Space:
-                    new Bullet(game, direction, Location);
+                    new Bullet(BULLET_TYPE.USER, direction, Location);
+                    break;
+
+                case Keys.B:
+                    if (game.compTanks.Count == 0) {
+                        break;
+                    }
+
+                    int tankIndex = rnd.Next() % game.compTanks.Count;
+                    new Bullet(BULLET_TYPE.COMP, game.compTanks[tankIndex].direction, game.compTanks[tankIndex].Location);
                     break;
             }
         }
