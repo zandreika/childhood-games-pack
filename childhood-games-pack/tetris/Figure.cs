@@ -6,7 +6,7 @@ using System.Drawing;
 
 namespace childhood_games_pack.tetris {
     public enum FIGURE_TYPE { I, J, L, O, S, T, Z };
-    public enum FIGURE_ROTATE_TYPE { NORMAL, ROTATE_90, ROTATE_180, ROTATE_270 };
+    public enum FIGURE_ROTATING_STATE { NORMAL, ROTATE_90, ROTATE_180, ROTATE_270 };
     
 
     public class Figure {
@@ -14,8 +14,8 @@ namespace childhood_games_pack.tetris {
         private FIGURE_TYPE figureType;
         public List<Point> cubes;
         public bool isStay = false;
-        public int CUBE_SIZE = 20;
-        private FIGURE_ROTATE_TYPE rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+        public static int CUBE_SIZE = 20;
+        private FIGURE_ROTATING_STATE rotatingState = FIGURE_ROTATING_STATE.NORMAL;
 
         public Figure(Panel workspace, FIGURE_TYPE figureType) {
             this.workspace = workspace;
@@ -23,7 +23,6 @@ namespace childhood_games_pack.tetris {
 
             cubes = CreateFigure(figureType);
         }
-
 
         private List<Point> CreateFigure(FIGURE_TYPE figureType) {
             List<Point> cubes = new List<Point>();
@@ -92,7 +91,6 @@ namespace childhood_games_pack.tetris {
             return cubes;
         }
 
-
         public Brush GetBrushByFigureType() {
             switch (figureType) {
                 case FIGURE_TYPE.I: {
@@ -120,7 +118,6 @@ namespace childhood_games_pack.tetris {
                     throw new Exception("Wrong type of Figure");
             }
         }
-
 
         public int GetTopmostCoordinate() {
             int res = cubes[0].Y;
@@ -162,7 +159,6 @@ namespace childhood_games_pack.tetris {
             return res + CUBE_SIZE;
         }
 
-
         private int GetLeftmostCubeIndex() {
             int res = 0;
             for(int i = 1; i < cubes.Count; i++) {
@@ -172,7 +168,6 @@ namespace childhood_games_pack.tetris {
             }
             return res;
         }
-
 
         private int GetRightmostCubeIndex() {
             int res = 0;
@@ -184,7 +179,6 @@ namespace childhood_games_pack.tetris {
             return res;
         }
 
-
         private int GetBottommostCubeIndex() {
             int res = 0;
             for (int i = 1; i < cubes.Count; i++) {
@@ -195,10 +189,9 @@ namespace childhood_games_pack.tetris {
             return res;
         }
 
-
         public void StepLeft(List<KeyValuePair<Point, Brush>> ocсupiedCubes) {
             int leftIndex = GetLeftmostCubeIndex();
-            if (cubes[leftIndex].X <= workspace.Left) {
+            if (cubes[leftIndex].X < workspace.Left) {
                 return;
             }
             for (int i = 0; i < cubes.Count; i++) {
@@ -212,7 +205,6 @@ namespace childhood_games_pack.tetris {
                 cubes[i] = new Point(cubes[i].X - CUBE_SIZE, cubes[i].Y);
             }
         }
-
 
         public void StepRight(List<KeyValuePair<Point, Brush>> ocсupiedCubes) {
             int rightIndex = GetRightmostCubeIndex();
@@ -230,7 +222,6 @@ namespace childhood_games_pack.tetris {
                 cubes[i] = new Point(cubes[i].X + CUBE_SIZE, cubes[i].Y);
             }
         }
-
 
         public void StepDown(List<KeyValuePair<Point, Brush>> ocсupiedCubes) {
             int bottomIndex = GetBottommostCubeIndex();
@@ -251,12 +242,11 @@ namespace childhood_games_pack.tetris {
             }
         }
 
-
         public bool Rotate(List<KeyValuePair<Point, Brush>> ocсupiedCubes) {
             switch (figureType) {
                 case FIGURE_TYPE.I: {
-                    switch (rotateType) {
-                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                    switch (rotatingState) {
+                        case FIGURE_ROTATING_STATE.NORMAL: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[0].X - 2 * CUBE_SIZE, cubes[0].Y + 3 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 2 * CUBE_SIZE));
@@ -281,11 +271,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[2];
                             cubes[3] = newPoints[3];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_90;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                        case FIGURE_ROTATING_STATE.ROTATE_90: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[0].X + 2 * CUBE_SIZE, cubes[0].Y - 3 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 2 * CUBE_SIZE));
@@ -310,7 +300,7 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[2];
                             cubes[3] = newPoints[3];
 
-                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            rotatingState = FIGURE_ROTATING_STATE.NORMAL;
 
                             break;
                         }
@@ -320,8 +310,8 @@ namespace childhood_games_pack.tetris {
                     break;
                 }
                 case FIGURE_TYPE.J: {
-                    switch (rotateType) {
-                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                    switch (rotatingState) {
+                        case FIGURE_ROTATING_STATE.NORMAL: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y - 2 * CUBE_SIZE));
@@ -344,11 +334,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_90;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                        case FIGURE_ROTATING_STATE.ROTATE_90: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y + 2 * CUBE_SIZE));
@@ -371,11 +361,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_180;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                        case FIGURE_ROTATING_STATE.ROTATE_180: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y + 2 * CUBE_SIZE));
@@ -398,11 +388,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_270;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                        case FIGURE_ROTATING_STATE.ROTATE_270: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y - 2 * CUBE_SIZE));
@@ -425,7 +415,7 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            rotatingState = FIGURE_ROTATING_STATE.NORMAL;
 
                             break;
                         }
@@ -435,8 +425,8 @@ namespace childhood_games_pack.tetris {
                     break;
                 }
                 case FIGURE_TYPE.L: {
-                    switch (rotateType) {
-                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                    switch (rotatingState) {
+                        case FIGURE_ROTATING_STATE.NORMAL: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[0].X + 1 * CUBE_SIZE, cubes[0].Y - 3 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[1].X, cubes[1].Y - 2 * CUBE_SIZE));
@@ -459,11 +449,11 @@ namespace childhood_games_pack.tetris {
                             cubes[1] = newPoints[1];
                             cubes[2] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_90;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                        case FIGURE_ROTATING_STATE.ROTATE_90: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[0].X + 3 * CUBE_SIZE, cubes[0].Y + 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[1].X + 2 * CUBE_SIZE, cubes[1].Y));
@@ -486,11 +476,11 @@ namespace childhood_games_pack.tetris {
                             cubes[1] = newPoints[1];
                             cubes[2] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_180;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                        case FIGURE_ROTATING_STATE.ROTATE_180: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[0].X - 1 * CUBE_SIZE, cubes[0].Y + 3 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[1].X, cubes[1].Y + 2 * CUBE_SIZE));
@@ -513,11 +503,11 @@ namespace childhood_games_pack.tetris {
                             cubes[1] = newPoints[1];
                             cubes[2] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_270;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                        case FIGURE_ROTATING_STATE.ROTATE_270: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[0].X - 3 * CUBE_SIZE, cubes[0].Y - 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[1].X - 2 * CUBE_SIZE, cubes[1].Y));
@@ -540,7 +530,7 @@ namespace childhood_games_pack.tetris {
                             cubes[1] = newPoints[1];
                             cubes[2] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            rotatingState = FIGURE_ROTATING_STATE.NORMAL;
 
                             break;
                         }
@@ -552,8 +542,8 @@ namespace childhood_games_pack.tetris {
                 case FIGURE_TYPE.O:
                     break;
                 case FIGURE_TYPE.S: {
-                    switch (rotateType) {
-                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                    switch (rotatingState) {
+                        case FIGURE_ROTATING_STATE.NORMAL: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X, cubes[2].Y - 2 * CUBE_SIZE));
@@ -576,11 +566,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_90;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                        case FIGURE_ROTATING_STATE.ROTATE_90: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y));
@@ -603,11 +593,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_180;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                        case FIGURE_ROTATING_STATE.ROTATE_180: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X, cubes[2].Y + 2 * CUBE_SIZE));
@@ -630,11 +620,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_270;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                        case FIGURE_ROTATING_STATE.ROTATE_270: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y));
@@ -657,7 +647,7 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            rotatingState = FIGURE_ROTATING_STATE.NORMAL;
 
                             break;
                         }
@@ -667,8 +657,8 @@ namespace childhood_games_pack.tetris {
                     break;
                 }
                 case FIGURE_TYPE.T: {
-                    switch (rotateType) {
-                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                    switch (rotatingState) {
+                        case FIGURE_ROTATING_STATE.NORMAL: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X, cubes[1].Y - 2 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE));
@@ -691,11 +681,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_90;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                        case FIGURE_ROTATING_STATE.ROTATE_90: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X + 2 * CUBE_SIZE, cubes[1].Y));
                             newPoints.Add(new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y - 1 * CUBE_SIZE));
@@ -718,11 +708,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_180;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                        case FIGURE_ROTATING_STATE.ROTATE_180: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X, cubes[1].Y + 2 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X + 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE));
@@ -745,11 +735,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_270;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                        case FIGURE_ROTATING_STATE.ROTATE_270: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X - 2 * CUBE_SIZE, cubes[1].Y));
                             newPoints.Add(new Point(cubes[2].X - 1 * CUBE_SIZE, cubes[2].Y + 1 * CUBE_SIZE));
@@ -772,7 +762,7 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            rotatingState = FIGURE_ROTATING_STATE.NORMAL;
 
                             break;
                         }
@@ -782,8 +772,8 @@ namespace childhood_games_pack.tetris {
                     break;
                 }
                 case FIGURE_TYPE.Z: {
-                    switch (rotateType) {
-                        case FIGURE_ROTATE_TYPE.NORMAL: {
+                    switch (rotatingState) {
+                        case FIGURE_ROTATING_STATE.NORMAL: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X - 2 * CUBE_SIZE, cubes[2].Y));
@@ -806,11 +796,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_90;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_90;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_90: {
+                        case FIGURE_ROTATING_STATE.ROTATE_90: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X - 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X, cubes[2].Y - 2 * CUBE_SIZE));
@@ -833,11 +823,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_180;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_180;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_180: {
+                        case FIGURE_ROTATING_STATE.ROTATE_180: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y - 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X + 2 * CUBE_SIZE, cubes[2].Y));
@@ -860,11 +850,11 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.ROTATE_270;
+                            rotatingState = FIGURE_ROTATING_STATE.ROTATE_270;
 
                             break;
                         }
-                        case FIGURE_ROTATE_TYPE.ROTATE_270: {
+                        case FIGURE_ROTATING_STATE.ROTATE_270: {
                             List<Point> newPoints = new List<Point>();
                             newPoints.Add(new Point(cubes[1].X + 1 * CUBE_SIZE, cubes[1].Y + 1 * CUBE_SIZE));
                             newPoints.Add(new Point(cubes[2].X, cubes[2].Y + 2 * CUBE_SIZE));
@@ -887,7 +877,7 @@ namespace childhood_games_pack.tetris {
                             cubes[2] = newPoints[1];
                             cubes[3] = newPoints[2];
 
-                            rotateType = FIGURE_ROTATE_TYPE.NORMAL;
+                            rotatingState = FIGURE_ROTATING_STATE.NORMAL;
 
                             break;
                         }
