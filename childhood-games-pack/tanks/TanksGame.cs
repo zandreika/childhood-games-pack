@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Threading;
-
+using System.Runtime.InteropServices;
 
 namespace childhood_games_pack.tanks {
     public enum TANK_TYPE : int {
-        NONE = 0,
-        LIGHT = 1,
-        MEDIUM = 2,
-        HEAVY = 3
+        NONE    = 0,
+        LIGHT   = 1,
+        MEDIUM  = 2,
+        HEAVY   = 3
     }
 
     public enum SPEED_LEVEL : int {
-        NONE = 0,
-        LOW = 1,
-        MEDIUM = 2,
-        HIGHT = 3
+        NONE    = 0,
+        LOW     = 1,
+        MEDIUM  = 2,
+        HIGHT   = 3
     }
 
     public enum DIRECTION : int {
@@ -27,24 +27,41 @@ namespace childhood_games_pack.tanks {
         R   = 4
     }
 
+    public enum BULLET_TYPE : int {
+        USER    = 1,
+        COMP    = 2
+    }
+
     public partial class TanksGame : Form {
+        public static TanksGame gameRef = null;
+
+        public const int tankHeight = 50;
+        public const int tankWidth = 50;
+        public const int bulletHeight = 8;
+        public const int bulletWidth = 8;
+
         private enum GAME_STATUS : int {
             LEVEL_SELECT = 1,
             GAME = 2
         }
 
-        public int tankHeight = 50;
-        public int tankWidth = 50;
-        public int bulletHeight = 8;
-        public int bulletWidth = 8;
-
         public List<CompTank> compTanks = new List<CompTank>();
         public UserTank userTank;
+        public bool isUserTankAlive;
 
         private MainMenuForm mainMenu;
         private GAME_STATUS gameStatus;
         private List<Button> buttons = new List<Button>();
-        
+
+        [DllImport("user32.dll")]
+        private static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
+
+        private const int KEYEVENTF_EXTENDEDKEY = 1;
+
+        public static void ShootKeyDown(Keys vKey) {
+            keybd_event((byte)vKey, 0, KEYEVENTF_EXTENDEDKEY, 0);
+        }
+
         public TanksGame(MainMenuForm mainMenu) {
             InitializeComponent();
 
@@ -56,6 +73,8 @@ namespace childhood_games_pack.tanks {
 
             gameStatus = GAME_STATUS.LEVEL_SELECT;
             Size = new Size(350, 150);
+
+            TanksGame.gameRef = this;
         }
 
         private void configureGameField(int level) {
@@ -77,14 +96,15 @@ namespace childhood_games_pack.tanks {
             Point userSpot = new Point(500, 500);
             Point compSpot = new Point(500, 50);
 
-            userTank = new UserTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, userSpot, this);
+            userTank = new UserTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, userSpot);
+            isUserTankAlive = true;
             Controls.Add(userTank);
             userTank.Show();
 
             int spotDifference = -200;
             int countOfEnemies = 5;
             for (int i = 0; i < countOfEnemies; i++) {
-                CompTank compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, new Point(compSpot.X + spotDifference, compSpot.Y), this);
+                CompTank compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, new Point(compSpot.X + spotDifference, compSpot.Y));
                 compTanks.Add(compTank);
                 Controls.Add(compTank);
                 compTank.Show();
@@ -124,6 +144,12 @@ namespace childhood_games_pack.tanks {
             while (true) {
                 if (compTanks.Count == 0) {
                     MessageBox.Show("Winner!");
+                    restartGame();
+                    return;
+                }
+
+                if (isUserTankAlive == false) {
+                    MessageBox.Show("You lose!");
                     restartGame();
                     return;
                 }
