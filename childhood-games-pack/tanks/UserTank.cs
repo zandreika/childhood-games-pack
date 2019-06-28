@@ -56,25 +56,49 @@ namespace childhood_games_pack.tanks {
                 case Keys.W:
                     BackgroundImage = Properties.Resources.light_utank_u;
                     direction = DIRECTION.U;
-                    Location = new Point(Location.X, Location.Y - step);
+
+                    Point newUpLoc = new Point(Location.X, Location.Y - step);
+                    if (newUpLoc.Y <= 0) {
+                        break;
+                    }
+
+                    Location = newUpLoc;
                     break;
 
                 case Keys.S:
                     BackgroundImage = Properties.Resources.light_utank_d;
                     direction = DIRECTION.D;
-                    Location = new Point(Location.X, Location.Y + step);
+
+                    Point newDownLoc = new Point(Location.X, Location.Y + step);
+                    if (newDownLoc.Y >= 600) {
+                        break;
+                    }
+
+                    Location = newDownLoc;
                     break;
 
                 case Keys.A:
                     BackgroundImage = Properties.Resources.light_utank_l;
                     direction = DIRECTION.L;
-                    Location = new Point(Location.X - step, Location.Y);
+
+                    Point newLeftLoc = new Point(Location.X - step, Location.Y);
+                    if (newLeftLoc.X <= 0) {
+                        break;
+                    }
+
+                    Location = newLeftLoc;
                     break;
 
                 case Keys.D:
                     BackgroundImage = Properties.Resources.light_utank_r;
                     direction = DIRECTION.R;
-                    Location = new Point(Location.X + step, Location.Y);
+
+                    Point newRightLoc = new Point(Location.X + step, Location.Y);
+                    if (newRightLoc.X >= 1200) {
+                        break;
+                    }
+
+                    Location = newRightLoc;
                     break;
 
                 case Keys.Space:

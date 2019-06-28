@@ -90,22 +90,46 @@ namespace childhood_games_pack.tanks {
                 switch (direction) {
                     case DIRECTIONS.UP:
                         BackgroundImage = Properties.Resources.light_ctank_u;
-                        Location = new Point(Location.X, Location.Y - step);
+
+                        Point newUpLoc = new Point(Location.X, Location.Y - step);
+                        if (newUpLoc.Y <= 0) {
+                            break;
+                        }
+
+                        Location = newUpLoc;
                         break;
 
                     case DIRECTIONS.DOWN:
                         BackgroundImage = Properties.Resources.light_ctank_d;
-                        Location = new Point(Location.X, Location.Y + step);
+
+                        Point newDownLoc = new Point(Location.X, Location.Y + step);
+                        if (newDownLoc.Y >= 600) {
+                            break;
+                        }
+
+                        Location = newDownLoc;
                         break;
 
                     case DIRECTIONS.LEFT:
                         BackgroundImage = Properties.Resources.light_ctank_l;
-                        Location = new Point(Location.X - step, Location.Y);
+
+                        Point newLeftLoc = new Point(Location.X - step, Location.Y);
+                        if (newLeftLoc.X <= 0) {
+                            break;
+                        }
+
+                        Location = newLeftLoc;
                         break;
 
                     case DIRECTIONS.RIGHT:
                         BackgroundImage = Properties.Resources.light_ctank_r;
-                        Location = new Point(Location.X + step, Location.Y);
+
+                        Point newRightLoc = new Point(Location.X + step, Location.Y);
+                        if (newRightLoc.X >= 1200) {
+                            break;
+                        }
+
+                        Location = newRightLoc;
                         break;
                 }
 

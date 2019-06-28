@@ -75,14 +75,14 @@ namespace childhood_games_pack.tanks {
 
         private void levelOneConfigure() {
             Point userSpot = new Point(500, 500);
-            Point compSpot = new Point(500, 300);
+            Point compSpot = new Point(500, 50);
 
             userTank = new UserTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, userSpot, this);
             Controls.Add(userTank);
             userTank.Show();
 
-            int spotDifference = 0; // -400
-            int countOfEnemies = 1; // 10
+            int spotDifference = -200;
+            int countOfEnemies = 5;
             for (int i = 0; i < countOfEnemies; i++) {
                 CompTank compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, new Point(compSpot.X + spotDifference, compSpot.Y), this);
                 compTanks.Add(compTank);
@@ -93,7 +93,6 @@ namespace childhood_games_pack.tanks {
             }
 
             userTank.Focus();
-
             resultGameChecker.RunWorkerAsync();
         }
 
