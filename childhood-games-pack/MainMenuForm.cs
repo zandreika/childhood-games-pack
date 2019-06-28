@@ -25,7 +25,7 @@ namespace childhood_games_pack {
             tetris.TetrisMainForm tetris = new tetris.TetrisMainForm(this);
             tetris.Show();
             Hide();
-            tetris.StartGame();
+            //tetris.StartGame();
         }
     }
 }

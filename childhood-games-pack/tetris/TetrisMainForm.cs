@@ -6,7 +6,7 @@ using System.Threading;
 using System;
 
 namespace childhood_games_pack.tetris {
-    public enum GAME_SPEED { LOW = 300, MEDIUM = 200, HIGH = 100, INCREDIBLE = 50 };
+    public enum GAME_SPEED { LOW = 250, MEDIUM = 200, HIGH = 150, INCREDIBLE = 100 };
 
     public partial class TetrisMainForm : Form {
         private MainMenuForm mainMenu;
@@ -16,7 +16,7 @@ namespace childhood_games_pack.tetris {
         private Figure currentFigure;
         private Figure nextFigure;
 
-        private List<KeyValuePair<Point, Brush>> cubes = new List<KeyValuePair<Point, Brush>>();
+        private List<KeyValuePair<Point, Brush>> cubes;
         private byte[,] occupatedMap = new byte[20,10];
 
         private int gameSpeed;
@@ -25,11 +25,22 @@ namespace childhood_games_pack.tetris {
         public TetrisMainForm(MainMenuForm mainMenu) {
             InitializeComponent();
             this.mainMenu = mainMenu;
+
             tetrisGamePanelCanvas = tetrisGamePanel.CreateGraphics();
             nextFigurePanelCanvas = nextFigurePanel.CreateGraphics();
-        }
 
+            tetrisGamePanel.Hide();
+            nextFigurePanel.Hide();
+            ScoreHeaderLabel.Hide();
+
+            StartGameButton.Show();
+            InfoButton.Show();
+
+            this.Size = new Size(300, 300);
+        }
+        
         public void StartGame() {
+            this.Size = new Size(500, 500);
             gameSpeed = (int)GAME_SPEED.LOW;
             gameScore = 0;
 
@@ -38,10 +49,12 @@ namespace childhood_games_pack.tetris {
                     occupatedMap[i, j] = 0;
                 }
             }
-            currentFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I);
-            nextFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.J);
 
-            restartGameButton.Hide();
+            Random random = new Random();
+            currentFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I + random.Next() % Enum.GetNames(typeof(FIGURE_TYPE)).Length);
+            nextFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I + random.Next() % Enum.GetNames(typeof(FIGURE_TYPE)).Length);
+
+            StartGameButton.Hide();
             nextFigurePanel.Invalidate();
             ScoreLabel.Text = gameScore.ToString();
 
@@ -57,8 +70,9 @@ namespace childhood_games_pack.tetris {
                 if (currentFigure.isStay) {
                     if(currentFigure.GetTopmostCoordinate() <= 0) {
                         MessageBox.Show("You lose");
-                        restartGameButton.Show();
-                        restartGameButton.Enabled = true;
+                        StartGameButton.Location = new Point(nextFigurePanel.Location.X, nextFigurePanel.Location.Y + nextFigurePanel.Height + 20);
+                        StartGameButton.Enabled = true;
+                        StartGameButton.Show();
                         return;
                     }
 
@@ -72,7 +86,7 @@ namespace childhood_games_pack.tetris {
                     }
 
                     // find 10 cubes in a row
-                    // and shift upper cubes
+                    // and shift upper cubes down
                     for (int i = occupatedMap.GetLength(0) - 1; i > 0; i--) {
                         int cubes_in_row = 0;
                         for (int j = 0; j < occupatedMap.GetLength(1); j++) {
@@ -89,13 +103,16 @@ namespace childhood_games_pack.tetris {
                                 occupatedMap[0, k] = 0;
                             }
 
-                            for (int u = 0; u < cubes.Count; u++) {
-                                var item = cubes[u];
+                            //delete cubes from line
+                            for (int l = 0; l < cubes.Count; l++) {
+                                var item = cubes[l];
                                 if (item.Key.Y == i * currentFigure.CUBE_SIZE) {
-                                    cubes.RemoveAt(u);
-                                    u--;
+                                    cubes.RemoveAt(l);
+                                    l--;
                                 }
                             }
+
+                            //shift upper cubes down
                             for (int u = 0; u < cubes.Count; u++) {
                                 var item = cubes[u];
                                 if (item.Key.Y < i * currentFigure.CUBE_SIZE) {
@@ -103,9 +120,10 @@ namespace childhood_games_pack.tetris {
                                 }
                             }
 
-                            for (int f1 = i; f1 > 0; f1--) {
-                                for(int f2 = 0; f2 < occupatedMap.GetLength(1); f2++) {
-                                    occupatedMap[f1, f2] = occupatedMap[f1 - 1, f2];
+                            //change map
+                            for (int x = i; x > 0; x--) {
+                                for(int y = 0; y < occupatedMap.GetLength(1); y++) {
+                                    occupatedMap[x, y] = occupatedMap[x - 1, y];
                                 }
                             }
 
@@ -134,10 +152,10 @@ namespace childhood_games_pack.tetris {
                     if(gameScore > 5000) {
                         gameSpeed = (int)GAME_SPEED.INCREDIBLE;
                     }
-                    else if(gameSpeed > 3000) {
+                    else if(gameScore >= 3000) {
                         gameSpeed = (int)GAME_SPEED.HIGH;
                     }
-                    else if(gameSpeed > 1500) {
+                    else if(gameScore >= 1000) {
                         gameSpeed = (int)GAME_SPEED.MEDIUM;
                     }
                     else {
@@ -150,11 +168,12 @@ namespace childhood_games_pack.tetris {
 
                     if (rows_to_del > 0) {
                         tetrisGamePanel.Invalidate();
+                        ScoreLabel.Text = gameScore.ToString();
                     }
-                    nextFigurePanel.Invalidate();
-                    ScoreLabel.Text = gameScore.ToString();
+                    nextFigurePanel.Invalidate();  
                 }
 
+                Thread.Sleep(gameSpeed);
                 currentFigure.StepDown(cubes);
 
                 Point startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate(), currentFigure.GetTopmostCoordinate() - currentFigure.CUBE_SIZE);
@@ -162,7 +181,6 @@ namespace childhood_games_pack.tetris {
                 Rectangle invRect = new Rectangle(startRedrawPoint, sizeRedraw);
 
                 tetrisGamePanel.Invalidate(invRect);
-                Thread.Sleep(gameSpeed);
             }
 
         }
@@ -178,10 +196,12 @@ namespace childhood_games_pack.tetris {
                 Point startRedrawPoint;
                 Size sizeRedraw;
                 Rectangle invRect;
+
                 switch (e.KeyCode) {
                     case Keys.A:
                     case Keys.Left:
                         currentFigure.StepLeft(cubes);
+
                         startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate(), currentFigure.GetTopmostCoordinate());
                         sizeRedraw = new Size(currentFigure.GetRightmostCoordinate() - currentFigure.GetLeftmostCoordinate() + 2*currentFigure.CUBE_SIZE, currentFigure.GetBottommostCoordinate() - currentFigure.GetTopmostCoordinate() + currentFigure.CUBE_SIZE);
                         invRect = new Rectangle(startRedrawPoint, sizeRedraw);
@@ -214,7 +234,6 @@ namespace childhood_games_pack.tetris {
                     case Keys.W:
                     case Keys.Up:
                         if (currentFigure.Rotate(cubes)) {
-
                             startRedrawPoint = new Point(currentFigure.GetLeftmostCoordinate() - 2 * currentFigure.CUBE_SIZE, currentFigure.GetTopmostCoordinate() - 3 * currentFigure.CUBE_SIZE);
                             sizeRedraw = new Size(8 * currentFigure.CUBE_SIZE, 8 * currentFigure.CUBE_SIZE);
                             invRect = new Rectangle(startRedrawPoint, sizeRedraw);
@@ -229,7 +248,6 @@ namespace childhood_games_pack.tetris {
         }
 
         private void TetrisGamePanel_Paint(object sender, PaintEventArgs e) {
-
             for (int i = 0; i < currentFigure.cubes.Count; i++) {
                 Rectangle rect = new Rectangle(currentFigure.cubes[i], new Size(currentFigure.CUBE_SIZE, currentFigure.CUBE_SIZE));
                 tetrisGamePanelCanvas.FillRectangle(currentFigure.GetBrushByFigureType(), rect);
@@ -242,19 +260,42 @@ namespace childhood_games_pack.tetris {
             }
         }
 
-        private void RestartGameButton_Click(object sender, EventArgs e) {
-            cubes = new List<KeyValuePair<Point, Brush>>();
-            tetrisGamePanel.Invalidate();
-            restartGameButton.Enabled = false;
-            StartGame();
-        }
-
         private void NextFigurePanel_Paint(object sender, PaintEventArgs e) {
             for (int i = 0; i < nextFigure.cubes.Count; i++) {
                 Rectangle rect = new Rectangle(new Point(nextFigure.cubes[i].X - 40, nextFigure.cubes[i].Y + 100), new Size(nextFigure.CUBE_SIZE, nextFigure.CUBE_SIZE));
                 nextFigurePanelCanvas.FillRectangle(nextFigure.GetBrushByFigureType(), rect);
                 nextFigurePanelCanvas.DrawRectangle(Pens.Black, rect);
             }
+        }
+
+        private void StartGameButton_Click(object sender, EventArgs e) {
+            tetrisGamePanel.Show();
+            nextFigurePanel.Show();
+            ScoreHeaderLabel.Show();
+
+            StartGameButton.Enabled = false;
+            InfoButton.Enabled = false;
+            StartGameButton.Hide();
+            InfoButton.Hide();
+
+            cubes = new List<KeyValuePair<Point, Brush>>();
+            tetrisGamePanel.Invalidate();
+            StartGame();
+        }
+
+        private void InfoButton_Click(object sender, EventArgs e) {
+            String information = "Control:\n";
+            information += "to move the figure left press A or left Arrow\n";
+            information += "to move the figure right press D or right Arrow\n";
+            information += "to speed up figure press S or arrow down\n";
+            information += "to rotate figeure press W or arrow up\n\n";
+            information += "Adding points:\n";
+            information += "If you collect 1 row - to score added 100 points\n";
+            information += "If you collect 2 rows - to score added 300 points\n";
+            information += "If you collect 3 rows - to score added 700 points\n";
+            information += "If you collect 4 rows - to score added 1500 points\n";
+
+            MessageBox.Show(information);
         }
     }
 }
