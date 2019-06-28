@@ -27,6 +27,7 @@
             this.level2Button = new System.Windows.Forms.Button();
             this.level3Button = new System.Windows.Forms.Button();
             this.level4Button = new System.Windows.Forms.Button();
+            this.resultGameChecker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // level1Button
@@ -66,7 +67,11 @@
             this.level4Button.Text = "4";
             this.level4Button.UseVisualStyleBackColor = true;
             // 
-            // TanksMainForm
+            // resultGameChecker
+            // 
+            this.resultGameChecker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.resultGameChecker_DoWork);
+            // 
+            // TanksGame
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(332, 103);
@@ -76,7 +81,7 @@
             this.Controls.Add(this.level1Button);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.KeyPreview = true;
-            this.Name = "TanksMainForm";
+            this.Name = "TanksGame";
             this.Text = "Tanks";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TanksMainForm_FormClosed);
             this.ResumeLayout(false);
@@ -89,5 +94,6 @@
         private System.Windows.Forms.Button level2Button;
         private System.Windows.Forms.Button level3Button;
         private System.Windows.Forms.Button level4Button;
+        private System.ComponentModel.BackgroundWorker resultGameChecker;
     }
 }

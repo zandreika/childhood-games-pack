@@ -65,6 +65,7 @@ namespace childhood_games_pack.tanks {
                     if (bulletCenter.X >= tank.Location.X && bulletCenter.X <= tank.Location.X + game.tankWidth &&
                         bulletCenter.Y >= tank.Location.Y && bulletCenter.Y <= tank.Location.Y + game.tankHeight) {
 
+                        game.compTanks.Remove(tank);
                         tank.Close();
                         Close();
                     }

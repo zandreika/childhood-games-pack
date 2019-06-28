@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading;
 
 
 namespace childhood_games_pack.tanks {
@@ -38,13 +39,11 @@ namespace childhood_games_pack.tanks {
         public int bulletWidth = 8;
 
         public List<CompTank> compTanks = new List<CompTank>();
+        public UserTank userTank;
 
         private MainMenuForm mainMenu;
         private GAME_STATUS gameStatus;
         private List<Button> buttons = new List<Button>();
-
-        private Point userSpot = new Point(500, 500);
-        private Point compSpot = new Point(500, 100);
         
         public TanksGame(MainMenuForm mainMenu) {
             InitializeComponent();
@@ -75,29 +74,63 @@ namespace childhood_games_pack.tanks {
         }
 
         private void levelOneConfigure() {
-            UserTank userTank = new UserTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, userSpot, this);
+            Point userSpot = new Point(500, 500);
+            Point compSpot = new Point(500, 300);
+
+            userTank = new UserTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, userSpot, this);
             Controls.Add(userTank);
             userTank.Show();
 
-            int spotDifference = -400;
-            for (int i = 0; i < 10; i++) {
+            int spotDifference = 0; // -400
+            int countOfEnemies = 1; // 10
+            for (int i = 0; i < countOfEnemies; i++) {
                 CompTank compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, new Point(compSpot.X + spotDifference, compSpot.Y), this);
                 compTanks.Add(compTank);
                 Controls.Add(compTank);
                 compTank.Show();
 
-                spotDifference += 50;
+                spotDifference += 100;
             }
 
             userTank.Focus();
+
+            resultGameChecker.RunWorkerAsync();
         }
 
         private void TanksMainForm_FormClosed(object sender, FormClosedEventArgs e) {
             mainMenu.Show();
         }
 
+        private void restartGame() {
+            foreach (CompTank tank in compTanks) {
+                Controls.Remove(tank);
+                tank.Close();
+            }
+
+            userTank.Close();
+
+            gameStatus = GAME_STATUS.LEVEL_SELECT;
+            Size = new Size(350, 150);
+
+            foreach (Button b in buttons) {
+                b.Show();
+            }
+        }
+
         private void level1Button_Click(object sender, EventArgs e) {
             configureGameField(1);
+        }
+
+        private void resultGameChecker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
+            while (true) {
+                if (compTanks.Count == 0) {
+                    MessageBox.Show("Winner!");
+                    restartGame();
+                    return;
+                }
+
+                Thread.Sleep(300);
+            }
         }
     }
 }
