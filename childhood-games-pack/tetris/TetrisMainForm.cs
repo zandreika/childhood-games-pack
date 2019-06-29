@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System;
 
+
 namespace childhood_games_pack.tetris {
     public enum GAME_SPEED { LOW = 250, MEDIUM = 200, HIGH = 150, INCREDIBLE = 100 };
 
@@ -22,6 +23,7 @@ namespace childhood_games_pack.tetris {
         private int gameSpeed;
         private int gameScore;
 
+
         public TetrisMainForm(MainMenuForm mainMenu) {
             InitializeComponent();
             this.mainMenu = mainMenu;
@@ -36,6 +38,7 @@ namespace childhood_games_pack.tetris {
             Size = new Size(280, 280);
         }
         
+
         public void StartGame() {
             gameSpeed = (int)GAME_SPEED.LOW;
             gameScore = 0;
@@ -51,10 +54,10 @@ namespace childhood_games_pack.tetris {
             nextFigure = new Figure(tetrisGamePanel, FIGURE_TYPE.I + random.Next() % Enum.GetNames(typeof(FIGURE_TYPE)).Length);
 
             nextFigurePanel.Invalidate();
-            ScoreLabel.Text = gameScore.ToString();
 
             backgroundWorker1.RunWorkerAsync();
         }
+
 
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
             while (true) {
@@ -182,6 +185,7 @@ namespace childhood_games_pack.tetris {
 
         }
 
+
         private void TetrisMainForm_FormClosed(object sender, FormClosedEventArgs e) {
             backgroundWorker1.CancelAsync();
             mainMenu.Show();
@@ -244,6 +248,7 @@ namespace childhood_games_pack.tetris {
             }
         }
 
+
         private void TetrisGamePanel_Paint(object sender, PaintEventArgs e) {
             for (int i = 0; i < currentFigure.cubes.Count; i++) {
                 Rectangle rect = new Rectangle(currentFigure.cubes[i], new Size(Figure.CUBE_SIZE, Figure.CUBE_SIZE));
@@ -257,6 +262,7 @@ namespace childhood_games_pack.tetris {
             }
         }
 
+
         private void NextFigurePanel_Paint(object sender, PaintEventArgs e) {
             for (int i = 0; i < nextFigure.cubes.Count; i++) {
                 Rectangle rect = new Rectangle(new Point(nextFigure.cubes[i].X - 2 * Figure.CUBE_SIZE, nextFigure.cubes[i].Y + 5 * Figure.CUBE_SIZE), new Size(Figure.CUBE_SIZE, Figure.CUBE_SIZE));
@@ -264,6 +270,7 @@ namespace childhood_games_pack.tetris {
                 nextFigurePanelCanvas.DrawRectangle(Pens.Black, rect);
             }
         }
+
 
         private void StartGameButton_Click(object sender, EventArgs e) {
             if (SmallFigureRadioButton.Checked) {
@@ -292,6 +299,7 @@ namespace childhood_games_pack.tetris {
             ScoreLabel.Location = new Point(ScoreHeaderLabel.Left, ScoreHeaderLabel.Bottom + 10);
             ScoreLabel.Size = new Size(5 * Figure.CUBE_SIZE, 2 * Figure.CUBE_SIZE);
             ScoreLabel.Font = new Font("Microsoft Sans Serif", Figure.CUBE_SIZE);
+            ScoreLabel.Text = gameScore.ToString();
 
             nextFigurePanel.Location = new Point(tetrisGamePanel.Right + Figure.CUBE_SIZE, ScoreLabel.Bottom + 20);
 
@@ -319,6 +327,7 @@ namespace childhood_games_pack.tetris {
             tetrisGamePanel.Invalidate();
             StartGame();
         }
+
 
         private void InfoButton_Click(object sender, EventArgs e) {
             String information = "Control:\n";
