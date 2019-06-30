@@ -26,5 +26,11 @@ namespace childhood_games_pack {
             tetris.Show();
             Hide();
         }
+
+        private void TennisGameButton_Click(object sender, EventArgs e) {
+            tennis.TennisGame tennis = new tennis.TennisGame(this);
+            tennis.Show();
+            Hide();
+        }
     }
 }

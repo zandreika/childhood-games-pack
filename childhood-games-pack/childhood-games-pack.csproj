@@ -79,6 +79,24 @@
     <Compile Include="tanks\TanksGame.Designer.cs">
       <DependentUpon>TanksGame.cs</DependentUpon>
     </Compile>
+    <Compile Include="tennis\Ball.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tennis\Ball.Designer.cs">
+      <DependentUpon>Ball.cs</DependentUpon>
+    </Compile>
+    <Compile Include="tennis\UserRacket.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tennis\UserRacket.Designer.cs">
+      <DependentUpon>UserRacket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="tennis\TennisGame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tennis\TennisGame.Designer.cs">
+      <DependentUpon>TennisGame.cs</DependentUpon>
+    </Compile>
     <Compile Include="tetris\Figure.cs" />
     <Compile Include="tetris\TetrisMainForm.cs">
       <SubType>Form</SubType>
@@ -110,6 +128,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="tanks\TanksGame.resx">
       <DependentUpon>TanksGame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tennis\Ball.resx">
+      <DependentUpon>Ball.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tennis\UserRacket.resx">
+      <DependentUpon>UserRacket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tennis\TennisGame.resx">
+      <DependentUpon>TennisGame.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="tetris\TetrisMainForm.resx">
       <DependentUpon>TetrisMainForm.cs</DependentUpon>
