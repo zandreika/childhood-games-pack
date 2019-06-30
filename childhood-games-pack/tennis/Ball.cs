@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -19,11 +16,16 @@ namespace childhood_games_pack.tennis {
             this.tennisGame = tennisGame;
             isStay = true;
 
+            Size = new Size(tennisGame.userRacket.Size.Width / 3, tennisGame.userRacket.Size.Height);
             backgroundWorker1.RunWorkerAsync();
         }
 
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
             while (true) {
+                if(tennisGame.gameStatus == GAME_STATUS.STOP) {
+                    isStay = true;
+                    return;
+                }
                 if (isStay) {
                     if (isLastKickUser) {
                         Location = new Point(tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2 - Size.Width / 2, tennisGame.userRacket.Top - tennisGame.userRacket.Size.Height);
@@ -35,22 +37,37 @@ namespace childhood_games_pack.tennis {
                 }
 
                 if (isLastKickUser) {
-                    if (Location.Y > tennisGame.compRacket.Size.Height) {
-                        if (Top < tennisGame.compRacket.Bottom &&
+                    if (Top > tennisGame.compRacket.Bottom) { // if the ball going from player to computer
+                        if (Top - Size.Height < tennisGame.compRacket.Bottom &&
                             Right >= tennisGame.compRacket.Left &&
-                            Left <= tennisGame.compRacket.Right) 
-                        {
-                            Location = new Point(Location.X, tennisGame.compRacket.Size.Height);
+                            Left <= tennisGame.compRacket.Right) { // for not to cross computer racket
+                            Location = new Point(Location.X, tennisGame.compRacket.Bottom);
                         }
                         else {
-                            Location = new Point(Location.X, Location.Y - Size.Height);
+                            switch (tennisGame.userRacket.lastKick) {
+                                case KICKS.LEFT_HAND: {
+                                    Location = new Point(Location.X + 5, Location.Y - Size.Height);
+                                    break;
+                                }
+                                case KICKS.DIRECT: {
+                                    Location = new Point(Location.X, Location.Y - Size.Height);
+                                    break;
+                                }
+                                case KICKS.RIGHT_HAND: {
+                                    Location = new Point(Location.X - 5, Location.Y - Size.Height);
+                                    break;
+                                }
+                                default:
+                                    throw new Exception("Wrong shoot");
+                            }
+                            
                         }
                     }
-                    else {
+                    else { // if the ball reached computer racket
                         if (Right < tennisGame.compRacket.Left  || 
-                            Left > tennisGame.compRacket.Right) {
+                            Left > tennisGame.compRacket.Right) { // if computer racket can't kick the ball
                             Location = new Point(Location.X, 0);
-                            MessageBox.Show("You win!");
+                            //MessageBox.Show("You win!");
                             isStay = true;
                         }
                         else {
@@ -60,26 +77,35 @@ namespace childhood_games_pack.tennis {
 
                 }
                 else {
-                    if (Bottom < tennisGame.userRacket.Top) {
+                    if (Bottom < tennisGame.userRacket.Top) { // if the ball going from computer to player 
                         if (Bottom + Size.Height > tennisGame.userRacket.Top &&
                             Right >= tennisGame.userRacket.Left &&
-                            Left <= tennisGame.userRacket.Right) 
+                            Left <= tennisGame.userRacket.Right) // for not to cross user racket
                         {
-                            Location = new Point(Location.X, tennisGame.userRacket.Location.Y - Size.Height);
+                            Location = new Point(Location.X, tennisGame.userRacket.Top - Size.Height);
                         }
                         else {
                             Location = new Point(Location.X, Location.Y + Size.Height);
                         }
                     }
-                    else {
-                        if (Location.X > tennisGame.userRacket.Location.X + tennisGame.userRacket.Size.Width ||
-                            Right < tennisGame.userRacket.Left) {
+                    else { // if the ball reached user racket
+                        if (Left > tennisGame.userRacket.Right ||
+                            Right < tennisGame.userRacket.Left) { // if user racket can't kick the ball
                             Location = new Point(Location.X, Location.Y + Size.Height);
-                            MessageBox.Show("You lose!");
+                            //MessageBox.Show("You lose!");
                             isStay = true;
                         }
                         else {
                             isLastKickUser = true;
+                            if(Left < tennisGame.userRacket.Left + Size.Width) {
+                                tennisGame.userRacket.lastKick = KICKS.LEFT_HAND;
+                            }
+                            else if(Left < tennisGame.userRacket.Left + 2 * Size.Width) {
+                                tennisGame.userRacket.lastKick = KICKS.DIRECT;
+                            }
+                            else {
+                                tennisGame.userRacket.lastKick = KICKS.RIGHT_HAND;
+                            }
                         }
                     }
                 }

@@ -4,16 +4,19 @@ using System.Drawing;
 using System.Windows.Forms;
 
 namespace childhood_games_pack.tennis {
+    public enum GAME_STATUS { IN_GAME, STOP };
     public partial class TennisGame : Form {
         private MainMenuForm mainMenu;
         private Graphics table { get; }
         public UserRacket userRacket { get; }
         public CompRacket compRacket { get; }
         public Ball ball { get; }
+        public GAME_STATUS gameStatus { get; set; }
 
         public TennisGame(MainMenuForm mainMenu) {
             InitializeComponent();
             this.mainMenu = mainMenu;
+            gameStatus = GAME_STATUS.IN_GAME;
 
             table = TablePanel.CreateGraphics();
 
@@ -28,10 +31,10 @@ namespace childhood_games_pack.tennis {
             userRacket.Show();
             compRacket.Show();
             ball.Show();
-            
         }
 
         private void TennisMainForm_FormClosed(object sender, FormClosedEventArgs e) {
+            gameStatus = GAME_STATUS.STOP;
             mainMenu.Show();
         }
 
