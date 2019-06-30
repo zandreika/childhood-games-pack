@@ -98,11 +98,11 @@
       <DependentUpon>TennisGame.cs</DependentUpon>
     </Compile>
     <Compile Include="tetris\Figure.cs" />
-    <Compile Include="tetris\TetrisMainForm.cs">
+    <Compile Include="tetris\TetrisGame.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="tetris\TetrisMainForm.Designer.cs">
-      <DependentUpon>TetrisMainForm.cs</DependentUpon>
+    <Compile Include="tetris\TetrisGame.Designer.cs">
+      <DependentUpon>TetrisGame.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="MainMenuForm.resx">
       <DependentUpon>MainMenuForm.cs</DependentUpon>
@@ -138,8 +138,8 @@
     <EmbeddedResource Include="tennis\TennisGame.resx">
       <DependentUpon>TennisGame.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="tetris\TetrisMainForm.resx">
-      <DependentUpon>TetrisMainForm.cs</DependentUpon>
+    <EmbeddedResource Include="tetris\TetrisGame.resx">
+      <DependentUpon>TetrisGame.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
