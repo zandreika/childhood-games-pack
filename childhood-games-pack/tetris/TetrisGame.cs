@@ -9,7 +9,7 @@ using System;
 namespace childhood_games_pack.tetris {
     public enum GAME_SPEED { LOW = 250, MEDIUM = 200, HIGH = 150, INCREDIBLE = 100 };
 
-    public partial class TetrisMainForm : Form {
+    public partial class TetrisGame : Form {
         private MainMenuForm mainMenu;
         private Graphics tetrisGamePanelCanvas;
         private Graphics nextFigurePanelCanvas;
@@ -24,7 +24,7 @@ namespace childhood_games_pack.tetris {
         private int gameScore;
 
 
-        public TetrisMainForm(MainMenuForm mainMenu) {
+        public TetrisGame(MainMenuForm mainMenu) {
             InitializeComponent();
             this.mainMenu = mainMenu;
 

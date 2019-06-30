@@ -22,7 +22,7 @@ namespace childhood_games_pack {
         }
 
         private void TetrisGameButton_Click(object sender, EventArgs e) {
-            tetris.TetrisMainForm tetris = new tetris.TetrisMainForm(this);
+            tetris.TetrisGame tetris = new tetris.TetrisGame(this);
             tetris.Show();
             Hide();
         }
