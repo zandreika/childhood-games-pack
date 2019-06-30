@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace childhood_games_pack.tennis {
@@ -13,6 +8,7 @@ namespace childhood_games_pack.tennis {
         private MainMenuForm mainMenu;
         private Graphics table { get; }
         public UserRacket userRacket { get; }
+        public CompRacket compRacket { get; }
         public Ball ball { get; }
 
         public TennisGame(MainMenuForm mainMenu) {
@@ -22,11 +18,15 @@ namespace childhood_games_pack.tennis {
             table = TablePanel.CreateGraphics();
 
             userRacket = new UserRacket(this);
+            compRacket = new CompRacket(this);
             ball = new Ball(this);
 
             TablePanel.Controls.Add(userRacket);
+            TablePanel.Controls.Add(compRacket);
             TablePanel.Controls.Add(ball);
+
             userRacket.Show();
+            compRacket.Show();
             ball.Show();
             
         }

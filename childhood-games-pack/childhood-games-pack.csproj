@@ -85,6 +85,12 @@
     <Compile Include="tennis\Ball.Designer.cs">
       <DependentUpon>Ball.cs</DependentUpon>
     </Compile>
+    <Compile Include="tennis\CompRacket.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tennis\CompRacket.Designer.cs">
+      <DependentUpon>CompRacket.cs</DependentUpon>
+    </Compile>
     <Compile Include="tennis\UserRacket.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -131,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="tennis\Ball.resx">
       <DependentUpon>Ball.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tennis\CompRacket.resx">
+      <DependentUpon>CompRacket.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="tennis\UserRacket.resx">
       <DependentUpon>UserRacket.cs</DependentUpon>

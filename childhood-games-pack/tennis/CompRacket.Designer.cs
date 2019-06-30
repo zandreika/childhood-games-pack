@@ -1,5 +1,5 @@
 ﻿namespace childhood_games_pack.tennis {
-    partial class UserRacket {
+    partial class CompRacket {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -25,16 +25,15 @@
         private void InitializeComponent() {
             this.SuspendLayout();
             // 
-            // UserRacket
+            // CompRacket
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.Red;
             this.ClientSize = new System.Drawing.Size(40, 15);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "UserRacket";
-            this.Text = "Racket";
-            this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Racket_PreviewKeyDown);
+            this.Name = "CompRacket";
+            this.Text = "CompRacket";
             this.ResumeLayout(false);
 
         }
