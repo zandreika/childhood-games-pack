@@ -8,8 +8,8 @@ using System.Windows.Forms;
 namespace childhood_games_pack.tennis {
     public partial class Ball : Form {
         private TennisGame tennisGame;
-        public bool isStay { get; set; } = false;
-        public bool isLastKickUser { get; set; } = true;
+        public bool isStay = false;
+        public bool isLastKickUser = true;
         public Ball(TennisGame tennisGame) {
             InitializeComponent();
             SetTopLevel(false);
@@ -46,7 +46,7 @@ namespace childhood_games_pack.tennis {
                         else {
                             switch (tennisGame.userRacket.lastKick) {
                                 case KICKS.LEFT_HAND: {
-                                    Location = new Point(Location.X + 5, Location.Y - Size.Height);
+                                    Location = new Point(Location.X + 3, Location.Y - Size.Height);
                                     break;
                                 }
                                 case KICKS.DIRECT: {
@@ -54,7 +54,7 @@ namespace childhood_games_pack.tennis {
                                     break;
                                 }
                                 case KICKS.RIGHT_HAND: {
-                                    Location = new Point(Location.X - 5, Location.Y - Size.Height);
+                                    Location = new Point(Location.X - 3, Location.Y - Size.Height);
                                     break;
                                 }
                                 default:
