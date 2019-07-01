@@ -8,7 +8,7 @@ namespace childhood_games_pack.tennis {
     public enum KICKS { RIGHT_HAND, LEFT_HAND, DIRECT};
     public partial class UserRacket : Form {
         private TennisGame tennisGame;
-        public KICKS lastKick { get; set; }
+        public KICKS lastKick;
         public UserRacket(TennisGame tennisGame) {
             InitializeComponent();
             SetTopLevel(false);
