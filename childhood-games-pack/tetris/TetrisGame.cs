@@ -42,6 +42,7 @@ namespace childhood_games_pack.tetris {
         public void StartGame() {
             gameSpeed = (int)GAME_SPEED.LOW;
             gameScore = 0;
+            ScoreLabel.Text = gameScore.ToString();
 
             for (int i = 0; i < occupatedMap.GetLength(0); i++) {
                 for (int j = 0; j < occupatedMap.GetLength(1); j++) {
