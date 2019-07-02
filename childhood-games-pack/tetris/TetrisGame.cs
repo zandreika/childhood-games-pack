@@ -104,14 +104,7 @@ namespace childhood_games_pack.tetris {
                                 occupatedMap[0, k] = 0;
                             }
 
-                            //delete cubes from line
-                            for (int l = 0; l < cubes.Count; l++) {
-                                var item = cubes[l];
-                                if (item.Key.Y == i * Figure.CUBE_SIZE) {
-                                    cubes.RemoveAt(l);
-                                    l--;
-                                }
-                            }
+                            cubes.RemoveAll(x => x.Key.Y == i * Figure.CUBE_SIZE);
 
                             //shift upper cubes down
                             for (int u = 0; u < cubes.Count; u++) {
