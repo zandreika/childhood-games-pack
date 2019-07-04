@@ -79,6 +79,7 @@
     <Compile Include="tanks\TanksGame.Designer.cs">
       <DependentUpon>TanksGame.cs</DependentUpon>
     </Compile>
+    <Compile Include="tanks\Utils\AtomicList.cs" />
     <Compile Include="tetris\Figure.cs" />
     <Compile Include="tetris\TetrisMainForm.cs">
       <SubType>Form</SubType>

@@ -36,7 +36,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "UserTankForm";
             this.Text = "TankForm";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TankForm_KeyDown);
             this.ResumeLayout(false);
 
         }

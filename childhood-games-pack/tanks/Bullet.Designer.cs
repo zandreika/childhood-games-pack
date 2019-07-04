@@ -23,12 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.backgroundMove = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
-            // 
-            // backgroundMove
-            // 
-            this.backgroundMove.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundMove_DoWork);
             // 
             // Bullet
             // 
@@ -44,7 +39,5 @@
         }
 
         #endregion
-
-        private System.ComponentModel.BackgroundWorker backgroundMove;
     }
 }
