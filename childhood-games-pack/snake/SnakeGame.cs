@@ -12,11 +12,11 @@ using System.Windows.Forms;
 namespace childhood_games_pack.snake {
     public partial class SnakeGame : Form {
         private MainMenuForm mainMenu;
+
         private Point foodPoint;
-        private ArrayList snakeBlocks;
+        private List<Point> snakeBlocks;
 
         Random random = new Random();
-
         private Graphics snakePanelCanvas;
 
         private int BLOCK_SIZE = 20;
@@ -46,7 +46,8 @@ namespace childhood_games_pack.snake {
 
             Point startBlock = createStartSnakeBlocks();
             Rectangle snake;
-            snakeBlocks = new ArrayList();
+            snakeBlocks = new List<Point>();
+
             for (int i = 0; i < 3; i++) {
                 startBlock.X = startBlock.X - BLOCK_SIZE;
                 snakeBlocks.Add(startBlock);//храним координаты блоков
@@ -57,6 +58,8 @@ namespace childhood_games_pack.snake {
             }
 
             createFood();
+
+            snakePanel.Focus();
         }
 
         private void SnakeGame_FormClosing(object sender, FormClosingEventArgs e) {
@@ -95,6 +98,83 @@ namespace childhood_games_pack.snake {
 
             snakePanelCanvas.FillEllipse(Brushes.Red, food);
             snakePanelCanvas.DrawEllipse(Pens.Red, food);
+        }
+
+        private void snakePanel_Paint(object sender, PaintEventArgs e) {
+            for (int i = 0; i < snakeBlocks.Count; i++) {
+                Rectangle rect = new Rectangle(snakeBlocks[i], new Size(BLOCK_SIZE, BLOCK_SIZE));
+                //snakePanelCanvas.FillRectangle(, rect);
+                snakePanelCanvas.DrawRectangle(Pens.DarkCyan, rect);
+            }
+
+            Rectangle food = new Rectangle(foodPoint, new Size(BLOCK_SIZE, BLOCK_SIZE));
+            snakePanelCanvas.FillEllipse(Brushes.Red, food);
+            snakePanelCanvas.DrawEllipse(Pens.Red, food);
+        }
+
+        private void snakePanel_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e) {
+            List<Point> helpList = new List<Point>();
+            Rectangle rect;
+            switch (e.KeyCode) {
+                case Keys.A:
+                case Keys.Left:
+                    helpList.Add(new Point(snakeBlocks[0].X - BLOCK_SIZE, snakeBlocks[0].Y));
+                    for (int i = 1; i < snakeBlocks.Count; i++) {
+                        helpList.Add(snakeBlocks[i - 1]);
+                        rect = new Rectangle(helpList[i], new Size(BLOCK_SIZE, BLOCK_SIZE));
+                    }
+                    //snakeBlocks[0] = new Point(snakeBlocks[0].X - BLOCK_SIZE, snakeBlocks[0].Y);
+                    rect = new Rectangle(helpList[0], new Size(BLOCK_SIZE, BLOCK_SIZE));
+                    snakeBlocks = helpList;
+
+                    snakePanel.Invalidate();
+                    break;
+
+                case Keys.D:
+                case Keys.Right:
+                    helpList.Add(new Point(snakeBlocks[0].X + BLOCK_SIZE, snakeBlocks[0].Y));
+                    for (int i = 1; i < snakeBlocks.Count; i++) {
+                        helpList.Add(snakeBlocks[i - 1]);
+                        rect = new Rectangle(helpList[i], new Size(BLOCK_SIZE, BLOCK_SIZE));
+                    }
+                    //snakeBlocks[0] = new Point(snakeBlocks[0].X + BLOCK_SIZE, snakeBlocks[0].Y);
+                    rect = new Rectangle(snakeBlocks[0], new Size(BLOCK_SIZE, BLOCK_SIZE));
+                    snakeBlocks = helpList;
+
+                    snakePanel.Invalidate();
+                    break;
+
+                case Keys.S:
+                case Keys.Down:
+                    helpList.Add(new Point(snakeBlocks[0].X, snakeBlocks[0].Y + BLOCK_SIZE));
+                    for (int i = 1; i < snakeBlocks.Count; i++) {
+                        helpList.Add(snakeBlocks[i - 1]);
+                        rect = new Rectangle(helpList[i], new Size(BLOCK_SIZE, BLOCK_SIZE));
+                    }
+                    //snakeBlocks[0] = new Point(snakeBlocks[0].X, snakeBlocks[0].Y + BLOCK_SIZE);
+                    rect = new Rectangle(snakeBlocks[0], new Size(BLOCK_SIZE, BLOCK_SIZE));
+                    snakeBlocks = helpList;
+
+                    snakePanel.Invalidate();
+                    break;
+
+                case Keys.W:
+                case Keys.Up:
+                    helpList.Add(new Point(snakeBlocks[0].X, snakeBlocks[0].Y - BLOCK_SIZE));
+                    for (int i = 1; i < snakeBlocks.Count; i++) {
+                        helpList.Add(snakeBlocks[i - 1]);
+                        rect = new Rectangle(helpList[i], new Size(BLOCK_SIZE, BLOCK_SIZE));
+                    }
+                    //snakeBlocks[0] = new Point(snakeBlocks[0].X, snakeBlocks[0].Y - BLOCK_SIZE);
+                    rect = new Rectangle(snakeBlocks[0], new Size(BLOCK_SIZE, BLOCK_SIZE));
+                    snakeBlocks = helpList;
+
+                    snakePanel.Invalidate();
+                    break;
+
+                default:
+                    break;
+            }
         }
     }
 }

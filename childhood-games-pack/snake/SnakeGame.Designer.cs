@@ -38,6 +38,8 @@
             this.snakePanel.Name = "snakePanel";
             this.snakePanel.Size = new System.Drawing.Size(382, 358);
             this.snakePanel.TabIndex = 0;
+            this.snakePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.snakePanel_Paint);
+            this.snakePanel.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.snakePanel_PreviewKeyDown);
             // 
             // scoreLabel
             // 
@@ -58,7 +60,6 @@
             this.pauseGameButton.TabIndex = 3;
             this.pauseGameButton.Text = "Pause game";
             this.pauseGameButton.UseVisualStyleBackColor = true;
-            this.pauseGameButton.Click += new System.EventHandler(this.startGameButton_Click);
             // 
             // endGameButton
             // 
