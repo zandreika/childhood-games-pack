@@ -103,7 +103,7 @@ namespace childhood_games_pack.snake {
         private void snakePanel_Paint(object sender, PaintEventArgs e) {
             for (int i = 0; i < snakeBlocks.Count; i++) {
                 Rectangle rect = new Rectangle(snakeBlocks[i], new Size(BLOCK_SIZE, BLOCK_SIZE));
-                //snakePanelCanvas.FillRectangle(, rect);
+                //snakePanelCanvas.FillRectangle(Brushes.Black, rect);
                 snakePanelCanvas.DrawRectangle(Pens.DarkCyan, rect);
             }
 
