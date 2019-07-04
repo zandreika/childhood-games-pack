@@ -25,5 +25,11 @@ namespace childhood_games_pack {
             tennis.Show();
             Hide();
         }
+
+        private void SnakeGameButton_Click(object sender, EventArgs e) {
+            snake.SnakeGame snake = new snake.SnakeGame(this);
+            snake.Show();
+            Hide();
+        }
     }
 }

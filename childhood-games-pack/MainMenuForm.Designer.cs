@@ -31,6 +31,7 @@
             this.tanksGameButton = new System.Windows.Forms.Button();
             this.tetrisGameButton = new System.Windows.Forms.Button();
             this.tennisGameButton = new System.Windows.Forms.Button();
+            this.snakeGameButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tanksGameButton
@@ -66,11 +67,22 @@
             this.tennisGameButton.UseVisualStyleBackColor = true;
             this.tennisGameButton.Click += new System.EventHandler(this.TennisGameButton_Click);
             // 
+            // snakeGameButton
+            // 
+            this.snakeGameButton.Location = new System.Drawing.Point(50, 228);
+            this.snakeGameButton.Name = "snakeGameButton";
+            this.snakeGameButton.Size = new System.Drawing.Size(232, 46);
+            this.snakeGameButton.TabIndex = 3;
+            this.snakeGameButton.Text = "snake";
+            this.snakeGameButton.UseVisualStyleBackColor = true;
+            this.snakeGameButton.Click += new System.EventHandler(this.SnakeGameButton_Click);
+            // 
             // MainMenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(372, 431);
+            this.Controls.Add(this.snakeGameButton);
             this.Controls.Add(this.tennisGameButton);
             this.Controls.Add(this.tetrisGameButton);
             this.Controls.Add(this.tanksGameButton);
@@ -86,6 +98,7 @@
         private System.Windows.Forms.Button tanksGameButton;
         private System.Windows.Forms.Button tetrisGameButton;
         private System.Windows.Forms.Button tennisGameButton;
+        private System.Windows.Forms.Button snakeGameButton;
     }
 }
 
