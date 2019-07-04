@@ -55,6 +55,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="snake\SnakeGame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="snake\SnakeGame.Designer.cs">
+      <DependentUpon>SnakeGame.cs</DependentUpon>
+    </Compile>
     <Compile Include="tanks\Bullet.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,12 +86,36 @@
       <DependentUpon>TanksGame.cs</DependentUpon>
     </Compile>
     <Compile Include="tanks\Utils\AtomicList.cs" />
-    <Compile Include="tetris\Figure.cs" />
-    <Compile Include="tetris\TetrisMainForm.cs">
+    <Compile Include="tennis\Ball.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="tetris\TetrisMainForm.Designer.cs">
-      <DependentUpon>TetrisMainForm.cs</DependentUpon>
+    <Compile Include="tennis\Ball.Designer.cs">
+      <DependentUpon>Ball.cs</DependentUpon>
+    </Compile>
+    <Compile Include="tennis\CompRacket.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tennis\CompRacket.Designer.cs">
+      <DependentUpon>CompRacket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="tennis\UserRacket.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tennis\UserRacket.Designer.cs">
+      <DependentUpon>UserRacket.cs</DependentUpon>
+    </Compile>
+    <Compile Include="tennis\TennisGame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tennis\TennisGame.Designer.cs">
+      <DependentUpon>TennisGame.cs</DependentUpon>
+    </Compile>
+    <Compile Include="tetris\Figure.cs" />
+    <Compile Include="tetris\TetrisGame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tetris\TetrisGame.Designer.cs">
+      <DependentUpon>TetrisGame.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="MainMenuForm.resx">
       <DependentUpon>MainMenuForm.cs</DependentUpon>
@@ -100,6 +130,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="snake\SnakeGame.resx">
+      <DependentUpon>SnakeGame.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="tanks\Bullet.resx">
       <DependentUpon>Bullet.cs</DependentUpon>
     </EmbeddedResource>
@@ -112,8 +145,20 @@
     <EmbeddedResource Include="tanks\TanksGame.resx">
       <DependentUpon>TanksGame.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="tetris\TetrisMainForm.resx">
-      <DependentUpon>TetrisMainForm.cs</DependentUpon>
+    <EmbeddedResource Include="tennis\Ball.resx">
+      <DependentUpon>Ball.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tennis\CompRacket.resx">
+      <DependentUpon>CompRacket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tennis\UserRacket.resx">
+      <DependentUpon>UserRacket.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tennis\TennisGame.resx">
+      <DependentUpon>TennisGame.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tetris\TetrisGame.resx">
+      <DependentUpon>TetrisGame.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -161,5 +206,6 @@
   <ItemGroup>
     <None Include="tanks\res\light_ctank_u.jpg" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

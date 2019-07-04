@@ -1,5 +1,5 @@
 ﻿namespace childhood_games_pack.tetris {
-    partial class TetrisMainForm {
+    partial class TetrisGame {
         /// <summary>
         /// Required designer variable.
         /// </summary>

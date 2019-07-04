@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -22,8 +15,20 @@ namespace childhood_games_pack {
         }
 
         private void TetrisGameButton_Click(object sender, EventArgs e) {
-            tetris.TetrisMainForm tetris = new tetris.TetrisMainForm(this);
+            tetris.TetrisGame tetris = new tetris.TetrisGame(this);
             tetris.Show();
+            Hide();
+        }
+
+        private void TennisGameButton_Click(object sender, EventArgs e) {
+            tennis.TennisGame tennis = new tennis.TennisGame(this);
+            tennis.Show();
+            Hide();
+        }
+
+        private void SnakeGameButton_Click(object sender, EventArgs e) {
+            snake.SnakeGame snake = new snake.SnakeGame(this);
+            snake.Show();
             Hide();
         }
     }

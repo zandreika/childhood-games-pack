@@ -13,13 +13,16 @@ namespace childhood_games_pack.tetris {
         public Panel workspace;
         private FIGURE_TYPE figureType;
         public List<Point> cubes;
-        public bool isStay = false;
-        public static int CUBE_SIZE = 20;
-        private FIGURE_ROTATING_STATE rotatingState = FIGURE_ROTATING_STATE.NORMAL;
+        public static int CUBE_SIZE;
+        public bool isStay;
+        private FIGURE_ROTATING_STATE rotatingState;
 
         public Figure(Panel workspace, FIGURE_TYPE figureType) {
             this.workspace = workspace;
             this.figureType = figureType;
+
+            isStay = false;
+            rotatingState = FIGURE_ROTATING_STATE.NORMAL;
 
             cubes = CreateFigure(figureType);
         }
