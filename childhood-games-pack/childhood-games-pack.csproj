@@ -85,6 +85,7 @@
     <Compile Include="tanks\TanksGame.Designer.cs">
       <DependentUpon>TanksGame.cs</DependentUpon>
     </Compile>
+    <Compile Include="tanks\Utils\AtomicList.cs" />
     <Compile Include="tennis\Ball.cs">
       <SubType>Form</SubType>
     </Compile>

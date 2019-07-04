@@ -28,6 +28,8 @@
             this.level3Button = new System.Windows.Forms.Button();
             this.level4Button = new System.Windows.Forms.Button();
             this.resultGameChecker = new System.ComponentModel.BackgroundWorker();
+            this.bulletsMoveWorker = new System.ComponentModel.BackgroundWorker();
+            this.compTanksActionWorker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
             // 
             // level1Button
@@ -71,6 +73,14 @@
             // 
             this.resultGameChecker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.resultGameChecker_DoWork);
             // 
+            // bulletsMoveWorker
+            // 
+            this.bulletsMoveWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bulletsMoveWorker_DoWork);
+            // 
+            // compTanksActionWorker
+            // 
+            this.compTanksActionWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.CompTanksActionWorker_DoWork);
+            // 
             // TanksGame
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -84,6 +94,7 @@
             this.Name = "TanksGame";
             this.Text = "Tanks";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TanksMainForm_FormClosed);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TanksGame_KeyDown);
             this.ResumeLayout(false);
 
         }
@@ -95,5 +106,7 @@
         private System.Windows.Forms.Button level3Button;
         private System.Windows.Forms.Button level4Button;
         private System.ComponentModel.BackgroundWorker resultGameChecker;
+        private System.ComponentModel.BackgroundWorker bulletsMoveWorker;
+        private System.ComponentModel.BackgroundWorker compTanksActionWorker;
     }
 }

@@ -23,12 +23,7 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.walkAndAttackWorker = new System.ComponentModel.BackgroundWorker();
             this.SuspendLayout();
-            // 
-            // walkAndAttackWorker
-            // 
-            this.walkAndAttackWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.walkAndAttackWorker_DoWork);
             // 
             // CompTank
             // 
@@ -44,7 +39,5 @@
         }
 
         #endregion
-
-        private System.ComponentModel.BackgroundWorker walkAndAttackWorker;
     }
 }
