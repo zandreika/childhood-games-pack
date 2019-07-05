@@ -141,7 +141,7 @@
             this.FigureSizeLabel.TabIndex = 6;
             this.FigureSizeLabel.Text = "Choose size of figure";
             // 
-            // TetrisMainForm
+            // TetrisGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -156,9 +156,10 @@
             this.Controls.Add(this.ScoreHeaderLabel);
             this.Controls.Add(this.nextFigurePanel);
             this.Controls.Add(this.tetrisGamePanel);
-            this.Name = "TetrisMainForm";
+            this.Name = "TetrisGame";
             this.Text = "TetrisMainForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TetrisMainForm_FormClosed);
+            this.Load += new System.EventHandler(this.TetrisGame_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TetrisMainForm_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
