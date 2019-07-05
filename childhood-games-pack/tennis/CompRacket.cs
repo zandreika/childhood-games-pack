@@ -22,10 +22,7 @@ namespace childhood_games_pack.tennis {
         }
 
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
-            while (true) {
-                if (tennisGame.gameStatus == GAME_STATUS.STOP) {
-                    return;
-                }
+            while (tennisGame.gameStatus == GAME_STATUS.IN_GAME) {
                 if (!tennisGame.ball.isStay) {
                     if (Location.X + Size.Width / 2 < tennisGame.ball.Location.X) {
                         if (Location.X + tennisGame.ball.Width < 0) {

@@ -12,11 +12,18 @@ namespace childhood_games_pack.tennis {
         public CompRacket compRacket { get; }
         public Ball ball { get; }
         public GAME_STATUS gameStatus { get; set; }
+        public int UserScore { get; set; }
+        public int CompScore { get; set; }
 
         public TennisGame(MainMenuForm mainMenu) {
             InitializeComponent();
             this.mainMenu = mainMenu;
             gameStatus = GAME_STATUS.IN_GAME;
+            UserScore = 0;
+            CompScore = 0;
+
+            UserScoreLabel.Text = UserScore.ToString();
+            CompScoreLabel.Text = CompScore.ToString();
 
             table = TablePanel.CreateGraphics();
 

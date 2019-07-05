@@ -24,6 +24,10 @@
         /// </summary>
         private void InitializeComponent() {
             this.TablePanel = new System.Windows.Forms.Panel();
+            this.UserScoreHeaderLabel = new System.Windows.Forms.Label();
+            this.UserScoreLabel = new System.Windows.Forms.Label();
+            this.CompScoreHeaderLabel = new System.Windows.Forms.Label();
+            this.CompScoreLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // TablePanel
@@ -35,21 +39,68 @@
             this.TablePanel.TabIndex = 0;
             this.TablePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.TablePanel_Paint);
             // 
-            // TennisMainForm
+            // UserScoreHeaderLabel
+            // 
+            this.UserScoreHeaderLabel.AutoSize = true;
+            this.UserScoreHeaderLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.UserScoreHeaderLabel.Location = new System.Drawing.Point(291, 15);
+            this.UserScoreHeaderLabel.Name = "UserScoreHeaderLabel";
+            this.UserScoreHeaderLabel.Size = new System.Drawing.Size(57, 25);
+            this.UserScoreHeaderLabel.TabIndex = 1;
+            this.UserScoreHeaderLabel.Text = "User";
+            // 
+            // UserScoreLabel
+            // 
+            this.UserScoreLabel.AutoSize = true;
+            this.UserScoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.UserScoreLabel.Location = new System.Drawing.Point(310, 50);
+            this.UserScoreLabel.Name = "UserScoreLabel";
+            this.UserScoreLabel.Size = new System.Drawing.Size(0, 25);
+            this.UserScoreLabel.TabIndex = 2;
+            // 
+            // CompScoreHeaderLabel
+            // 
+            this.CompScoreHeaderLabel.AutoSize = true;
+            this.CompScoreHeaderLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.CompScoreHeaderLabel.Location = new System.Drawing.Point(354, 15);
+            this.CompScoreHeaderLabel.Name = "CompScoreHeaderLabel";
+            this.CompScoreHeaderLabel.Size = new System.Drawing.Size(105, 25);
+            this.CompScoreHeaderLabel.TabIndex = 3;
+            this.CompScoreHeaderLabel.Text = "Computer";
+            // 
+            // CompScoreLabel
+            // 
+            this.CompScoreLabel.AutoSize = true;
+            this.CompScoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.CompScoreLabel.Location = new System.Drawing.Point(396, 50);
+            this.CompScoreLabel.Name = "CompScoreLabel";
+            this.CompScoreLabel.Size = new System.Drawing.Size(0, 25);
+            this.CompScoreLabel.TabIndex = 4;
+            // 
+            // TennisGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 461);
+            this.Controls.Add(this.CompScoreLabel);
+            this.Controls.Add(this.CompScoreHeaderLabel);
+            this.Controls.Add(this.UserScoreLabel);
+            this.Controls.Add(this.UserScoreHeaderLabel);
             this.Controls.Add(this.TablePanel);
-            this.Name = "TennisMainForm";
+            this.Name = "TennisGame";
             this.Text = "TennisMainForm";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TennisMainForm_FormClosed);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
         public System.Windows.Forms.Panel TablePanel;
+        private System.Windows.Forms.Label UserScoreHeaderLabel;
+        public System.Windows.Forms.Label UserScoreLabel;
+        private System.Windows.Forms.Label CompScoreHeaderLabel;
+        public System.Windows.Forms.Label CompScoreLabel;
     }
 }

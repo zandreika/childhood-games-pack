@@ -21,11 +21,7 @@ namespace childhood_games_pack.tennis {
         }
 
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
-            while (true) {
-                if(tennisGame.gameStatus == GAME_STATUS.STOP) {
-                    isStay = true;
-                    return;
-                }
+            while (tennisGame.gameStatus == GAME_STATUS.IN_GAME) {
                 if (isStay) {
                     if (isLastKickUser) {
                         Location = new Point(tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2 - Size.Width / 2, tennisGame.userRacket.Top - tennisGame.userRacket.Size.Height);
@@ -50,6 +46,16 @@ namespace childhood_games_pack.tennis {
                     else { // if the ball reached computer racket
                         if (Right < tennisGame.compRacket.Left  || 
                             Left > tennisGame.compRacket.Right) { // if computer racket can't kick the ball
+                            if (Right > tennisGame.TablePanel.Width || Left < 0) {
+                                tennisGame.CompScore++;
+                                tennisGame.CompScoreLabel.Text = tennisGame.CompScore.ToString();
+                                isLastKickUser = false;
+                            }
+                            else {
+                                tennisGame.UserScore++;
+                                tennisGame.UserScoreLabel.Text = tennisGame.UserScore.ToString();
+                                isLastKickUser = false;
+                            }
                             Location = new Point(Location.X, 0);
                             //MessageBox.Show("You win!");
                             isStay = true;
@@ -75,6 +81,16 @@ namespace childhood_games_pack.tennis {
                     else { // if the ball reached user racket
                         if (Left > tennisGame.userRacket.Right ||
                             Right < tennisGame.userRacket.Left) { // if user racket can't kick the ball
+                            if (Right > tennisGame.TablePanel.Width || Left < 0) {
+                                tennisGame.UserScore++;
+                                tennisGame.UserScoreLabel.Text = tennisGame.UserScore.ToString();
+                                isLastKickUser = true;
+                            }
+                            else {
+                                tennisGame.CompScore++;
+                                tennisGame.CompScoreLabel.Text = tennisGame.CompScore.ToString();
+                                isLastKickUser = false;
+                            }
                             Location = new Point(Location.X, Location.Y + Size.Height);
                             //MessageBox.Show("You lose!");
                             isStay = true;
