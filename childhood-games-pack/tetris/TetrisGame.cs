@@ -339,8 +339,5 @@ namespace childhood_games_pack.tetris {
             MessageBox.Show(information);
         }
 
-        private void TetrisGame_Load(object sender, EventArgs e) {
-
-        }
     }
 }
