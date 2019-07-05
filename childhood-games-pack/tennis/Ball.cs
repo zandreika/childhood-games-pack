@@ -44,23 +44,7 @@ namespace childhood_games_pack.tennis {
                             Location = new Point(Location.X, tennisGame.compRacket.Bottom);
                         }
                         else {
-                            switch (tennisGame.userRacket.lastKick) {
-                                case KICKS.LEFT_HAND: {
-                                    Location = new Point(Location.X + 3, Location.Y - Size.Height);
-                                    break;
-                                }
-                                case KICKS.DIRECT: {
-                                    Location = new Point(Location.X, Location.Y - Size.Height);
-                                    break;
-                                }
-                                case KICKS.RIGHT_HAND: {
-                                    Location = new Point(Location.X - 3, Location.Y - Size.Height);
-                                    break;
-                                }
-                                default:
-                                    throw new Exception("Wrong shoot");
-                            }
-                            
+                            Location = new Point(Location.X + tennisGame.userRacket.lastKickXTrajectory, Location.Y - Size.Height);
                         }
                     }
                     else { // if the ball reached computer racket
@@ -97,15 +81,8 @@ namespace childhood_games_pack.tennis {
                         }
                         else {
                             isLastKickUser = true;
-                            if(Left < tennisGame.userRacket.Left + Size.Width) {
-                                tennisGame.userRacket.lastKick = KICKS.LEFT_HAND;
-                            }
-                            else if(Left < tennisGame.userRacket.Left + 2 * Size.Width) {
-                                tennisGame.userRacket.lastKick = KICKS.DIRECT;
-                            }
-                            else {
-                                tennisGame.userRacket.lastKick = KICKS.RIGHT_HAND;
-                            }
+                            int trajectory = - ((Left + Size.Width / 2) - (tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2)) / 3;
+                            tennisGame.userRacket.lastKickXTrajectory = trajectory;
                         }
                     }
                 }

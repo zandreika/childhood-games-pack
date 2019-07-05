@@ -5,10 +5,9 @@ using System.Threading;
 using System.Windows.Forms;
 
 namespace childhood_games_pack.tennis {
-    public enum KICKS { RIGHT_HAND, LEFT_HAND, DIRECT};
     public partial class UserRacket : Form {
         private TennisGame tennisGame;
-        public KICKS lastKick;
+        public int lastKickXTrajectory;
         public UserRacket(TennisGame tennisGame) {
             InitializeComponent();
             SetTopLevel(false);
@@ -23,7 +22,7 @@ namespace childhood_games_pack.tennis {
             switch (e.KeyCode) {
                 case Keys.Left:
                 case Keys.A: {
-                    Point newLocation = new Point(Location.X - tennisGame.ball.Width, Location.Y);
+                    Point newLocation = new Point(Location.X - tennisGame.ball.Width / 3, Location.Y);
 
                     if(newLocation.X < tennisGame.TablePanel.Width / 2 - Size.Width / 2) {
                         BackColor = Color.Black;
@@ -37,7 +36,7 @@ namespace childhood_games_pack.tennis {
                 }
                 case Keys.Right:
                 case Keys.D: {
-                    Point newLocation = new Point(Location.X + tennisGame.ball.Width, Location.Y);
+                    Point newLocation = new Point(Location.X + tennisGame.ball.Width / 3, Location.Y);
 
                     if (newLocation.X > tennisGame.TablePanel.Width / 2 - Size.Width / 2) {
                         BackColor = Color.Red;
@@ -60,7 +59,7 @@ namespace childhood_games_pack.tennis {
         private void Shoot() {
             if (tennisGame.ball.isStay) {
                 tennisGame.ball.isStay = false;
-                lastKick = KICKS.DIRECT;
+                lastKickXTrajectory = 0;
             }
         }
     }
