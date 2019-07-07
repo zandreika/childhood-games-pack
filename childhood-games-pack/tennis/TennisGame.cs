@@ -38,6 +38,9 @@ namespace childhood_games_pack.tennis {
             userRacket.Show();
             compRacket.Show();
             ball.Show();
+
+            compRacket.Enabled = false;
+            ball.Enabled = false;
         }
 
         private void TennisMainForm_FormClosed(object sender, FormClosedEventArgs e) {

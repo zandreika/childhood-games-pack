@@ -10,6 +10,8 @@ namespace childhood_games_pack.tennis {
         private TennisGame tennisGame;
         public bool isStay = false;
         public bool isLastKickUser = true;
+        private int numberOfKicks = 0;
+        public bool userKick = true; 
         public Ball(TennisGame tennisGame) {
             InitializeComponent();
             SetTopLevel(false);
@@ -23,11 +25,13 @@ namespace childhood_games_pack.tennis {
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
             while (tennisGame.gameStatus == GAME_STATUS.IN_GAME) {
                 if (isStay) {
-                    if (isLastKickUser) {
+                    if (numberOfKicks % 4 < 2) {
                         Location = new Point(tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2 - Size.Width / 2, tennisGame.userRacket.Top - tennisGame.userRacket.Size.Height);
+                        userKick = true;
                     }
                     else {
                         Location = new Point(tennisGame.compRacket.Left + tennisGame.compRacket.Size.Width / 2 - Size.Width / 2, tennisGame.compRacket.Top + tennisGame.compRacket.Size.Height);
+                        userKick = false;
                     }
                     continue;
                 }
@@ -54,10 +58,11 @@ namespace childhood_games_pack.tennis {
                             else {
                                 tennisGame.UserScore++;
                                 tennisGame.UserScoreLabel.Text = tennisGame.UserScore.ToString();
-                                isLastKickUser = false;
+                                isLastKickUser = true;
                             }
                             Location = new Point(Location.X, 0);
                             //MessageBox.Show("You win!");
+                            numberOfKicks++;
                             isStay = true;
                         }
                         else {
@@ -93,6 +98,7 @@ namespace childhood_games_pack.tennis {
                             }
                             Location = new Point(Location.X, Location.Y + Size.Height);
                             //MessageBox.Show("You lose!");
+
                             isStay = true;
                         }
                         else {

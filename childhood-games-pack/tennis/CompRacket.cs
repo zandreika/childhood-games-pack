@@ -43,7 +43,7 @@ namespace childhood_games_pack.tennis {
                 }
                 else {
                     Location = new Point(tennisGame.TablePanel.Width / 2 - Size.Width / 2, 0);
-                    if (!tennisGame.ball.isLastKickUser) {
+                    if (!tennisGame.ball.userKick) {
                         Thread.Sleep(1000);
                         tennisGame.ball.isStay = false;
                     }
