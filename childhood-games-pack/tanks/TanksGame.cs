@@ -45,20 +45,19 @@ namespace childhood_games_pack.tanks {
         public const int compTankStep = 20;
         public const int compTankStepTimer = 2000;
 
-        private enum GAME_STATUS : int {
-            LEVEL_SELECT = 1,
-            GAME = 2
-        }
+        public const int reloadTimerMs = 2000;
+        public const int resultGameCheckerMs = 300;
 
         public AtomicList<CompTank> compTanks = new AtomicList<CompTank>();
-        //public List<CompTank> compTanks = new List<CompTank>();
         public AtomicList<Bullet> bullets = new AtomicList<Bullet>();
-        //public List<Bullet> bullets = new List<Bullet>();
+
         public UserTank userTank;
         public bool isUserTankAlive;
 
+        private static bool isReadyToShoot = true;
+        private static bool isCompReadyToShoot = true;
+
         private MainMenuForm mainMenu;
-        private GAME_STATUS gameStatus;
         private List<Button> buttons = new List<Button>();
 
         [DllImport("user32.dll")]
@@ -81,12 +80,19 @@ namespace childhood_games_pack.tanks {
             });
             this.mainMenu = mainMenu;
 
-            gameStatus = GAME_STATUS.LEVEL_SELECT;
             Size = new Size(350, 150);
+
+            reloadTimer.Interval = reloadTimerMs;
+            compTanksActionWorker.Interval = compTankStepTimer;
+            resultGameChecker.Interval = resultGameCheckerMs;
+            bulletsMoveWorker.Interval = bulletStepTimer;
+
+            gunLabel.Text = "Gun: Ready";
+            debugTimer.Interval = 300;
+            debugTimer.Start();
         }
 
         private void configureGameField(int level) {
-            gameStatus = GAME_STATUS.GAME;
             Size = new Size(1260, 660);
 
             foreach (Button b in buttons) {
@@ -102,13 +108,12 @@ namespace childhood_games_pack.tanks {
 
         private void levelOneConfigure() {
             Point userSpot = new Point(500, 500);
-            Point compSpot = new Point(500, 50);
-
             userTank = new UserTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, userSpot);
             isUserTankAlive = true;
             Controls.Add(userTank);
             userTank.Show();
 
+            Point compSpot = new Point(500, 50);
             int spotDifference = -200;
             int countOfEnemies = 5;
             for (int i = 0; i < countOfEnemies; i++) {
@@ -121,9 +126,9 @@ namespace childhood_games_pack.tanks {
             }
 
             userTank.Focus();
-            resultGameChecker.RunWorkerAsync();
-            bulletsMoveWorker.RunWorkerAsync();
-            compTanksActionWorker.RunWorkerAsync();
+            bulletsMoveWorker.Start();
+            resultGameChecker.Start();
+            compTanksActionWorker.Start();
         }
 
         private void TanksMainForm_FormClosed(object sender, FormClosedEventArgs e) {
@@ -131,204 +136,15 @@ namespace childhood_games_pack.tanks {
         }
 
         private void restartGame() {
-            /*
-            foreach (CompTank tank in compTanks) {
-                Controls.Remove(tank);
-                tank.Close();
-            }
-
-            compTanks.Clear();
-            userTank.Close();
-
-            resultGameChecker.CancelAsync();
-            bulletsMoveWorker.CancelAsync();
-            compTanksActionWorker.CancelAsync();
-            */
+            bulletsMoveWorker.Stop();
+            resultGameChecker.Stop();
+            compTanksActionWorker.Stop();
+            reloadTimer.Stop();
             Close();
         }
 
         private void level1Button_Click(object sender, EventArgs e) {
             configureGameField(1);
-        }
-
-        private void resultGameChecker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            while (true) {
-                if (compTanks.Count() == 0) {
-                    MessageBox.Show("Winner!");
-                    restartGame();
-                    return;
-                }
-
-                if (isUserTankAlive == false) {
-                    MessageBox.Show("You lose!");
-                    restartGame();
-                    return;
-                }
-
-                Thread.Sleep(300);
-            }
-        }
-
-        private void bulletsMoveWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            while (true) {
-                if (bulletsMoveWorker.CancellationPending) {
-                    e.Cancel = true;
-                    return;
-                }
-
-                foreach (var b in bullets) {
-                    if (bulletsMoveWorker.CancellationPending) {
-                        e.Cancel = true;
-                        return;
-                    }
-
-                    if (b.IsDisposed) {
-                        break;
-                    }
-
-                    switch (b.direction) {
-                        case DIRECTION.U:
-                            b.Location = new Point(b.Location.X, b.Location.Y - bulletStep);
-                            break;
-
-                        case DIRECTION.D:
-                            b.Location = new Point(b.Location.X, b.Location.Y + bulletStep);
-                            break;
-
-                        case DIRECTION.L:
-                            b.Location = new Point(b.Location.X - bulletStep, b.Location.Y);
-                            break;
-
-                        case DIRECTION.R:
-                            b.Location = new Point(b.Location.X + bulletStep, b.Location.Y);
-                            break;
-                    }
-
-                    if (b.Location.X <= 0 || b.Location.X >= 1260 || b.Location.Y <= 0 || b.Location.Y >= 660) {
-                        bullets.Remove(b);
-                        b.Close();
-                        break;
-                    }
-
-                    Point bulletCenter = new Point(b.Location.X + TanksGame.bulletHeight / 2, b.Location.Y + TanksGame.bulletWidth / 2);
-
-                    bool isNeedBreak = false;
-                    switch (b.bulletType) {
-                        case BULLET_TYPE.USER:
-                            foreach (CompTank tank in compTanks) {
-                                if (bulletCenter.X >= tank.Location.X && bulletCenter.X <= tank.Location.X + TanksGame.tankWidth &&
-                                    bulletCenter.Y >= tank.Location.Y && bulletCenter.Y <= tank.Location.Y + TanksGame.tankHeight) {
-
-                                    compTanks.Remove(tank);
-                                    tank.Close();
-                                    bullets.Remove(b);
-                                    b.Close();
-                                    isNeedBreak = true;
-                                    break;
-                                }
-                            }
-
-                            break;
-
-                        case BULLET_TYPE.COMP:
-                            if (bulletCenter.X >= userTank.Location.X && bulletCenter.X <= userTank.Location.X + TanksGame.tankWidth &&
-                                bulletCenter.Y >= userTank.Location.Y && bulletCenter.Y <= userTank.Location.Y + TanksGame.tankHeight) {
-
-                                isUserTankAlive = false;
-                                userTank.Close();
-                                bullets.Remove(b);
-                                b.Close();
-                                isNeedBreak = true;
-                                break;
-                            }
-
-                            break;
-                    }
-
-                    if (isNeedBreak) {
-                        break;
-                    }
-                } // foreach b in bullets
-
-                Thread.Sleep(bulletStepTimer);
-            }
-        }
-
-        private void CompTanksActionWorker_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e) {
-            Random rnd = new Random();
-
-            while (true) {
-                if (compTanksActionWorker.CancellationPending) {
-                    e.Cancel = true;
-                    return;
-                }
-
-                foreach (var tank in compTanks) {
-                    if (compTanksActionWorker.CancellationPending) {
-                        e.Cancel = true;
-                        return;
-                    }
-
-                    if (tank.IsDisposed) {
-                        break;
-                    }
-
-                    tank.direction = (DIRECTION)(rnd.Next() % 4);
-                    int isNeedShot = rnd.Next() % 10000;
-
-                    if (isNeedShot < 1000) {
-                        TanksGame.ShootKeyDown(Keys.B);
-                    }
-
-                    switch (tank.direction) {
-                        case DIRECTION.U:
-                            tank.BackgroundImage = Properties.Resources.light_ctank_u;
-
-                            Point newUpLoc = new Point(tank.Location.X, tank.Location.Y - compTankStep);
-                            if (newUpLoc.Y <= 0) {
-                                break;
-                            }
-
-                            tank.Location = newUpLoc;
-                            break;
-
-                        case DIRECTION.D:
-                            tank.BackgroundImage = Properties.Resources.light_ctank_d;
-
-                            Point newDownLoc = new Point(tank.Location.X, tank.Location.Y + compTankStep);
-                            if (newDownLoc.Y >= 600) {
-                                break;
-                            }
-
-                            tank.Location = newDownLoc;
-                            break;
-
-                        case DIRECTION.L:
-                            tank.BackgroundImage = Properties.Resources.light_ctank_l;
-
-                            Point newLeftLoc = new Point(tank.Location.X - compTankStep, tank.Location.Y);
-                            if (newLeftLoc.X <= 0) {
-                                break;
-                            }
-
-                            tank.Location = newLeftLoc;
-                            break;
-
-                        case DIRECTION.R:
-                            tank.BackgroundImage = Properties.Resources.light_ctank_r;
-
-                            Point newRightLoc = new Point(tank.Location.X + compTankStep, tank.Location.Y);
-                            if (newRightLoc.X >= 1200) {
-                                break;
-                            }
-
-                            tank.Location = newRightLoc;
-                            break;
-                    }
-                }
-
-                Thread.Sleep(compTankStepTimer);
-            }
         }
 
         private void TanksGame_KeyDown(object sender, KeyEventArgs e) {
@@ -385,10 +201,17 @@ namespace childhood_games_pack.tanks {
                     break;
 
                 case Keys.Space:
+                    if (!isReadyToShoot) {
+                        break;
+                    }
+
                     bullet = new Bullet(BULLET_TYPE.USER, userTank.direction, userTank.Location);
                     bullets.Add(bullet);
                     Controls.Add(bullet);
                     bullet.Show();
+                    isReadyToShoot = false;
+                    gunLabel.Text = "Gun: Reloading";
+                    reloadTimer.Start();
                     break;
 
                 case Keys.B:
@@ -401,8 +224,174 @@ namespace childhood_games_pack.tanks {
                     bullets.Add(bullet);
                     Controls.Add(bullet);
                     bullet.Show();
+                    isCompReadyToShoot = true;
                     break;
             }
+        }
+
+        private void ReloadTimer_Tick(object sender, EventArgs e) {
+            isReadyToShoot = true;
+            gunLabel.Text = "Gun: Ready";
+            reloadTimer.Stop();
+        }
+
+        private void CompTanksAction_Tick(object sender, EventArgs e) {
+            Random rnd = new Random();
+            foreach (var tank in compTanks) {
+                if (tank.IsDisposed) {
+                    break;
+                }
+
+                tank.direction = (DIRECTION)(rnd.Next() % 4);
+                int isNeedShot = rnd.Next() % 5000;
+
+                if (isNeedShot < 2500 && isCompReadyToShoot == true) {
+                    isCompReadyToShoot = false;
+                    TanksGame.ShootKeyDown(Keys.B);
+                }
+
+                switch (tank.direction) {
+                    case DIRECTION.U:
+                        tank.BackgroundImage = Properties.Resources.light_ctank_u;
+
+                        Point newUpLoc = new Point(tank.Location.X, tank.Location.Y - compTankStep);
+                        if (newUpLoc.Y <= 0) {
+                            break;
+                        }
+
+                        tank.Location = newUpLoc;
+                        break;
+
+                    case DIRECTION.D:
+                        tank.BackgroundImage = Properties.Resources.light_ctank_d;
+
+                        Point newDownLoc = new Point(tank.Location.X, tank.Location.Y + compTankStep);
+                        if (newDownLoc.Y >= 600) {
+                            break;
+                        }
+
+                        tank.Location = newDownLoc;
+                        break;
+
+                    case DIRECTION.L:
+                        tank.BackgroundImage = Properties.Resources.light_ctank_l;
+
+                        Point newLeftLoc = new Point(tank.Location.X - compTankStep, tank.Location.Y);
+                        if (newLeftLoc.X <= 0) {
+                            break;
+                        }
+
+                        tank.Location = newLeftLoc;
+                        break;
+
+                    case DIRECTION.R:
+                        tank.BackgroundImage = Properties.Resources.light_ctank_r;
+
+                        Point newRightLoc = new Point(tank.Location.X + compTankStep, tank.Location.Y);
+                        if (newRightLoc.X >= 1200) {
+                            break;
+                        }
+
+                        tank.Location = newRightLoc;
+                        break;
+                }
+            }
+        }
+
+        private void ResultGameChecker_Tick(object sender, EventArgs e) {
+            if (compTanks.Count() == 0) {
+                resultGameChecker.Stop();
+                MessageBox.Show("Winner!");
+                restartGame();
+                return;
+            }
+
+            if (isUserTankAlive == false) {
+                resultGameChecker.Stop();
+                MessageBox.Show("You lose!");
+                restartGame();
+                return;
+            }
+        }
+
+        private void BulletsMoveWorker_Tick(object sender, EventArgs e) {
+            foreach (var b in bullets) {
+                if (b.IsDisposed) {
+                    break;
+                }
+
+                switch (b.direction) {
+                    case DIRECTION.U:
+                        b.Location = new Point(b.Location.X, b.Location.Y - bulletStep);
+                        break;
+
+                    case DIRECTION.D:
+                        b.Location = new Point(b.Location.X, b.Location.Y + bulletStep);
+                        break;
+
+                    case DIRECTION.L:
+                        b.Location = new Point(b.Location.X - bulletStep, b.Location.Y);
+                        break;
+
+                    case DIRECTION.R:
+                        b.Location = new Point(b.Location.X + bulletStep, b.Location.Y);
+                        break;
+
+                    default:
+                        bullets.Remove(b);
+                        b.Close();
+                        break;
+                }
+
+                if (b.Location.X <= 0 || b.Location.X >= 1260 || b.Location.Y <= 0 || b.Location.Y >= 660) {
+                    bullets.Remove(b);
+                    b.Close();
+                    break;
+                }
+
+                Point bulletCenter = new Point(b.Location.X + TanksGame.bulletHeight / 2, b.Location.Y + TanksGame.bulletWidth / 2);
+
+                bool isNeedBreak = false;
+                switch (b.bulletType) {
+                    case BULLET_TYPE.USER:
+                        foreach (CompTank tank in compTanks) {
+                            if (bulletCenter.X >= tank.Location.X && bulletCenter.X <= tank.Location.X + TanksGame.tankWidth &&
+                                bulletCenter.Y >= tank.Location.Y && bulletCenter.Y <= tank.Location.Y + TanksGame.tankHeight) {
+
+                                compTanks.Remove(tank);
+                                tank.Close();
+                                bullets.Remove(b);
+                                b.Close();
+                                isNeedBreak = true;
+                                break;
+                            }
+                        }
+
+                        break;
+
+                    case BULLET_TYPE.COMP:
+                        if (bulletCenter.X >= userTank.Location.X && bulletCenter.X <= userTank.Location.X + TanksGame.tankWidth &&
+                            bulletCenter.Y >= userTank.Location.Y && bulletCenter.Y <= userTank.Location.Y + TanksGame.tankHeight) {
+
+                            isUserTankAlive = false;
+                            userTank.Close();
+                            bullets.Remove(b);
+                            b.Close();
+                            isNeedBreak = true;
+                            break;
+                        }
+
+                        break;
+                }
+
+                if (isNeedBreak) {
+                    break;
+                }
+            } // foreach b in bullets
+        }
+
+        private void DebugTimer_Tick(object sender, EventArgs e) {
+            debugLabel.Text = "CompTanks: " + compTanks.Count() + " Bullets: " + bullets.Count();
         }
     }
 }
