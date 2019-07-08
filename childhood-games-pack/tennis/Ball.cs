@@ -8,7 +8,6 @@ namespace childhood_games_pack.tennis {
         private TennisGame tennisGame;
         public bool isStay = false;
         public bool isLastKickUser = true;
-        private int numberOfKicks = 0;
         public bool userServe = true; 
         public Ball(TennisGame tennisGame) {
             InitializeComponent();
@@ -23,7 +22,18 @@ namespace childhood_games_pack.tennis {
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
             while (tennisGame.gameStatus == GAME_STATUS.IN_GAME) {
                 if (isStay) {
-                    if (numberOfKicks % 4 < 2) {
+                    if (tennisGame.UserScore >= 11 && tennisGame.UserScore - 2 >= tennisGame.CompScore) {
+                        MessageBox.Show("You win!", "Congrats");
+                        tennisGame.gameStatus = GAME_STATUS.STOP;
+                        return;
+                    }
+                    else if (tennisGame.CompScore >= 11 && tennisGame.CompScore - 2 >= tennisGame.UserScore) {
+                        MessageBox.Show("You lose!");
+                        tennisGame.gameStatus = GAME_STATUS.STOP;
+                        return;
+                    }
+
+                    if (tennisGame.UserScore + tennisGame.CompScore % 4 < 2) {
                         Location = new Point(tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2 - Size.Width / 2, tennisGame.userRacket.Top - tennisGame.userRacket.Size.Height);
                         userServe = true;
                     }
@@ -60,7 +70,6 @@ namespace childhood_games_pack.tennis {
                             }
                             Location = new Point(Location.X, 0);
                             //MessageBox.Show("You win!");
-                            numberOfKicks++;
                             isStay = true;
                         }
                         else {
