@@ -12,7 +12,7 @@ using System.Windows.Forms;
 
 namespace childhood_games_pack.snake {
 
-    public enum SNAKE_DIRECTION { LEFT = 1, RIGHT = 2, UP = 3, DOWN = 4 };
+    public enum SNAKE_DIRECTION {STOP = 0, LEFT = 1, RIGHT = 2, UP = 3, DOWN = 4 };
 
     public partial class SnakeGame : Form {
         private MainMenuForm mainMenu;
@@ -26,10 +26,6 @@ namespace childhood_games_pack.snake {
         private int BLOCK_SIZE  = 20;
 
         private bool startGame;
-        private bool leftMove   = false;
-        private bool rightMove  = false;
-        private bool upMove     = false;
-        private bool downMove   = false;
 
         private int startSpeed = 400;
         private int score;
@@ -59,6 +55,7 @@ namespace childhood_games_pack.snake {
             endGameButton.Show();
             
             snakePanelCanvas = snakePanel.CreateGraphics();
+            snakePanel.Invalidate();
 
             Point startBlock = createStartSnakeBlocks();
             Rectangle snake;
@@ -102,7 +99,7 @@ namespace childhood_games_pack.snake {
             return true;
         }
 
-        private void checkBorderAndFood(Point block) {
+        private bool checkBorderAndFood(Point block) {
             if (block.X + 3 * BLOCK_SIZE < snakePanel.Left ||
                 block.X + 3 * BLOCK_SIZE > snakePanel.Right ||
                 block.Y + BLOCK_SIZE > snakePanel.Bottom ||
@@ -110,6 +107,8 @@ namespace childhood_games_pack.snake {
                 snakeBlocks.Contains(block)) {
 
                 endGame();
+
+                return false;
             }
 
             if (block == foodPoint) {
@@ -131,14 +130,12 @@ namespace childhood_games_pack.snake {
                         break;
                 }
             }
+            return true;
         }
 
         private void endGame() {
-            downMove = false;
-            leftMove = false;
-            upMove = false;
-            rightMove = false;
             startGame = false;
+            snakeDirection = (int)SNAKE_DIRECTION.STOP;
 
             MessageBox.Show("Game over!");
 
@@ -166,7 +163,8 @@ namespace childhood_games_pack.snake {
                 foodPoint.Y = random.Next() % (snakePanel.Height - BLOCK_SIZE);
             }
 
-            snakePanel.Invalidate();
+            Rectangle food = new Rectangle(foodPoint, new Size(BLOCK_SIZE, BLOCK_SIZE));
+            snakePanel.Invalidate(food);
         }
 
         private void snakePanel_Paint(object sender, PaintEventArgs e) {
@@ -194,13 +192,10 @@ namespace childhood_games_pack.snake {
                     if (snakeDirection == (int)SNAKE_DIRECTION.RIGHT) {
                         break;
                     }
-                    leftMove = true;
-
-                    rightMove = false;
-                    upMove = false;
-                    downMove = false;
 
                     snakeDirection = (int)SNAKE_DIRECTION.LEFT;
+
+                    e.IsInputKey = true;
                     break;
 
                 case Keys.D:
@@ -208,13 +203,10 @@ namespace childhood_games_pack.snake {
                     if (snakeDirection == (int)SNAKE_DIRECTION.LEFT) {
                         break;
                     }
-                    rightMove = true;
-
-                    leftMove = false;
-                    upMove = false;
-                    downMove = false;
 
                     snakeDirection = (int)SNAKE_DIRECTION.RIGHT;
+
+                    e.IsInputKey = true;
                     break;
 
                 case Keys.S:
@@ -222,13 +214,10 @@ namespace childhood_games_pack.snake {
                     if (snakeDirection == (int)SNAKE_DIRECTION.UP) {
                         break;
                     }
-                    downMove = true;
-
-                    leftMove = false;
-                    upMove = false;
-                    rightMove = false;
 
                     snakeDirection = (int)SNAKE_DIRECTION.DOWN;
+
+                    e.IsInputKey = true;
                     break;
 
                 case Keys.W:
@@ -236,13 +225,10 @@ namespace childhood_games_pack.snake {
                     if (snakeDirection == (int)SNAKE_DIRECTION.DOWN) {
                         break;
                     }
-                    upMove = true;
-
-                    leftMove = false;
-                    downMove = false;
-                    rightMove = false;
 
                     snakeDirection = (int)SNAKE_DIRECTION.UP;
+
+                    e.IsInputKey = true;
                     break;
 
                 default:
@@ -258,6 +244,23 @@ namespace childhood_games_pack.snake {
                 return;
             }
 
+            Point topLeft = snakeBlocks[0];
+            Point bottonRight = snakeBlocks[0];
+            for (int i = 1; i < snakeBlocks.Count; i++) {
+                if (snakeBlocks[i].X < topLeft.X) {
+                    topLeft.X = snakeBlocks[i].X;
+                }
+                if (snakeBlocks[i].Y < topLeft.Y) {
+                    topLeft.Y = snakeBlocks[i].Y;
+                }
+                if (snakeBlocks[i].X + BLOCK_SIZE > bottonRight.X) {
+                    bottonRight.X = snakeBlocks[i].X + BLOCK_SIZE;
+                }
+                if (snakeBlocks[i].Y + BLOCK_SIZE > bottonRight.Y) {
+                    bottonRight.Y = snakeBlocks[i].Y + BLOCK_SIZE;
+                }
+            }
+
             helpList.Add(head);
             for (int i = 1; i < snakeBlocks.Count; i++) {
                 helpList.Add(snakeBlocks[i - 1]);
@@ -266,6 +269,9 @@ namespace childhood_games_pack.snake {
 
             rect = new Rectangle(snakeBlocks[0], new Size(BLOCK_SIZE, BLOCK_SIZE));
             snakeBlocks = helpList;
+            
+            Rectangle snakeBlock = new Rectangle(topLeft, new Size(bottonRight.X - topLeft.X + BLOCK_SIZE, bottonRight.Y - topLeft.Y + BLOCK_SIZE));
+            snakePanel.Invalidate(snakeBlock);
         }
 
         private void snakeBackgroundWorker_DoWork(object sender, DoWorkEventArgs e) {
@@ -274,38 +280,41 @@ namespace childhood_games_pack.snake {
                 if (snakeBackgroundWorker.CancellationPending) {
                     return;
                 }
-                
-                while (leftMove && startGame) {
+                while (snakeDirection == (int)SNAKE_DIRECTION.LEFT && startGame) {
                     head = new Point(snakeBlocks[0].X - BLOCK_SIZE, snakeBlocks[0].Y);
-                    checkBorderAndFood(head);
+                    if (!checkBorderAndFood(head)) {
+                        continue;
+                    }
                     reDrawSnake(head);
 
                     Thread.Sleep(startSpeed);
-                    snakePanel.Invalidate();
                 }
-                while (rightMove && startGame) {
+                while (snakeDirection == (int)SNAKE_DIRECTION.RIGHT && startGame) {
                     head = new Point(snakeBlocks[0].X + BLOCK_SIZE, snakeBlocks[0].Y);
-                    checkBorderAndFood(head);
+                    if (!checkBorderAndFood(head)) {
+                        continue;
+                    }
                     reDrawSnake(head);
 
                     Thread.Sleep(startSpeed);
-                    snakePanel.Invalidate();
                 }
-                while (upMove && startGame) {
+                while (snakeDirection == (int)SNAKE_DIRECTION.UP && startGame) {
                     head = new Point(snakeBlocks[0].X, snakeBlocks[0].Y - BLOCK_SIZE);
-                    checkBorderAndFood(head);
+                    if (!checkBorderAndFood(head)) {
+                        continue;
+                    }
                     reDrawSnake(head);
 
                     Thread.Sleep(startSpeed);
-                    snakePanel.Invalidate();
                 }
-                while (downMove && startGame) {
+                while (snakeDirection == (int)SNAKE_DIRECTION.DOWN && startGame) {
                     head = new Point(snakeBlocks[0].X, snakeBlocks[0].Y + BLOCK_SIZE);
-                    checkBorderAndFood(head);
+                    if (!checkBorderAndFood(head)) {
+                        continue;
+                    }
                     reDrawSnake(head);
 
                     Thread.Sleep(startSpeed);
-                    snakePanel.Invalidate();
                 }
 
             }
