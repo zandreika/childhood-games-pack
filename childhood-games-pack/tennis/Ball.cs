@@ -33,7 +33,7 @@ namespace childhood_games_pack.tennis {
                         return;
                     }
 
-                    if (tennisGame.UserScore + tennisGame.CompScore % 4 < 2) {
+                    if ( (tennisGame.UserScore + tennisGame.CompScore) % 4 < 2) {
                         Location = new Point(tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2 - Size.Width / 2, tennisGame.userRacket.Top - tennisGame.userRacket.Size.Height);
                         userServe = true;
                     }
