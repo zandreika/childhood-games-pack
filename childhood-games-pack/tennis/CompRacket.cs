@@ -20,8 +20,8 @@ namespace childhood_games_pack.tennis {
             while (tennisGame.gameStatus == GAME_STATUS.IN_GAME) {
                 if (!tennisGame.ball.isStay) {
                     if (Location.X + Size.Width / 2 < tennisGame.ball.Location.X) {
-                        if (Location.X + tennisGame.ball.Width < 0) {
-                            Location = new Point(tennisGame.TablePanel.Right, Location.Y);
+                        if (Right + tennisGame.ball.Width > tennisGame.TablePanel.Width) {
+                            Location = new Point(tennisGame.TablePanel.Width - Size.Width, Location.Y);
                         }
                         else {
                             Location = new Point(Location.X + tennisGame.ball.Width, Location.Y);
