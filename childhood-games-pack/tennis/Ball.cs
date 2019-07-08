@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
@@ -11,7 +9,7 @@ namespace childhood_games_pack.tennis {
         public bool isStay = false;
         public bool isLastKickUser = true;
         private int numberOfKicks = 0;
-        public bool userKick = true; 
+        public bool userServe = true; 
         public Ball(TennisGame tennisGame) {
             InitializeComponent();
             SetTopLevel(false);
@@ -27,11 +25,11 @@ namespace childhood_games_pack.tennis {
                 if (isStay) {
                     if (numberOfKicks % 4 < 2) {
                         Location = new Point(tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2 - Size.Width / 2, tennisGame.userRacket.Top - tennisGame.userRacket.Size.Height);
-                        userKick = true;
+                        userServe = true;
                     }
                     else {
                         Location = new Point(tennisGame.compRacket.Left + tennisGame.compRacket.Size.Width / 2 - Size.Width / 2, tennisGame.compRacket.Top + tennisGame.compRacket.Size.Height);
-                        userKick = false;
+                        userServe = false;
                     }
                     continue;
                 }
