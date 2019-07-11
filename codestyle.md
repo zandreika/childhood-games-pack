@@ -4,7 +4,7 @@
 - Все имена следует записывать по-английски  
 - При инициализации допускается отсутсвие переноса фигурных скобок и членов инициализатора на новую строку
 ```
-public void main()
+public void Main()
 {
 	string fileName; // нельзя: imyaFayla
 	List<string> stringsList = new List<string>();
@@ -117,6 +117,7 @@ if (condition)
 }
 else
 {
+	// some code
 }
 
 while (condition)
