@@ -35,6 +35,7 @@
             this.debugTimer = new System.Windows.Forms.Timer(this.components);
             this.debugLabel = new System.Windows.Forms.Label();
             this.gunLabel = new System.Windows.Forms.Label();
+            this.mouseLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // level1Button
@@ -106,16 +107,26 @@
             // gunLabel
             // 
             this.gunLabel.AutoSize = true;
-            this.gunLabel.Location = new System.Drawing.Point(3, 21);
+            this.gunLabel.Location = new System.Drawing.Point(0, 17);
             this.gunLabel.Name = "gunLabel";
             this.gunLabel.Size = new System.Drawing.Size(46, 17);
             this.gunLabel.TabIndex = 5;
             this.gunLabel.Text = "label1";
             // 
+            // mouseLabel
+            // 
+            this.mouseLabel.AutoSize = true;
+            this.mouseLabel.Location = new System.Drawing.Point(0, 34);
+            this.mouseLabel.Name = "mouseLabel";
+            this.mouseLabel.Size = new System.Drawing.Size(46, 17);
+            this.mouseLabel.TabIndex = 6;
+            this.mouseLabel.Text = "label1";
+            // 
             // TanksGame
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(332, 103);
+            this.Controls.Add(this.mouseLabel);
             this.Controls.Add(this.gunLabel);
             this.Controls.Add(this.debugLabel);
             this.Controls.Add(this.level4Button);
@@ -128,6 +139,7 @@
             this.Text = "Tanks";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TanksMainForm_FormClosed);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TanksGame_KeyDown);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TanksGame_MouseMove);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -146,5 +158,6 @@
         private System.Windows.Forms.Timer debugTimer;
         private System.Windows.Forms.Label debugLabel;
         private System.Windows.Forms.Label gunLabel;
+        private System.Windows.Forms.Label mouseLabel;
     }
 }
