@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using childhood_games_pack.tanks.Utils;
 
 namespace childhood_games_pack.tanks
 {
@@ -10,7 +11,9 @@ namespace childhood_games_pack.tanks
         private TANK_TYPE Type { get; set; }
         private SPEED_LEVEL SpeedLevel { get; set; }
 
-        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point location)
+        public ICompTankStrategy Strategy { get; set; }
+
+        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point location, ICompTankStrategy strategy)
         {
             InitializeComponent();
             SetTopLevel(false);
@@ -19,6 +22,7 @@ namespace childhood_games_pack.tanks
             Type = type;
             SpeedLevel = speedLevel;
             Direction = DIRECTION.D;
+            Strategy = strategy;
 
             Shape();
 

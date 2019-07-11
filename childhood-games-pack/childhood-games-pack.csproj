@@ -92,6 +92,10 @@
       <DependentUpon>TanksGame.cs</DependentUpon>
     </Compile>
     <Compile Include="tanks\Utils\AtomicList.cs" />
+    <Compile Include="tanks\Utils\BaseKillStrategy.cs" />
+    <Compile Include="tanks\Utils\DummyStrategy.cs" />
+    <Compile Include="tanks\Utils\ICompTankStrategy.cs" />
+    <Compile Include="tanks\Utils\UserKillStrategy.cs" />
     <Compile Include="tennis\Ball.cs">
       <SubType>Form</SubType>
     </Compile>
