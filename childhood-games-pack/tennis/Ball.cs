@@ -3,13 +3,16 @@ using System.Drawing;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace childhood_games_pack.tennis {
-    public partial class Ball : Form {
+namespace childhood_games_pack.tennis
+{
+    public partial class Ball : Form
+    {
         private TennisGame tennisGame;
         public bool isStay = false;
         public bool isLastKickUser = true;
-        public bool userServe = true; 
-        public Ball(TennisGame tennisGame) {
+        public bool userServe = true;
+        public Ball(TennisGame tennisGame)
+        {
             InitializeComponent();
             SetTopLevel(false);
             this.tennisGame = tennisGame;
@@ -19,51 +22,66 @@ namespace childhood_games_pack.tennis {
             backgroundWorker1.RunWorkerAsync();
         }
 
-        private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e) {
-            while (tennisGame.gameStatus == GAME_STATUS.IN_GAME) {
-                if (isStay) {
-                    if (tennisGame.UserScore >= 11 && tennisGame.UserScore - 2 >= tennisGame.CompScore) {
+        private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (tennisGame.gameStatus == GAME_STATUS.IN_GAME)
+            {
+                if (isStay)
+                {
+                    if (tennisGame.UserScore >= 11 && tennisGame.UserScore - 2 >= tennisGame.CompScore)
+                    {
                         MessageBox.Show("You win!", "Congrats");
                         tennisGame.gameStatus = GAME_STATUS.STOP;
                         return;
                     }
-                    else if (tennisGame.CompScore >= 11 && tennisGame.CompScore - 2 >= tennisGame.UserScore) {
+                    else if (tennisGame.CompScore >= 11 && tennisGame.CompScore - 2 >= tennisGame.UserScore)
+                    {
                         MessageBox.Show("You lose!");
                         tennisGame.gameStatus = GAME_STATUS.STOP;
                         return;
                     }
 
-                    if ( (tennisGame.UserScore + tennisGame.CompScore) % 4 < 2) {
+                    if ((tennisGame.UserScore + tennisGame.CompScore) % 4 < 2)
+                    {
                         Location = new Point(tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2 - Size.Width / 2, tennisGame.userRacket.Top - tennisGame.userRacket.Size.Height);
                         userServe = true;
                     }
-                    else {
+                    else
+                    {
                         Location = new Point(tennisGame.compRacket.Left + tennisGame.compRacket.Size.Width / 2 - Size.Width / 2, tennisGame.compRacket.Top + tennisGame.compRacket.Size.Height);
                         userServe = false;
                     }
                     continue;
                 }
 
-                if (isLastKickUser) {
-                    if (Top > tennisGame.compRacket.Bottom) { // if the ball going from player to computer
+                if (isLastKickUser)
+                {
+                    if (Top > tennisGame.compRacket.Bottom)
+                    { // if the ball going from player to computer
                         if (Top - Size.Height < tennisGame.compRacket.Bottom &&
                             Right >= tennisGame.compRacket.Left &&
-                            Left <= tennisGame.compRacket.Right) { // for not to cross computer racket
+                            Left <= tennisGame.compRacket.Right)
+                        { // for not to cross computer racket
                             Location = new Point(Location.X, tennisGame.compRacket.Bottom);
                         }
-                        else {
+                        else
+                        {
                             Location = new Point(Location.X + tennisGame.userRacket.lastKickXTrajectory, Location.Y - Size.Height);
                         }
                     }
-                    else { // if the ball reached computer racket
-                        if (Right < tennisGame.compRacket.Left  || 
-                            Left > tennisGame.compRacket.Right) { // if computer racket can't kick the ball
-                            if (Right > tennisGame.TablePanel.Width || Left < 0) {
+                    else
+                    { // if the ball reached computer racket
+                        if (Right < tennisGame.compRacket.Left ||
+                            Left > tennisGame.compRacket.Right)
+                        { // if computer racket can't kick the ball
+                            if (Right > tennisGame.TablePanel.Width || Left < 0)
+                            {
                                 tennisGame.CompScore++;
                                 tennisGame.CompScoreLabel.Text = tennisGame.CompScore.ToString();
                                 isLastKickUser = false;
                             }
-                            else {
+                            else
+                            {
                                 tennisGame.UserScore++;
                                 tennisGame.UserScoreLabel.Text = tennisGame.UserScore.ToString();
                                 isLastKickUser = true;
@@ -72,33 +90,41 @@ namespace childhood_games_pack.tennis {
                             //MessageBox.Show("You win!");
                             isStay = true;
                         }
-                        else {
+                        else
+                        {
                             isLastKickUser = false;
                         }
                     }
 
                 }
-                else {
-                    if (Bottom < tennisGame.userRacket.Top) { // if the ball going from computer to player 
+                else
+                {
+                    if (Bottom < tennisGame.userRacket.Top)
+                    { // if the ball going from computer to player 
                         if (Bottom + Size.Height > tennisGame.userRacket.Top &&
                             Right >= tennisGame.userRacket.Left &&
                             Left <= tennisGame.userRacket.Right) // for not to cross user racket
                         {
                             Location = new Point(Location.X, tennisGame.userRacket.Top - Size.Height);
                         }
-                        else {
+                        else
+                        {
                             Location = new Point(Location.X, Location.Y + Size.Height);
                         }
                     }
-                    else { // if the ball reached user racket
+                    else
+                    { // if the ball reached user racket
                         if (Left > tennisGame.userRacket.Right ||
-                            Right < tennisGame.userRacket.Left) { // if user racket can't kick the ball
-                            if (Right > tennisGame.TablePanel.Width || Left < 0) {
+                            Right < tennisGame.userRacket.Left)
+                        { // if user racket can't kick the ball
+                            if (Right > tennisGame.TablePanel.Width || Left < 0)
+                            {
                                 tennisGame.UserScore++;
                                 tennisGame.UserScoreLabel.Text = tennisGame.UserScore.ToString();
                                 isLastKickUser = true;
                             }
-                            else {
+                            else
+                            {
                                 tennisGame.CompScore++;
                                 tennisGame.CompScoreLabel.Text = tennisGame.CompScore.ToString();
                                 isLastKickUser = false;
@@ -108,9 +134,10 @@ namespace childhood_games_pack.tennis {
 
                             isStay = true;
                         }
-                        else {
+                        else
+                        {
                             isLastKickUser = true;
-                            int trajectory = - ((Left + Size.Width / 2) - (tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2)) / 3;
+                            int trajectory = -((Left + Size.Width / 2) - (tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2)) / 3;
                             tennisGame.userRacket.lastKickXTrajectory = trajectory;
                         }
                     }

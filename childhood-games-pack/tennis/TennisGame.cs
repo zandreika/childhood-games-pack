@@ -1,9 +1,11 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace childhood_games_pack.tennis {
+namespace childhood_games_pack.tennis
+{
     public enum GAME_STATUS { IN_GAME, STOP };
-    public partial class TennisGame : Form {
+    public partial class TennisGame : Form
+    {
         private MainMenuForm mainMenu;
         private Graphics table { get; }
         public UserRacket userRacket { get; }
@@ -13,7 +15,8 @@ namespace childhood_games_pack.tennis {
         public int UserScore { get; set; }
         public int CompScore { get; set; }
 
-        public TennisGame(MainMenuForm mainMenu) {
+        public TennisGame(MainMenuForm mainMenu)
+        {
             InitializeComponent();
             this.mainMenu = mainMenu;
             gameStatus = GAME_STATUS.IN_GAME;
@@ -41,12 +44,14 @@ namespace childhood_games_pack.tennis {
             ball.Enabled = false;
         }
 
-        private void TennisMainForm_FormClosed(object sender, FormClosedEventArgs e) {
+        private void TennisMainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
             gameStatus = GAME_STATUS.STOP;
             mainMenu.Show();
         }
 
-        private void TablePanel_Paint(object sender, PaintEventArgs e) {
+        private void TablePanel_Paint(object sender, PaintEventArgs e)
+        {
             Pen whitePen = new Pen(Color.White, 3);
             Point leftPoint = new Point(0, TablePanel.Height / 2);
             Point rightPoint = new Point(TablePanel.Width, TablePanel.Height / 2);
