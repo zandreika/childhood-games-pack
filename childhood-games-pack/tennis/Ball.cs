@@ -87,7 +87,6 @@ namespace childhood_games_pack.tennis
                                 isLastKickUser = true;
                             }
                             Location = new Point(Location.X, 0);
-                            //MessageBox.Show("You win!");
                             isStay = true;
                         }
                         else
@@ -130,8 +129,6 @@ namespace childhood_games_pack.tennis
                                 isLastKickUser = false;
                             }
                             Location = new Point(Location.X, Location.Y + Size.Height);
-                            //MessageBox.Show("You lose!");
-
                             isStay = true;
                         }
                         else

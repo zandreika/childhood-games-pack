@@ -122,7 +122,7 @@ namespace childhood_games_pack.tetris
 
                             cubes.RemoveAll(x => x.Key.Y == i * Figure.CUBE_SIZE);
 
-                            //shift upper cubes down
+                            // shift upper cubes down
                             for (int u = 0; u < cubes.Count; u++)
                             {
                                 var item = cubes[u];
@@ -132,7 +132,7 @@ namespace childhood_games_pack.tetris
                                 }
                             }
 
-                            //change map
+                            // change map
                             for (int x = i; x > 0; x--)
                             {
                                 for (int y = 0; y < occupatedMap.GetLength(1); y++)
