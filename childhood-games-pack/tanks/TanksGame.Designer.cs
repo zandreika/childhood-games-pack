@@ -40,7 +40,7 @@
             // 
             // level1Button
             // 
-            this.level1Button.Location = new System.Drawing.Point(18, 12);
+            this.level1Button.Location = new System.Drawing.Point(21, 34);
             this.level1Button.Name = "level1Button";
             this.level1Button.Size = new System.Drawing.Size(70, 70);
             this.level1Button.TabIndex = 0;
@@ -50,7 +50,7 @@
             // 
             // level2Button
             // 
-            this.level2Button.Location = new System.Drawing.Point(92, 12);
+            this.level2Button.Location = new System.Drawing.Point(95, 34);
             this.level2Button.Name = "level2Button";
             this.level2Button.Size = new System.Drawing.Size(70, 70);
             this.level2Button.TabIndex = 1;
@@ -59,7 +59,7 @@
             // 
             // level3Button
             // 
-            this.level3Button.Location = new System.Drawing.Point(166, 12);
+            this.level3Button.Location = new System.Drawing.Point(169, 34);
             this.level3Button.Name = "level3Button";
             this.level3Button.Size = new System.Drawing.Size(70, 70);
             this.level3Button.TabIndex = 2;
@@ -68,7 +68,7 @@
             // 
             // level4Button
             // 
-            this.level4Button.Location = new System.Drawing.Point(240, 12);
+            this.level4Button.Location = new System.Drawing.Point(243, 34);
             this.level4Button.Name = "level4Button";
             this.level4Button.Size = new System.Drawing.Size(70, 70);
             this.level4Button.TabIndex = 3;
@@ -125,7 +125,7 @@
             // TanksGame
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(332, 103);
+            this.ClientSize = new System.Drawing.Size(854, 492);
             this.Controls.Add(this.mouseLabel);
             this.Controls.Add(this.gunLabel);
             this.Controls.Add(this.debugLabel);
@@ -138,6 +138,7 @@
             this.Name = "TanksGame";
             this.Text = "Tanks";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.TanksMainForm_FormClosed);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.TanksGame_Paint);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TanksGame_KeyDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.TanksGame_MouseMove);
             this.ResumeLayout(false);

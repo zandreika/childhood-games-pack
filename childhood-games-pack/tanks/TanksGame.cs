@@ -7,6 +7,13 @@ using childhood_games_pack.tanks.Utils;
 
 namespace childhood_games_pack.tanks
 {
+    public enum GAME_STATUS: int
+    {
+        LEVEL_SELECT    = 0,
+        GAME_STARTED    = 1,
+        GAME_PAUSED     = 2
+    }
+
     public enum TANK_TYPE : int
     {
         NONE = 0,
@@ -39,6 +46,11 @@ namespace childhood_games_pack.tanks
 
     public partial class TanksGame : Form
     {
+        public const int gameFieldWidth = 1200;
+        public const int gameFieldHeight = 700;
+        public const int gameFieldLocationX = 50;
+        public const int gameFieldLocationY = 50;
+ 
         public const int tankHeight = 50;
         public const int tankWidth = 50;
         public const int bulletHeight = 8;
@@ -66,6 +78,8 @@ namespace childhood_games_pack.tanks
         private static bool isReadyToShoot = true;
         private static bool isCompReadyToShoot = true;
 
+        private static GAME_STATUS GameStatus { get; set; }
+
         private MainMenuForm MainMenu { get; set; }
         private List<Button> buttons = new List<Button>();
 
@@ -90,9 +104,11 @@ namespace childhood_games_pack.tanks
                 level4Button,
             });
 
+            GameStatus = GAME_STATUS.LEVEL_SELECT;
             MainMenu = mainMenu;
 
             Size = new Size(350, 150);
+            WindowState = FormWindowState.Normal;
 
             reloadTimer.Interval = reloadTimerMs;
             compTanksActionWorker.Interval = compTankStepTimer;
@@ -100,6 +116,12 @@ namespace childhood_games_pack.tanks
             bulletsMoveWorker.Interval = bulletStepTimer;
 
             gunLabel.Text = "";
+            debugLabel.Text = "";
+            mouseLabel.Text = "";
+
+            gunLabel.Location = new Point(gameFieldLocationX + gameFieldWidth + 25, gunLabel.Location.Y + gameFieldLocationY + 25);
+            debugLabel.Location = new Point(gameFieldLocationX + gameFieldWidth + 25, debugLabel.Location.Y + gameFieldLocationY + 25);
+            mouseLabel.Location = new Point(gameFieldLocationX + gameFieldWidth + 25, mouseLabel.Location.Y + gameFieldLocationY + 25);
 
             debugTimer.Interval = 300;
             debugTimer.Start();
@@ -107,7 +129,7 @@ namespace childhood_games_pack.tanks
 
         private void ConfigureGameField(int level)
         {
-            Size = new Size(1260, 660);
+            WindowState = FormWindowState.Maximized;
 
             foreach (Button b in buttons)
             {
@@ -124,28 +146,50 @@ namespace childhood_games_pack.tanks
 
         private void LevelOneConfigure()
         {
+            GameStatus = GAME_STATUS.GAME_STARTED;
             gunLabel.Text = "Gun: Ready";
-            userTank = new UserTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, new Point(500, 300));
+
+            var baseLocation = new Point(gameFieldLocationX + gameFieldWidth / 2, gameFieldLocationY + gameFieldHeight - baseHeight);
+            userBase = new UserBase(baseLocation);
+            Controls.Add(userBase);
+            userBase.Show();
+
+            userTank = new UserTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, new Point(baseLocation.X, baseLocation.Y - tankHeight - 30));
             isUserTankAlive = true;
             Controls.Add(userTank);
             userTank.Show();
 
-            userBase = new UserBase(new Point(500, 500));
-            Controls.Add(userBase);
-            userBase.Show();
+            var compSpot = new Point(gameFieldLocationX, gameFieldLocationY);
+            var compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot, new DummyStrategy());
+            compTanks.Add(compTank);
+            Controls.Add(compTank);
+            compTank.Show();
 
-            Point compSpot = new Point(500, 50);
-            int spotDifference = -200;
-            int countOfEnemies = 5;
-            for (int i = 0; i < countOfEnemies; i++)
-            {
-                CompTank compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, new Point(compSpot.X + spotDifference, compSpot.Y));
-                compTanks.Add(compTank);
-                Controls.Add(compTank);
-                compTank.Show();
+            compSpot = new Point(gameFieldLocationX + 100, gameFieldLocationY);
+            compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot, new DummyStrategy());
+            compTanks.Add(compTank);
+            Controls.Add(compTank);
+            compTank.Show();
 
-                spotDifference += 100;
-            }
+            compSpot = new Point(gameFieldLocationX + 200, gameFieldLocationY);
+            compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot, new DummyStrategy());
+            compTanks.Add(compTank);
+            Controls.Add(compTank);
+            compTank.Show();
+
+            compSpot = new Point(gameFieldLocationX + 300, gameFieldLocationY);
+            compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot, new DummyStrategy());
+            compTanks.Add(compTank);
+            Controls.Add(compTank);
+            compTank.Show();
+
+            compSpot = new Point(gameFieldLocationX + 400, gameFieldLocationY);
+            compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot, new DummyStrategy());
+            compTanks.Add(compTank);
+            Controls.Add(compTank);
+            compTank.Show();
+
+
 
             userTank.Focus();
             bulletsMoveWorker.Start();
@@ -184,8 +228,9 @@ namespace childhood_games_pack.tanks
                 userTank.Direction = DIRECTION.U;
 
                 Point newUpLoc = new Point(userTank.Location.X, userTank.Location.Y - compTankStep);
-                if (newUpLoc.Y <= 0)
+                if (newUpLoc.Y <= gameFieldLocationY)
                 {
+                    userTank.Location = new Point(userTank.Location.X, gameFieldLocationY);
                     break;
                 }
 
@@ -197,8 +242,9 @@ namespace childhood_games_pack.tanks
                 userTank.Direction = DIRECTION.D;
 
                 Point newDownLoc = new Point(userTank.Location.X, userTank.Location.Y + compTankStep);
-                if (newDownLoc.Y >= 600)
+                if (newDownLoc.Y + tankHeight >= gameFieldLocationY + gameFieldHeight)
                 {
+                    userTank.Location = new Point(userTank.Location.X, gameFieldLocationY + gameFieldHeight - tankHeight);
                     break;
                 }
 
@@ -210,8 +256,9 @@ namespace childhood_games_pack.tanks
                 userTank.Direction = DIRECTION.L;
 
                 Point newLeftLoc = new Point(userTank.Location.X - compTankStep, userTank.Location.Y);
-                if (newLeftLoc.X <= 0)
+                if (newLeftLoc.X <= gameFieldLocationX)
                 {
+                    userTank.Location = new Point(gameFieldLocationX, userTank.Location.Y);
                     break;
                 }
 
@@ -223,8 +270,9 @@ namespace childhood_games_pack.tanks
                 userTank.Direction = DIRECTION.R;
 
                 Point newRightLoc = new Point(userTank.Location.X + compTankStep, userTank.Location.Y);
-                if (newRightLoc.X >= 1200)
+                if (newRightLoc.X + tankWidth >= gameFieldLocationX + gameFieldWidth)
                 {
+                    userTank.Location = new Point(gameFieldLocationX + gameFieldWidth - tankWidth, userTank.Location.Y);
                     break;
                 }
 
@@ -271,7 +319,6 @@ namespace childhood_games_pack.tanks
 
         private void CompTanksAction_Tick(object sender, EventArgs e)
         {
-            Random rnd = new Random();
             foreach (var tank in compTanks)
             {
                 if (tank.IsDisposed)
@@ -279,13 +326,12 @@ namespace childhood_games_pack.tanks
                     break;
                 }
 
-                tank.Direction = (DIRECTION)(rnd.Next() % 4);
-                int isNeedShot = rnd.Next() % 5000;
+                tank.Direction = tank.Strategy.GetNewDirection();
 
-                if (isNeedShot < 2500 && isCompReadyToShoot == true)
+                if (tank.Strategy.IsNeedShoot() && isCompReadyToShoot == true)
                 {
                     isCompReadyToShoot = false;
-                    TanksGame.ShootKeyDown(Keys.B);
+                    ShootKeyDown(Keys.B);
                 }
 
                 switch (tank.Direction)
@@ -294,8 +340,9 @@ namespace childhood_games_pack.tanks
                     tank.BackgroundImage = Properties.Resources.light_ctank_u;
 
                     Point newUpLoc = new Point(tank.Location.X, tank.Location.Y - compTankStep);
-                    if (newUpLoc.Y <= 0)
+                    if (newUpLoc.Y <= gameFieldLocationY)
                     {
+                        tank.Location = new Point(tank.Location.X, gameFieldLocationY);
                         break;
                     }
 
@@ -306,8 +353,9 @@ namespace childhood_games_pack.tanks
                     tank.BackgroundImage = Properties.Resources.light_ctank_d;
 
                     Point newDownLoc = new Point(tank.Location.X, tank.Location.Y + compTankStep);
-                    if (newDownLoc.Y >= 600)
+                    if (newDownLoc.Y + tankHeight >= gameFieldLocationY + gameFieldHeight)
                     {
+                        tank.Location = new Point(tank.Location.X, gameFieldLocationY + gameFieldHeight - tankHeight);
                         break;
                     }
 
@@ -318,8 +366,9 @@ namespace childhood_games_pack.tanks
                     tank.BackgroundImage = Properties.Resources.light_ctank_l;
 
                     Point newLeftLoc = new Point(tank.Location.X - compTankStep, tank.Location.Y);
-                    if (newLeftLoc.X <= 0)
+                    if (newLeftLoc.X <= gameFieldLocationX)
                     {
+                        tank.Location = new Point(gameFieldLocationX, tank.Location.Y);
                         break;
                     }
 
@@ -330,8 +379,9 @@ namespace childhood_games_pack.tanks
                     tank.BackgroundImage = Properties.Resources.light_ctank_r;
 
                     Point newRightLoc = new Point(tank.Location.X + compTankStep, tank.Location.Y);
-                    if (newRightLoc.X >= 1200)
+                    if (newRightLoc.X >= gameFieldLocationX + gameFieldWidth)
                     {
+                        tank.Location = new Point(gameFieldLocationX + gameFieldWidth - tankWidth, tank.Location.Y);
                         break;
                     }
 
@@ -393,7 +443,8 @@ namespace childhood_games_pack.tanks
                     break;
                 }
 
-                if (b.Location.X <= 0 || b.Location.X >= 1260 || b.Location.Y <= 0 || b.Location.Y >= 660)
+                if (b.Location.X <= gameFieldLocationX || b.Location.X >= gameFieldLocationX + gameFieldWidth || 
+                    b.Location.Y <= gameFieldLocationY || b.Location.Y >= gameFieldLocationY + gameFieldHeight)
                 {
                     bullets.Remove(b);
                     b.Close();
@@ -459,17 +510,41 @@ namespace childhood_games_pack.tanks
 
         private void DebugTimer_Tick(object sender, EventArgs e)
         {
-            debugLabel.Text = "CompTanks: " + compTanks.Count() + " Bullets: " + bullets.Count();
+            if (GameStatus == GAME_STATUS.GAME_STARTED)
+            {
+                debugLabel.Text = "CompTanks: " + compTanks.Count() + " Bullets: " + bullets.Count();
+            }
+        }
+
+        private void TanksGame_Paint(object sender, PaintEventArgs e)
+        {
+            if (GameStatus == GAME_STATUS.GAME_STARTED)
+            {
+                DrawGameField();
+            }
+        }
+
+        private void DrawGameField()
+        {
+            var canvas = CreateGraphics();
+            var pen = new Pen(Brushes.Black, 4);
+            canvas.DrawLine(pen, new Point(gameFieldLocationX, gameFieldLocationY), new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY));
+            canvas.DrawLine(pen, new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY), new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY + gameFieldHeight));
+            canvas.DrawLine(pen, new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY + gameFieldHeight), new Point(gameFieldLocationX, gameFieldLocationY + gameFieldHeight));
+            canvas.DrawLine(pen, new Point(gameFieldLocationX, gameFieldLocationY + gameFieldHeight), new Point(gameFieldLocationX, gameFieldLocationY));
+        }
+
+        private void TanksGame_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (GameStatus == GAME_STATUS.GAME_STARTED)
+            {
+                mouseLabel.Text = e.Location.X + " " + e.Location.Y;
+            }
         }
 
         private Point GetBarrelLocation(Point TankLocation)
         {
             return new Point(TankLocation.X + tankWidth / 2, TankLocation.Y + tankHeight / 2);
-        }
-
-        private void TanksGame_MouseMove(object sender, MouseEventArgs e)
-        {
-            mouseLabel.Text = e.Location.X + " " + e.Location.Y;
         }
     }
 }
