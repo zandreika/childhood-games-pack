@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace childhood_games_pack.tanks.Utils {
     public class AtomicList<T> : IEnumerable<T> {
@@ -28,7 +24,10 @@ namespace childhood_games_pack.tanks.Utils {
         public bool Remove(T value) {
             List<T> update = new List<T>(InternalCollection);
             bool removed = update.Remove(value);
-            if (removed) Interlocked.Exchange(ref InternalCollection, update);
+            if (removed) {
+                Interlocked.Exchange(ref InternalCollection, update);
+            }
+
             return removed;
         }
 

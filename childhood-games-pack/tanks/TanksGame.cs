@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Threading;
 using System.Runtime.InteropServices;
 using childhood_games_pack.tanks.Utils;
 
@@ -38,6 +37,8 @@ namespace childhood_games_pack.tanks {
         public const int tankWidth = 50;
         public const int bulletHeight = 8;
         public const int bulletWidth = 8;
+        public const int baseHeight = 70;
+        public const int baseWidth = 70;
 
         public const int bulletStep = 15;
         public const int bulletStepTimer = 150;
@@ -48,11 +49,13 @@ namespace childhood_games_pack.tanks {
         public const int reloadTimerMs = 2000;
         public const int resultGameCheckerMs = 300;
 
-        public AtomicList<CompTank> compTanks = new AtomicList<CompTank>();
-        public AtomicList<Bullet> bullets = new AtomicList<Bullet>();
+        private AtomicList<CompTank> compTanks = new AtomicList<CompTank>();
+        private AtomicList<Bullet> bullets = new AtomicList<Bullet>();
 
-        public UserTank userTank;
-        public bool isUserTankAlive;
+        private UserTank userTank;
+        private bool isUserTankAlive;
+
+        private UserBase userBase;
 
         private static bool isReadyToShoot = true;
         private static bool isCompReadyToShoot = true;
@@ -87,7 +90,7 @@ namespace childhood_games_pack.tanks {
             resultGameChecker.Interval = resultGameCheckerMs;
             bulletsMoveWorker.Interval = bulletStepTimer;
 
-            gunLabel.Text = "Gun: Ready";
+            gunLabel.Text = "";
             debugTimer.Interval = 300;
             debugTimer.Start();
         }
@@ -107,11 +110,16 @@ namespace childhood_games_pack.tanks {
         }
 
         private void levelOneConfigure() {
-            Point userSpot = new Point(500, 500);
+            gunLabel.Text = "Gun: Ready";
+            Point userSpot = new Point(500, 300);
             userTank = new UserTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, userSpot);
             isUserTankAlive = true;
             Controls.Add(userTank);
             userTank.Show();
+
+            userBase = new UserBase(new Point(500, 500));
+            Controls.Add(userBase);
+            userBase.Show();
 
             Point compSpot = new Point(500, 50);
             int spotDifference = -200;
@@ -154,7 +162,7 @@ namespace childhood_games_pack.tanks {
             switch (e.KeyCode) {
                 case Keys.W:
                     userTank.BackgroundImage = Properties.Resources.light_utank_u;
-                    userTank.direction = DIRECTION.U;
+                    userTank.Direction = DIRECTION.U;
 
                     Point newUpLoc = new Point(userTank.Location.X, userTank.Location.Y - compTankStep);
                     if (newUpLoc.Y <= 0) {
@@ -166,7 +174,7 @@ namespace childhood_games_pack.tanks {
 
                 case Keys.S:
                     userTank.BackgroundImage = Properties.Resources.light_utank_d;
-                    userTank.direction = DIRECTION.D;
+                    userTank.Direction = DIRECTION.D;
 
                     Point newDownLoc = new Point(userTank.Location.X, userTank.Location.Y + compTankStep);
                     if (newDownLoc.Y >= 600) {
@@ -178,7 +186,7 @@ namespace childhood_games_pack.tanks {
 
                 case Keys.A:
                     userTank.BackgroundImage = Properties.Resources.light_utank_l;
-                    userTank.direction = DIRECTION.L;
+                    userTank.Direction = DIRECTION.L;
 
                     Point newLeftLoc = new Point(userTank.Location.X - compTankStep, userTank.Location.Y);
                     if (newLeftLoc.X <= 0) {
@@ -190,7 +198,7 @@ namespace childhood_games_pack.tanks {
 
                 case Keys.D:
                     userTank.BackgroundImage = Properties.Resources.light_utank_r;
-                    userTank.direction = DIRECTION.R;
+                    userTank.Direction = DIRECTION.R;
 
                     Point newRightLoc = new Point(userTank.Location.X + compTankStep, userTank.Location.Y);
                     if (newRightLoc.X >= 1200) {
@@ -205,7 +213,7 @@ namespace childhood_games_pack.tanks {
                         break;
                     }
 
-                    bullet = new Bullet(BULLET_TYPE.USER, userTank.direction, userTank.Location);
+                    bullet = new Bullet(BULLET_TYPE.USER, userTank.Direction, GetBarrelLocation(userTank.Location));
                     bullets.Add(bullet);
                     Controls.Add(bullet);
                     bullet.Show();
@@ -220,7 +228,7 @@ namespace childhood_games_pack.tanks {
                     }
 
                     int tankIndex = rnd.Next() % compTanks.Count();
-                    bullet = new Bullet(BULLET_TYPE.COMP, compTanks[tankIndex].direction, compTanks[tankIndex].Location);
+                    bullet = new Bullet(BULLET_TYPE.COMP, compTanks[tankIndex].Direction, GetBarrelLocation(compTanks[tankIndex].Location));
                     bullets.Add(bullet);
                     Controls.Add(bullet);
                     bullet.Show();
@@ -242,7 +250,7 @@ namespace childhood_games_pack.tanks {
                     break;
                 }
 
-                tank.direction = (DIRECTION)(rnd.Next() % 4);
+                tank.Direction = (DIRECTION)(rnd.Next() % 4);
                 int isNeedShot = rnd.Next() % 5000;
 
                 if (isNeedShot < 2500 && isCompReadyToShoot == true) {
@@ -250,7 +258,7 @@ namespace childhood_games_pack.tanks {
                     TanksGame.ShootKeyDown(Keys.B);
                 }
 
-                switch (tank.direction) {
+                switch (tank.Direction) {
                     case DIRECTION.U:
                         tank.BackgroundImage = Properties.Resources.light_ctank_u;
 
@@ -320,7 +328,7 @@ namespace childhood_games_pack.tanks {
                     break;
                 }
 
-                switch (b.direction) {
+                switch (b.Direction) {
                     case DIRECTION.U:
                         b.Location = new Point(b.Location.X, b.Location.Y - bulletStep);
                         break;
@@ -349,14 +357,24 @@ namespace childhood_games_pack.tanks {
                     break;
                 }
 
-                Point bulletCenter = new Point(b.Location.X + TanksGame.bulletHeight / 2, b.Location.Y + TanksGame.bulletWidth / 2);
+                Point bulletCenter = new Point(b.Location.X + bulletHeight / 2, b.Location.Y + bulletWidth / 2);
 
-                bool isNeedBreak = false;
-                switch (b.bulletType) {
+                if (bulletCenter.X >= userBase.Location.X && bulletCenter.X <= userBase.Location.X + 70 &&
+                    bulletCenter.Y >= userBase.Location.Y && bulletCenter.Y <= userBase.Location.Y + 70 ) {
+
+                    isUserTankAlive = false;
+                    userBase.Close();
+                    bullets.Remove(b);
+                    b.Close();
+                    break;
+                }
+
+                    bool isNeedBreak = false;
+                switch (b.BulletType) {
                     case BULLET_TYPE.USER:
                         foreach (CompTank tank in compTanks) {
-                            if (bulletCenter.X >= tank.Location.X && bulletCenter.X <= tank.Location.X + TanksGame.tankWidth &&
-                                bulletCenter.Y >= tank.Location.Y && bulletCenter.Y <= tank.Location.Y + TanksGame.tankHeight) {
+                            if (bulletCenter.X >= tank.Location.X && bulletCenter.X <= tank.Location.X + tankWidth &&
+                                bulletCenter.Y >= tank.Location.Y && bulletCenter.Y <= tank.Location.Y + tankHeight) {
 
                                 compTanks.Remove(tank);
                                 tank.Close();
@@ -370,8 +388,8 @@ namespace childhood_games_pack.tanks {
                         break;
 
                     case BULLET_TYPE.COMP:
-                        if (bulletCenter.X >= userTank.Location.X && bulletCenter.X <= userTank.Location.X + TanksGame.tankWidth &&
-                            bulletCenter.Y >= userTank.Location.Y && bulletCenter.Y <= userTank.Location.Y + TanksGame.tankHeight) {
+                        if (bulletCenter.X >= userTank.Location.X && bulletCenter.X <= userTank.Location.X + tankWidth &&
+                            bulletCenter.Y >= userTank.Location.Y && bulletCenter.Y <= userTank.Location.Y + tankHeight) {
 
                             isUserTankAlive = false;
                             userTank.Close();
@@ -392,6 +410,10 @@ namespace childhood_games_pack.tanks {
 
         private void DebugTimer_Tick(object sender, EventArgs e) {
             debugLabel.Text = "CompTanks: " + compTanks.Count() + " Bullets: " + bullets.Count();
+        }
+
+        private Point GetBarrelLocation(Point TankLocation) {
+            return new Point(TankLocation.X + tankWidth / 2, TankLocation.Y + tankHeight / 2);
         }
     }
 }

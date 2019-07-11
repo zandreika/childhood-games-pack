@@ -1,33 +1,31 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Threading;
-
 
 namespace childhood_games_pack.tanks {
     public partial class CompTank : Form {
-        public DIRECTION direction = DIRECTION.D;
-
-        private TANK_TYPE type;
-        private SPEED_LEVEL speedLevel;
+        public DIRECTION Direction { get; set; }
+        private TANK_TYPE Type { get; set; }
+        private SPEED_LEVEL SpeedLevel { get; set; }
         
-        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point spot) {
+        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point location) {
             InitializeComponent();
             SetTopLevel(false);
             AutoSize = false;
 
-            this.type = type;
-            this.speedLevel = speedLevel;
+            Type = type;
+            SpeedLevel = speedLevel;
+            Direction = DIRECTION.D;
 
-            shape();
+            Shape();
 
-            Location = spot;
+            Location = location;
             Size = new Size(TanksGame.tankWidth, TanksGame.tankHeight);
         }
 
         //! Change shape of form depending on the tank-type.
-        private void shape() {
-            switch (type) {
+        private void Shape() {
+            switch (Type) {
                 case TANK_TYPE.LIGHT:
                     BackgroundImage = Properties.Resources.light_ctank_u;
                     break;

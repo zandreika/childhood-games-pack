@@ -73,6 +73,12 @@
     <Compile Include="tanks\CompTank.Designer.cs">
       <DependentUpon>CompTank.cs</DependentUpon>
     </Compile>
+    <Compile Include="tanks\UserBase.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tanks\UserBase.Designer.cs">
+      <DependentUpon>UserBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="tanks\UserTank.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -138,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="tanks\CompTank.resx">
       <DependentUpon>CompTank.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="tanks\UserBase.resx">
+      <DependentUpon>UserBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="tanks\UserTank.resx">
       <DependentUpon>UserTank.cs</DependentUpon>
@@ -206,6 +215,8 @@
   <ItemGroup>
     <None Include="tanks\res\light_ctank_u.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="tanks\res\base.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

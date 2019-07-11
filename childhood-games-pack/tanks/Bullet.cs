@@ -1,21 +1,17 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
-using System.Threading;
-
 
 namespace childhood_games_pack.tanks {
     public partial class Bullet : Form {
-        public DIRECTION direction;
-        public BULLET_TYPE bulletType;
+        public DIRECTION Direction { get; set; }
+        public BULLET_TYPE BulletType { get; set; }
 
         public Bullet(BULLET_TYPE bulletType, DIRECTION direction, Point location) {
             InitializeComponent();
             SetTopLevel(false);
 
-            this.direction = direction;
-            this.bulletType = bulletType;
+            Direction = direction;
+            BulletType = bulletType;
 
             Location = location;
             Size = new Size(TanksGame.bulletWidth, TanksGame.bulletHeight);
