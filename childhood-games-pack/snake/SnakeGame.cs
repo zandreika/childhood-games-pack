@@ -27,7 +27,7 @@ namespace childhood_games_pack.snake {
 
         private bool startGame;
 
-        private int startSpeed = 400;
+        private int startSpeed;
         private int score;
         private int snakeDirection;
 
@@ -41,6 +41,8 @@ namespace childhood_games_pack.snake {
             resLabel.Hide();
             pauseGameButton.Hide();
             endGameButton.Hide();
+
+            this.DoubleBuffered = true;
         }
 
         private void startGameButton_Click(object sender, EventArgs e) {
@@ -53,7 +55,9 @@ namespace childhood_games_pack.snake {
             scoreLabel.Show();
             pauseGameButton.Show();
             endGameButton.Show();
-            
+
+            startSpeed = 400;
+
             snakePanelCanvas = snakePanel.CreateGraphics();
             snakePanel.Invalidate();
 
