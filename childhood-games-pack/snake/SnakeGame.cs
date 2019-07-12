@@ -25,6 +25,8 @@ namespace childhood_games_pack.snake {
 
         private int BLOCK_SIZE  = 20;
 
+        private int initialSnakeSize = 3;
+
         private bool startGame;
 
         private int startSpeed;
@@ -57,6 +59,7 @@ namespace childhood_games_pack.snake {
             endGameButton.Show();
 
             startSpeed = 400;
+            snakeDirection = (int)SNAKE_DIRECTION.STOP;
 
             snakePanelCanvas = snakePanel.CreateGraphics();
             snakePanel.Invalidate();
@@ -65,7 +68,7 @@ namespace childhood_games_pack.snake {
             Rectangle snake;
             snakeBlocks = new List<Point>();
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < initialSnakeSize; i++) {
                 startBlock.X = startBlock.X - BLOCK_SIZE;
                 snakeBlocks.Add(startBlock);//храним координаты блоков
 
@@ -193,46 +196,43 @@ namespace childhood_games_pack.snake {
             switch (e.KeyCode) {
                 case Keys.A:
                 case Keys.Left:
-                    if (snakeDirection == (int)SNAKE_DIRECTION.RIGHT) {
+                    e.IsInputKey = true;
+                    if (snakeDirection == (int)SNAKE_DIRECTION.RIGHT || 
+                        snakeDirection == (int)SNAKE_DIRECTION.STOP) {
                         break;
                     }
 
                     snakeDirection = (int)SNAKE_DIRECTION.LEFT;
-
-                    e.IsInputKey = true;
                     break;
 
                 case Keys.D:
                 case Keys.Right:
+                    e.IsInputKey = true;
                     if (snakeDirection == (int)SNAKE_DIRECTION.LEFT) {
                         break;
                     }
 
                     snakeDirection = (int)SNAKE_DIRECTION.RIGHT;
-
-                    e.IsInputKey = true;
                     break;
 
                 case Keys.S:
                 case Keys.Down:
+                    e.IsInputKey = true;
                     if (snakeDirection == (int)SNAKE_DIRECTION.UP) {
                         break;
                     }
 
                     snakeDirection = (int)SNAKE_DIRECTION.DOWN;
-
-                    e.IsInputKey = true;
                     break;
 
                 case Keys.W:
                 case Keys.Up:
+                    e.IsInputKey = true;
                     if (snakeDirection == (int)SNAKE_DIRECTION.DOWN) {
                         break;
                     }
 
                     snakeDirection = (int)SNAKE_DIRECTION.UP;
-
-                    e.IsInputKey = true;
                     break;
 
                 default:
@@ -284,6 +284,7 @@ namespace childhood_games_pack.snake {
                 if (snakeBackgroundWorker.CancellationPending) {
                     return;
                 }
+
                 while (snakeDirection == (int)SNAKE_DIRECTION.LEFT && startGame) {
                     head = new Point(snakeBlocks[0].X - BLOCK_SIZE, snakeBlocks[0].Y);
                     if (!checkBorderAndFood(head)) {
@@ -334,7 +335,8 @@ namespace childhood_games_pack.snake {
                 pauseGameButton.Text = "Continue game";
             }
             else if (pauseGameButton.Text == "Continue game") {
-                startGame = true; snakePanel.Focus();
+                startGame = true;
+                snakePanel.Focus();
                 pauseGameButton.Text = "Pause game";
             }
         }
