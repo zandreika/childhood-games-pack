@@ -7,7 +7,7 @@ namespace childhood_games_pack.tennis
 {
     public partial class Ball : Form
     {
-        private TennisGame tennisGame;
+        TennisGame tennisGame;
         public bool isStay = false;
         public bool isLastKickUser = true;
         public bool userServe = true;
@@ -19,37 +19,49 @@ namespace childhood_games_pack.tennis
             isStay = true;
 
             Size = new Size(tennisGame.userRacket.Size.Width / 3, tennisGame.userRacket.Size.Height);
+            Location = new Point(tennisGame.TablePanel.Width / 2, tennisGame.TablePanel.Height / 2 - Size.Height / 2);
             backgroundWorker1.RunWorkerAsync();
         }
 
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            while (tennisGame.gameStatus == GAME_STATUS.IN_GAME)
+            while (tennisGame.gameStatus != GAME_STATUS.END)
             {
                 if (isStay)
                 {
-                    if (tennisGame.UserScore >= 11 && tennisGame.UserScore - 2 >= tennisGame.CompScore)
+                    if (tennisGame.gameStatus == GAME_STATUS.IN_GAME)
                     {
-                        MessageBox.Show("You win!", "Congrats");
-                        tennisGame.gameStatus = GAME_STATUS.STOP;
-                        return;
-                    }
-                    else if (tennisGame.CompScore >= 11 && tennisGame.CompScore - 2 >= tennisGame.UserScore)
-                    {
-                        MessageBox.Show("You lose!");
-                        tennisGame.gameStatus = GAME_STATUS.STOP;
-                        return;
-                    }
+                        if (tennisGame.UserScore >= 11 && tennisGame.UserScore - 2 >= tennisGame.CompScore)
+                        {
+                            MessageBox.Show("You win!", "Congrats");
+                            tennisGame.gameStatus = GAME_STATUS.STOP;
 
-                    if ((tennisGame.UserScore + tennisGame.CompScore) % 4 < 2)
-                    {
-                        Location = new Point(tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2 - Size.Width / 2, tennisGame.userRacket.Top - tennisGame.userRacket.Size.Height);
-                        userServe = true;
-                    }
-                    else
-                    {
-                        Location = new Point(tennisGame.compRacket.Left + tennisGame.compRacket.Size.Width / 2 - Size.Width / 2, tennisGame.compRacket.Top + tennisGame.compRacket.Size.Height);
-                        userServe = false;
+                            tennisGame.RestartButton.Enabled = true;
+                            tennisGame.RestartButton.Show();
+                            Location = new Point(tennisGame.TablePanel.Width / 2, tennisGame.TablePanel.Height / 2 - Size.Height / 2);
+                            continue;
+                        }
+                        else if (tennisGame.CompScore >= 11 && tennisGame.CompScore - 2 >= tennisGame.UserScore)
+                        {
+                            MessageBox.Show("You lose!");
+                            tennisGame.gameStatus = GAME_STATUS.STOP;
+
+                            tennisGame.RestartButton.Enabled = true;
+                            tennisGame.RestartButton.Show();
+                            Location = new Point(tennisGame.TablePanel.Width / 2, tennisGame.TablePanel.Height / 2 - Size.Height / 2);
+                            continue;
+                        }
+
+                        if ((tennisGame.UserScore + tennisGame.CompScore) % 4 < 2)
+                        {
+                            Location = new Point(tennisGame.userRacket.Left + tennisGame.userRacket.Size.Width / 2 - Size.Width / 2, tennisGame.userRacket.Top - tennisGame.userRacket.Size.Height);
+                            userServe = true;
+                        }
+                        else
+                        {
+                            Location = new Point(tennisGame.compRacket.Left + tennisGame.compRacket.Size.Width / 2 - Size.Width / 2, tennisGame.compRacket.Top + tennisGame.compRacket.Size.Height);
+                            userServe = false;
+                        }
                     }
                     continue;
                 }

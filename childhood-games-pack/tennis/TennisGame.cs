@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace childhood_games_pack.tennis
 {
-    public enum GAME_STATUS { IN_GAME, STOP };
+    public enum GAME_STATUS { IN_GAME, STOP, END };
     public partial class TennisGame : Form
     {
         private MainMenuForm mainMenu;
@@ -11,7 +11,7 @@ namespace childhood_games_pack.tennis
         public UserRacket userRacket { get; }
         public CompRacket compRacket { get; }
         public Ball ball { get; }
-        public GAME_STATUS gameStatus { get; set; }
+        public GAME_STATUS gameStatus { get; set; } = GAME_STATUS.STOP;
         public int UserScore { get; set; }
         public int CompScore { get; set; }
 
@@ -19,12 +19,6 @@ namespace childhood_games_pack.tennis
         {
             InitializeComponent();
             this.mainMenu = mainMenu;
-            gameStatus = GAME_STATUS.IN_GAME;
-            UserScore = 0;
-            CompScore = 0;
-
-            UserScoreLabel.Text = UserScore.ToString();
-            CompScoreLabel.Text = CompScore.ToString();
 
             table = TablePanel.CreateGraphics();
 
@@ -40,13 +34,32 @@ namespace childhood_games_pack.tennis
             compRacket.Show();
             ball.Show();
 
+            userRacket.Enabled = false;
+            RestartButton.Focus();
+        }
+
+        private void StartGame()
+        {
+            gameStatus = GAME_STATUS.IN_GAME;
+            UserScore = 0;
+            CompScore = 0;
+
+            UserScoreLabel.Text = UserScore.ToString();
+            CompScoreLabel.Text = CompScore.ToString();
+
             compRacket.Enabled = false;
             ball.Enabled = false;
+
+            RestartButton.Enabled = false;
+            RestartButton.Hide();
+
+            userRacket.Enabled = true;
+            userRacket.Focus();
         }
 
         private void TennisMainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            gameStatus = GAME_STATUS.STOP;
+            gameStatus = GAME_STATUS.END;
             mainMenu.Show();
         }
 
@@ -56,6 +69,11 @@ namespace childhood_games_pack.tennis
             Point leftPoint = new Point(0, TablePanel.Height / 2);
             Point rightPoint = new Point(TablePanel.Width, TablePanel.Height / 2);
             table.DrawLine(whitePen, leftPoint, rightPoint);
+        }
+
+        private void RestartButton_Click(object sender, System.EventArgs e)
+        {
+            StartGame();
         }
     }
 
