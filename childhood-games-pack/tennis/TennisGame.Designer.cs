@@ -28,6 +28,7 @@
             this.UserScoreLabel = new System.Windows.Forms.Label();
             this.CompScoreHeaderLabel = new System.Windows.Forms.Label();
             this.CompScoreLabel = new System.Windows.Forms.Label();
+            this.RestartButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // TablePanel
@@ -77,11 +78,22 @@
             this.CompScoreLabel.Size = new System.Drawing.Size(0, 25);
             this.CompScoreLabel.TabIndex = 4;
             // 
+            // RestartButton
+            // 
+            this.RestartButton.Location = new System.Drawing.Point(296, 235);
+            this.RestartButton.Name = "RestartButton";
+            this.RestartButton.Size = new System.Drawing.Size(75, 51);
+            this.RestartButton.TabIndex = 5;
+            this.RestartButton.Text = "Start new game";
+            this.RestartButton.UseVisualStyleBackColor = true;
+            this.RestartButton.Click += new System.EventHandler(this.RestartButton_Click);
+            // 
             // TennisGame
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(484, 461);
+            this.Controls.Add(this.RestartButton);
             this.Controls.Add(this.CompScoreLabel);
             this.Controls.Add(this.CompScoreHeaderLabel);
             this.Controls.Add(this.UserScoreLabel);
@@ -102,5 +114,6 @@
         public System.Windows.Forms.Label UserScoreLabel;
         private System.Windows.Forms.Label CompScoreHeaderLabel;
         public System.Windows.Forms.Label CompScoreLabel;
+        public System.Windows.Forms.Button RestartButton;
     }
 }

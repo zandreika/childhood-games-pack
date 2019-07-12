@@ -15,7 +15,6 @@ namespace childhood_games_pack.tennis
             this.tennisGame = tennisGame;
             Size = new Size(45, 15);
             Location = new Point(tennisGame.TablePanel.Width / 2 - Size.Width / 2, tennisGame.TablePanel.Height - Size.Height);
-
         }
 
         private void Racket_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
@@ -67,7 +66,7 @@ namespace childhood_games_pack.tennis
 
         private void Shoot()
         {
-            if (tennisGame.ball.isStay)
+            if (tennisGame.ball.isStay && tennisGame.gameStatus == GAME_STATUS.IN_GAME)
             {
                 tennisGame.ball.isStay = false;
                 lastKickXTrajectory = 0;
