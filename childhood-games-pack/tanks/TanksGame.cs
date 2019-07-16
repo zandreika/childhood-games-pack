@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Runtime.InteropServices;
 using childhood_games_pack.tanks.Utils;
 
 namespace childhood_games_pack.tanks
@@ -76,22 +75,12 @@ namespace childhood_games_pack.tanks
         private UserBase userBase;
 
         private static bool isReadyToShoot = true;
-        private static bool isCompReadyToShoot = true;
+        private List<CompTank> TanksReadyToShoot = new List<CompTank>();
 
         private static GAME_STATUS GameStatus { get; set; }
 
         private MainMenuForm MainMenu { get; set; }
         private List<Button> buttons = new List<Button>();
-
-        [DllImport("user32.dll")]
-        private static extern void keybd_event(byte bVk, byte bScan, int dwFlags, int dwExtraInfo);
-
-        private const int KEYEVENTF_EXTENDEDKEY = 1;
-
-        public static void ShootKeyDown(Keys vKey)
-        {
-            keybd_event((byte)vKey, 0, KEYEVENTF_EXTENDEDKEY, 0);
-        }
 
         public TanksGame(MainMenuForm mainMenu)
         {
@@ -159,6 +148,7 @@ namespace childhood_games_pack.tanks
             Controls.Add(userTank);
             userTank.Show();
 
+            /*
             var compSpot = new Point(gameFieldLocationX, gameFieldLocationY);
             var compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot, new DummyStrategy());
             compTanks.Add(compTank);
@@ -170,26 +160,28 @@ namespace childhood_games_pack.tanks
             compTanks.Add(compTank);
             Controls.Add(compTank);
             compTank.Show();
+            */
 
-            compSpot = new Point(gameFieldLocationX + 200, gameFieldLocationY);
-            compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot, new DummyStrategy());
+            var compSpot = new Point(gameFieldLocationX + 200, gameFieldLocationY);
+            var compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot);
+            compTank.SetStrategy(new DummyStrategy());
             compTanks.Add(compTank);
             Controls.Add(compTank);
             compTank.Show();
 
             compSpot = new Point(gameFieldLocationX + 300, gameFieldLocationY);
-            compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot, new DummyStrategy());
+            compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot);
+            compTank.SetStrategy(new UserKillStrategy(compTank, userTank));
             compTanks.Add(compTank);
             Controls.Add(compTank);
             compTank.Show();
-
+            
             compSpot = new Point(gameFieldLocationX + 400, gameFieldLocationY);
-            compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot, new DummyStrategy());
+            compTank = new CompTank(TANK_TYPE.LIGHT, SPEED_LEVEL.HIGHT, compSpot);
+            compTank.SetStrategy(new BaseKillStrategy(compTank, userBase));
             compTanks.Add(compTank);
             Controls.Add(compTank);
             compTank.Show();
-
-
 
             userTank.Focus();
             bulletsMoveWorker.Start();
@@ -293,20 +285,6 @@ namespace childhood_games_pack.tanks
                 gunLabel.Text = "Gun: Reloading";
                 reloadTimer.Start();
                 break;
-
-            case Keys.B:
-                if (compTanks.Count() == 0)
-                {
-                    break;
-                }
-
-                int tankIndex = rnd.Next() % compTanks.Count();
-                bullet = new Bullet(BULLET_TYPE.COMP, compTanks[tankIndex].Direction, GetBarrelLocation(compTanks[tankIndex].Location));
-                bullets.Add(bullet);
-                Controls.Add(bullet);
-                bullet.Show();
-                isCompReadyToShoot = true;
-                break;
             }
         }
 
@@ -328,10 +306,9 @@ namespace childhood_games_pack.tanks
 
                 tank.Direction = tank.Strategy.GetNewDirection();
 
-                if (tank.Strategy.IsNeedShoot() && isCompReadyToShoot == true)
+                if (tank.Strategy.IsNeedShoot())
                 {
-                    isCompReadyToShoot = false;
-                    ShootKeyDown(Keys.B);
+                    TanksReadyToShoot.Add(tank);
                 }
 
                 switch (tank.Direction)
@@ -389,6 +366,16 @@ namespace childhood_games_pack.tanks
                     break;
                 }
             }
+
+            foreach (var tank in TanksReadyToShoot)
+            {
+                var bullet = new Bullet(BULLET_TYPE.COMP, tank.Direction, GetBarrelLocation(tank.Location));
+                bullets.Add(bullet);
+                Controls.Add(bullet);
+                bullet.Show();
+            }
+
+            TanksReadyToShoot.Clear();
         }
 
         private void ResultGameChecker_Tick(object sender, EventArgs e)
@@ -546,5 +533,7 @@ namespace childhood_games_pack.tanks
         {
             return new Point(TankLocation.X + tankWidth / 2, TankLocation.Y + tankHeight / 2);
         }
+
+        
     }
 }
