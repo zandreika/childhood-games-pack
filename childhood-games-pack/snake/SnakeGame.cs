@@ -115,7 +115,7 @@ namespace childhood_games_pack.snake {
 
             if (block == foodPoint) {
                 score += 10;
-                resLabel.Text = score.ToString();
+                this.InvokeIfNeeded(() => resLabel.Text = score.ToString());
 
                 snakeBlocks.Add(snakeBlocks[snakeBlocks.Count - 1]);
                 createFood();
@@ -144,7 +144,7 @@ namespace childhood_games_pack.snake {
             snakeBackgroundWorker.CancelAsync();
 
             startGameButton.Enabled = true;
-            startGameButton.Show();
+            this.InvokeIfNeeded(() => startGameButton.Show());
         }
 
         private Point createStartSnakeBlocks() {
@@ -334,6 +334,17 @@ namespace childhood_games_pack.snake {
                 startGame = true;
                 snakePanel.Focus();
                 pauseGameButton.Text = "Pause game";
+            }
+        }
+    }
+
+    public static class ControlExtentions {
+        public static void InvokeIfNeeded(this Control control, Action doit) {
+            if (control.InvokeRequired) {
+                control.Invoke(doit);
+            }
+            else {
+                doit();
             }
         }
     }
