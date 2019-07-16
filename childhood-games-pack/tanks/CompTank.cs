@@ -13,7 +13,7 @@ namespace childhood_games_pack.tanks
 
         public ICompTankStrategy Strategy { get; set; }
 
-        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point location, ICompTankStrategy strategy)
+        public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point location)
         {
             InitializeComponent();
             SetTopLevel(false);
@@ -22,12 +22,16 @@ namespace childhood_games_pack.tanks
             Type = type;
             SpeedLevel = speedLevel;
             Direction = DIRECTION.D;
-            Strategy = strategy;
 
             Shape();
 
             Location = location;
             Size = new Size(TanksGame.tankWidth, TanksGame.tankHeight);
+        }
+
+        public void SetStrategy(ICompTankStrategy strategy)
+        {
+            Strategy = strategy;
         }
 
         //! Change shape of form depending on the tank-type.
