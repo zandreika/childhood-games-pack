@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace childhood_games_pack.snake {
@@ -31,7 +26,7 @@ namespace childhood_games_pack.snake {
 
         private int startSpeed;
         private int score;
-        private int snakeDirection;
+        private SNAKE_DIRECTION snakeDirection;
 
         public SnakeGame(MainMenuForm mainMenu) {
             InitializeComponent();
@@ -120,7 +115,7 @@ namespace childhood_games_pack.snake {
 
             if (block == foodPoint) {
                 score += 10;
-                resLabel.Text = score.ToString();
+                this.InvokeIfNeeded(() => resLabel.Text = score.ToString());
 
                 snakeBlocks.Add(snakeBlocks[snakeBlocks.Count - 1]);
                 createFood();
@@ -149,7 +144,7 @@ namespace childhood_games_pack.snake {
             snakeBackgroundWorker.CancelAsync();
 
             startGameButton.Enabled = true;
-            startGameButton.Show();
+            this.InvokeIfNeeded(() => startGameButton.Show());
         }
 
         private Point createStartSnakeBlocks() {
@@ -197,42 +192,42 @@ namespace childhood_games_pack.snake {
                 case Keys.A:
                 case Keys.Left:
                     e.IsInputKey = true;
-                    if (snakeDirection == (int)SNAKE_DIRECTION.RIGHT || 
-                        snakeDirection == (int)SNAKE_DIRECTION.STOP) {
+                    if (snakeDirection == SNAKE_DIRECTION.RIGHT || 
+                        snakeDirection == SNAKE_DIRECTION.STOP) {
                         break;
                     }
 
-                    snakeDirection = (int)SNAKE_DIRECTION.LEFT;
+                    snakeDirection = SNAKE_DIRECTION.LEFT;
                     break;
 
                 case Keys.D:
                 case Keys.Right:
                     e.IsInputKey = true;
-                    if (snakeDirection == (int)SNAKE_DIRECTION.LEFT) {
+                    if (snakeDirection == SNAKE_DIRECTION.LEFT) {
                         break;
                     }
 
-                    snakeDirection = (int)SNAKE_DIRECTION.RIGHT;
+                    snakeDirection = SNAKE_DIRECTION.RIGHT;
                     break;
 
                 case Keys.S:
                 case Keys.Down:
                     e.IsInputKey = true;
-                    if (snakeDirection == (int)SNAKE_DIRECTION.UP) {
+                    if (snakeDirection == SNAKE_DIRECTION.UP) {
                         break;
                     }
 
-                    snakeDirection = (int)SNAKE_DIRECTION.DOWN;
+                    snakeDirection = SNAKE_DIRECTION.DOWN;
                     break;
 
                 case Keys.W:
                 case Keys.Up:
                     e.IsInputKey = true;
-                    if (snakeDirection == (int)SNAKE_DIRECTION.DOWN) {
+                    if (snakeDirection == SNAKE_DIRECTION.DOWN) {
                         break;
                     }
 
-                    snakeDirection = (int)SNAKE_DIRECTION.UP;
+                    snakeDirection = SNAKE_DIRECTION.UP;
                     break;
 
                 default:
@@ -242,7 +237,6 @@ namespace childhood_games_pack.snake {
 
         private void reDrawSnake(Point head) {
             List<Point> helpList = new List<Point>();
-            Rectangle rect;
 
             if (head == snakeBlocks[1]) {
                 return;
@@ -268,10 +262,8 @@ namespace childhood_games_pack.snake {
             helpList.Add(head);
             for (int i = 1; i < snakeBlocks.Count; i++) {
                 helpList.Add(snakeBlocks[i - 1]);
-                rect = new Rectangle(helpList[i], new Size(BLOCK_SIZE, BLOCK_SIZE));
             }
-
-            rect = new Rectangle(snakeBlocks[0], new Size(BLOCK_SIZE, BLOCK_SIZE));
+            
             snakeBlocks = helpList;
             
             Rectangle snakeBlock = new Rectangle(topLeft, new Size(bottonRight.X - topLeft.X + BLOCK_SIZE, bottonRight.Y - topLeft.Y + BLOCK_SIZE));
@@ -285,43 +277,47 @@ namespace childhood_games_pack.snake {
                     return;
                 }
 
-                while (snakeDirection == (int)SNAKE_DIRECTION.LEFT && startGame) {
-                    head = new Point(snakeBlocks[0].X - BLOCK_SIZE, snakeBlocks[0].Y);
-                    if (!checkBorderAndFood(head)) {
-                        continue;
+                while (startGame) {
+                    switch (snakeDirection) {
+                        case SNAKE_DIRECTION.LEFT:
+                            head = new Point(snakeBlocks[0].X - BLOCK_SIZE, snakeBlocks[0].Y);
+                            if (!checkBorderAndFood(head)) {
+                                continue;
+                            }
+                            reDrawSnake(head);
+
+                            break;
+
+                        case SNAKE_DIRECTION.RIGHT:
+                            head = new Point(snakeBlocks[0].X + BLOCK_SIZE, snakeBlocks[0].Y);
+                            if (!checkBorderAndFood(head)) {
+                                continue;
+                            }
+                            reDrawSnake(head);
+
+                            break;
+
+                        case SNAKE_DIRECTION.UP:
+                            head = new Point(snakeBlocks[0].X, snakeBlocks[0].Y - BLOCK_SIZE);
+                            if (!checkBorderAndFood(head)) {
+                                continue;
+                            }
+                            reDrawSnake(head);
+
+                            break;
+
+                        case SNAKE_DIRECTION.DOWN:
+                            head = new Point(snakeBlocks[0].X, snakeBlocks[0].Y + BLOCK_SIZE);
+                            if (!checkBorderAndFood(head)) {
+                                continue;
+                            }
+                            reDrawSnake(head);
+
+                            break;
                     }
-                    reDrawSnake(head);
 
                     Thread.Sleep(startSpeed);
                 }
-                while (snakeDirection == (int)SNAKE_DIRECTION.RIGHT && startGame) {
-                    head = new Point(snakeBlocks[0].X + BLOCK_SIZE, snakeBlocks[0].Y);
-                    if (!checkBorderAndFood(head)) {
-                        continue;
-                    }
-                    reDrawSnake(head);
-
-                    Thread.Sleep(startSpeed);
-                }
-                while (snakeDirection == (int)SNAKE_DIRECTION.UP && startGame) {
-                    head = new Point(snakeBlocks[0].X, snakeBlocks[0].Y - BLOCK_SIZE);
-                    if (!checkBorderAndFood(head)) {
-                        continue;
-                    }
-                    reDrawSnake(head);
-
-                    Thread.Sleep(startSpeed);
-                }
-                while (snakeDirection == (int)SNAKE_DIRECTION.DOWN && startGame) {
-                    head = new Point(snakeBlocks[0].X, snakeBlocks[0].Y + BLOCK_SIZE);
-                    if (!checkBorderAndFood(head)) {
-                        continue;
-                    }
-                    reDrawSnake(head);
-
-                    Thread.Sleep(startSpeed);
-                }
-
             }
         }
 
@@ -338,6 +334,17 @@ namespace childhood_games_pack.snake {
                 startGame = true;
                 snakePanel.Focus();
                 pauseGameButton.Text = "Pause game";
+            }
+        }
+    }
+
+    public static class ControlExtentions {
+        public static void InvokeIfNeeded(this Control control, Action doit) {
+            if (control.InvokeRequired) {
+                control.Invoke(doit);
+            }
+            else {
+                doit();
             }
         }
     }
