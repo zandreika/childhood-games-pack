@@ -12,18 +12,18 @@ namespace childhood_games_pack.tetris
 
     public partial class TetrisGame : Form
     {
-        private MainMenuForm mainMenu;
-        private Graphics tetrisGamePanelCanvas;
-        private Graphics nextFigurePanelCanvas;
+        MainMenuForm mainMenu;
+        Graphics tetrisGamePanelCanvas;
+        Graphics nextFigurePanelCanvas;
 
-        private Figure currentFigure;
-        private Figure nextFigure;
+        Figure currentFigure;
+        Figure nextFigure;
 
-        private List<KeyValuePair<Point, Brush>> cubes;
-        private byte[,] occupatedMap = new byte[20, 10];
+        List<KeyValuePair<Point, Brush>> cubes;
+        byte[,] occupatedMap = new byte[20, 10];
 
-        private int gameSpeed;
-        private int gameScore;
+        int gameSpeed;
+        int gameScore;
 
 
         public TetrisGame(MainMenuForm mainMenu)

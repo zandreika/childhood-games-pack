@@ -13,11 +13,11 @@ namespace childhood_games_pack.tetris
     public class Figure
     {
         public Panel workspace;
-        private FIGURE_TYPE figureType;
+        FIGURE_TYPE figureType;
         public List<Point> cubes;
         public static int CUBE_SIZE;
         public bool isStay;
-        private FIGURE_ROTATING_STATE rotatingState;
+        FIGURE_ROTATING_STATE rotatingState;
 
         public Figure(Panel workspace, FIGURE_TYPE figureType)
         {
