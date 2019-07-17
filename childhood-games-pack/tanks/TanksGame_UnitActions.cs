@@ -11,6 +11,7 @@ namespace childhood_games_pack.tanks
     {
         AtomicList<CompTank> compTanks = new AtomicList<CompTank>();
         AtomicList<Bullet> bullets = new AtomicList<Bullet>();
+        AtomicList<Wall> walls = new AtomicList<Wall>();
 
         UserTank userTank;
         bool isUserTankAlive;
@@ -171,11 +172,22 @@ namespace childhood_games_pack.tanks
                 }
 
                 Point bulletCenter = new Point(b.Location.X + bulletHeight / 2, b.Location.Y + bulletWidth / 2);
-
-                if (bulletCenter.X >= userBase.Location.X && bulletCenter.X <= userBase.Location.X + 70 &&
-                    bulletCenter.Y >= userBase.Location.Y && bulletCenter.Y <= userBase.Location.Y + 70)
+                foreach (var wall in walls)
                 {
+                    if (bulletCenter.X >= wall.Location.X && bulletCenter.X <= wall.Location.X + wallWidth &&
+                        bulletCenter.Y >= wall.Location.Y && bulletCenter.Y <= wall.Location.Y + wallHeight)
+                    {
+                        walls.Remove(wall);
+                        Controls.Remove(wall);
+                        bullets.Remove(b);
+                        b.Close();
+                        break;
+                    }
+                }
 
+                if (bulletCenter.X >= userBase.Location.X && bulletCenter.X <= userBase.Location.X + baseWidth &&
+                    bulletCenter.Y >= userBase.Location.Y && bulletCenter.Y <= userBase.Location.Y + baseHeight)
+                {
                     isUserTankAlive = false;
                     userBase.Close();
                     bullets.Remove(b);

@@ -2,25 +2,33 @@
 {
     public enum GAME_STATUS : int
     {
-        LEVEL_SELECT = 0,
-        GAME_STARTED = 1,
-        GAME_PAUSED = 2
+        LEVEL_SELECT    = 0,
+        GAME_STARTED    = 1,
+        GAME_PAUSED     = 2
     }
 
     public enum TANK_TYPE : int
     {
-        NONE = 0,
-        LIGHT = 1,
-        MEDIUM = 2,
-        HEAVY = 3
+        NONE    = 0,
+        LIGHT   = 1,
+        MEDIUM  = 2,
+        HEAVY   = 3
+    }
+
+    public enum WALL_TYPE : int
+    {
+        NONE    = 0,
+        LIGHT   = 1,
+        MEDIUM  = 2,
+        HEAVY   = 3
     }
 
     public enum SPEED_LEVEL : int
     {
-        NONE = 0,
-        LOW = 1,
-        MEDIUM = 2,
-        HIGHT = 3
+        NONE    = 0,
+        LOW     = 1,
+        MEDIUM  = 2,
+        HIGHT   = 3
     }
 
     public enum DIRECTION : int
@@ -39,17 +47,20 @@
 
     public partial class TanksGame
     {
-        public const int gameFieldWidth = 1200;
+        public const int gameFieldWidth  = 1200;
         public const int gameFieldHeight = 700;
-        public const int gameFieldLocationX = 50;
-        public const int gameFieldLocationY = 50;
+        public const int gameFieldLocationX = 25;
+        public const int gameFieldLocationY = 25;
+
+        public const int wallWidth  = 25;
+        public const int wallHeight = 25;
 
         public const int tankHeight = 50;
-        public const int tankWidth = 50;
+        public const int tankWidth  = 50;
         public const int bulletHeight = 8;
-        public const int bulletWidth = 8;
-        public const int baseHeight = 70;
-        public const int baseWidth = 70;
+        public const int bulletWidth  = 8;
+        public const int baseHeight = 50;
+        public const int baseWidth  = 50;
 
         public const int bulletStep = 15;
         public const int bulletStepTimer = 150;
