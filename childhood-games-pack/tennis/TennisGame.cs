@@ -43,7 +43,7 @@ namespace childhood_games_pack.tennis
             GameStatus = GAME_STATUS.IN_GAME;
             UserScore = 0;
             CompScore = 0;
-            ball.Location = new Point(userRacket.Left + userRacket.Size.Width / 2 - Size.Width / 2, userRacket.Top - userRacket.Size.Height);
+            Ball.Location = new Point(UserRacket.Left + UserRacket.Size.Width / 2 - Size.Width / 2, UserRacket.Top - UserRacket.Size.Height);
 
             UserScoreLabel.Text = UserScore.ToString();
             CompScoreLabel.Text = CompScore.ToString();
