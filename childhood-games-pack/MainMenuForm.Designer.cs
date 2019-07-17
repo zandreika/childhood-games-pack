@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainMenuForm));
             this.tanksGameButton = new System.Windows.Forms.Button();
             this.tetrisGameButton = new System.Windows.Forms.Button();
             this.tennisGameButton = new System.Windows.Forms.Button();
@@ -35,6 +36,7 @@
             this.tennisButtonLogo = new System.Windows.Forms.Panel();
             this.tetrisButtonLogo = new System.Windows.Forms.Panel();
             this.tanksButtonLogo = new System.Windows.Forms.Panel();
+            this.snakeButtonLogo = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
             // tanksGameButton
@@ -72,9 +74,9 @@
             // 
             // snakeGameButton
             // 
-            this.snakeGameButton.Location = new System.Drawing.Point(50, 228);
+            this.snakeGameButton.Location = new System.Drawing.Point(93, 228);
             this.snakeGameButton.Name = "snakeGameButton";
-            this.snakeGameButton.Size = new System.Drawing.Size(232, 46);
+            this.snakeGameButton.Size = new System.Drawing.Size(189, 46);
             this.snakeGameButton.TabIndex = 3;
             this.snakeGameButton.Text = "snake";
             this.snakeGameButton.UseVisualStyleBackColor = true;
@@ -108,11 +110,21 @@
             this.tanksButtonLogo.Size = new System.Drawing.Size(38, 41);
             this.tanksButtonLogo.TabIndex = 4;
             // 
+            // snakeButtonLogo
+            // 
+            this.snakeButtonLogo.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("snakeButtonLogo.BackgroundImage")));
+            this.snakeButtonLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.snakeButtonLogo.Location = new System.Drawing.Point(50, 228);
+            this.snakeButtonLogo.Name = "snakeButtonLogo";
+            this.snakeButtonLogo.Size = new System.Drawing.Size(38, 41);
+            this.snakeButtonLogo.TabIndex = 7;
+            // 
             // MainMenuForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(372, 431);
+            this.Controls.Add(this.snakeButtonLogo);
             this.Controls.Add(this.tennisButtonLogo);
             this.Controls.Add(this.tetrisButtonLogo);
             this.Controls.Add(this.tanksButtonLogo);
@@ -136,6 +148,7 @@
         private System.Windows.Forms.Panel tanksButtonLogo;
         private System.Windows.Forms.Panel tetrisButtonLogo;
         private System.Windows.Forms.Panel tennisButtonLogo;
+        private System.Windows.Forms.Panel snakeButtonLogo;
     }
 }
 
