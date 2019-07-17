@@ -32,6 +32,7 @@
             this.tetrisGameButton = new System.Windows.Forms.Button();
             this.tennisGameButton = new System.Windows.Forms.Button();
             this.snakeGameButton = new System.Windows.Forms.Button();
+            this.tennisButtonLogo = new System.Windows.Forms.Panel();
             this.tetrisButtonLogo = new System.Windows.Forms.Panel();
             this.tanksButtonLogo = new System.Windows.Forms.Panel();
             this.SuspendLayout();
@@ -60,10 +61,10 @@
             // 
             // tennisGameButton
             // 
-            this.tennisGameButton.Location = new System.Drawing.Point(50, 167);
+            this.tennisGameButton.Location = new System.Drawing.Point(93, 167);
             this.tennisGameButton.Margin = new System.Windows.Forms.Padding(2);
             this.tennisGameButton.Name = "tennisGameButton";
-            this.tennisGameButton.Size = new System.Drawing.Size(232, 46);
+            this.tennisGameButton.Size = new System.Drawing.Size(189, 41);
             this.tennisGameButton.TabIndex = 2;
             this.tennisGameButton.Text = "tennis";
             this.tennisGameButton.UseVisualStyleBackColor = true;
@@ -78,6 +79,15 @@
             this.snakeGameButton.Text = "snake";
             this.snakeGameButton.UseVisualStyleBackColor = true;
             this.snakeGameButton.Click += new System.EventHandler(this.SnakeGameButton_Click);
+            // 
+            // tennisButtonLogo
+            // 
+            this.tennisButtonLogo.BackgroundImage = global::childhood_games_pack.Properties.Resources.tennis_logo;
+            this.tennisButtonLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.tennisButtonLogo.Location = new System.Drawing.Point(50, 167);
+            this.tennisButtonLogo.Name = "tennisButtonLogo";
+            this.tennisButtonLogo.Size = new System.Drawing.Size(38, 41);
+            this.tennisButtonLogo.TabIndex = 6;
             // 
             // tetrisButtonLogo
             // 
@@ -103,6 +113,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(372, 431);
+            this.Controls.Add(this.tennisButtonLogo);
             this.Controls.Add(this.tetrisButtonLogo);
             this.Controls.Add(this.tanksButtonLogo);
             this.Controls.Add(this.snakeGameButton);
@@ -124,6 +135,7 @@
         private System.Windows.Forms.Button snakeGameButton;
         private System.Windows.Forms.Panel tanksButtonLogo;
         private System.Windows.Forms.Panel tetrisButtonLogo;
+        private System.Windows.Forms.Panel tennisButtonLogo;
     }
 }
 

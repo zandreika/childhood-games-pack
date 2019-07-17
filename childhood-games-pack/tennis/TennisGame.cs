@@ -6,12 +6,12 @@ namespace childhood_games_pack.tennis
     public enum GAME_STATUS { IN_GAME, STOP, END };
     public partial class TennisGame : Form
     {
-        private MainMenuForm mainMenu;
-        private Graphics table { get; }
-        public UserRacket userRacket { get; }
-        public CompRacket compRacket { get; }
-        public Ball ball { get; }
-        public GAME_STATUS gameStatus { get; set; } = GAME_STATUS.STOP;
+        readonly MainMenuForm mainMenu;
+        Graphics Table { get; }
+        public UserRacket UserRacket { get; }
+        public CompRacket CompRacket { get; }
+        public Ball Ball { get; }
+        public GAME_STATUS GameStatus { get; set; } = GAME_STATUS.STOP;
         public int UserScore { get; set; }
         public int CompScore { get; set; }
 
@@ -20,46 +20,46 @@ namespace childhood_games_pack.tennis
             InitializeComponent();
             this.mainMenu = mainMenu;
 
-            table = TablePanel.CreateGraphics();
+            Table = TablePanel.CreateGraphics();
 
-            userRacket = new UserRacket(this);
-            compRacket = new CompRacket(this);
-            ball = new Ball(this);
+            UserRacket = new UserRacket(this);
+            CompRacket = new CompRacket(this);
+            Ball = new Ball(this);
 
-            TablePanel.Controls.Add(userRacket);
-            TablePanel.Controls.Add(compRacket);
-            TablePanel.Controls.Add(ball);
+            TablePanel.Controls.Add(UserRacket);
+            TablePanel.Controls.Add(CompRacket);
+            TablePanel.Controls.Add(Ball);
 
-            userRacket.Show();
-            compRacket.Show();
-            ball.Show();
+            UserRacket.Show();
+            CompRacket.Show();
+            Ball.Show();
 
-            userRacket.Enabled = false;
+            UserRacket.Enabled = false;
             RestartButton.Focus();
         }
 
         private void StartGame()
         {
-            gameStatus = GAME_STATUS.IN_GAME;
+            GameStatus = GAME_STATUS.IN_GAME;
             UserScore = 0;
             CompScore = 0;
 
             UserScoreLabel.Text = UserScore.ToString();
             CompScoreLabel.Text = CompScore.ToString();
 
-            compRacket.Enabled = false;
-            ball.Enabled = false;
+            CompRacket.Enabled = false;
+            Ball.Enabled = false;
 
             RestartButton.Enabled = false;
             RestartButton.Hide();
 
-            userRacket.Enabled = true;
-            userRacket.Focus();
+            UserRacket.Enabled = true;
+            UserRacket.Focus();
         }
 
         private void TennisMainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
-            gameStatus = GAME_STATUS.END;
+            GameStatus = GAME_STATUS.END;
             mainMenu.Show();
         }
 
@@ -68,7 +68,7 @@ namespace childhood_games_pack.tennis
             Pen whitePen = new Pen(Color.White, 3);
             Point leftPoint = new Point(0, TablePanel.Height / 2);
             Point rightPoint = new Point(TablePanel.Width, TablePanel.Height / 2);
-            table.DrawLine(whitePen, leftPoint, rightPoint);
+            Table.DrawLine(whitePen, leftPoint, rightPoint);
         }
 
         private void RestartButton_Click(object sender, System.EventArgs e)
