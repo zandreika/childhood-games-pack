@@ -74,6 +74,16 @@ namespace childhood_games_pack.tanks
             }
         }
 
+        private void DrawGameField()
+        {
+            var canvas = CreateGraphics();
+            var pen = new Pen(Brushes.Black, 4);
+            canvas.DrawLine(pen, new Point(gameFieldLocationX, gameFieldLocationY), new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY));
+            canvas.DrawLine(pen, new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY), new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY + gameFieldHeight));
+            canvas.DrawLine(pen, new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY + gameFieldHeight), new Point(gameFieldLocationX, gameFieldLocationY + gameFieldHeight));
+            canvas.DrawLine(pen, new Point(gameFieldLocationX, gameFieldLocationY + gameFieldHeight), new Point(gameFieldLocationX, gameFieldLocationY));
+        }
+
         private void TanksGame_MouseMove(object sender, MouseEventArgs e)
         {
             if (GameStatus == GAME_STATUS.GAME_STARTED)

@@ -84,16 +84,6 @@ namespace childhood_games_pack.tanks
             compTanksActionWorker.Start();
         }
 
-        private void DrawGameField()
-        {
-            var canvas = CreateGraphics();
-            var pen = new Pen(Brushes.Black, 4);
-            canvas.DrawLine(pen, new Point(gameFieldLocationX, gameFieldLocationY), new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY));
-            canvas.DrawLine(pen, new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY), new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY + gameFieldHeight));
-            canvas.DrawLine(pen, new Point(gameFieldLocationX + gameFieldWidth, gameFieldLocationY + gameFieldHeight), new Point(gameFieldLocationX, gameFieldLocationY + gameFieldHeight));
-            canvas.DrawLine(pen, new Point(gameFieldLocationX, gameFieldLocationY + gameFieldHeight), new Point(gameFieldLocationX, gameFieldLocationY));
-        }
-
         private void DrawBaseWalls(Point baseLocation, WALL_TYPE wallType)
         {
             // Up walls
