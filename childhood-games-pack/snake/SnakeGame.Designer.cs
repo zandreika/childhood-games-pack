@@ -40,8 +40,8 @@
             this.snakePanel.Name = "snakePanel";
             this.snakePanel.Size = new System.Drawing.Size(400, 400);
             this.snakePanel.TabIndex = 0;
-            this.snakePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.snakePanel_Paint);
-            this.snakePanel.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.snakePanel_PreviewKeyDown);
+            this.snakePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.SnakePanel_Paint);
+            this.snakePanel.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.SnakePanel_PreviewKeyDown);
             // 
             // scoreLabel
             // 
@@ -63,7 +63,7 @@
             this.pauseGameButton.TabIndex = 3;
             this.pauseGameButton.Text = "Pause game";
             this.pauseGameButton.UseVisualStyleBackColor = true;
-            this.pauseGameButton.Click += new System.EventHandler(this.pauseGameButton_Click);
+            this.pauseGameButton.Click += new System.EventHandler(this.PauseGameButton_Click);
             // 
             // endGameButton
             // 
@@ -75,7 +75,7 @@
             this.endGameButton.TabIndex = 4;
             this.endGameButton.Text = "End game";
             this.endGameButton.UseVisualStyleBackColor = true;
-            this.endGameButton.Click += new System.EventHandler(this.endGameButton_Click);
+            this.endGameButton.Click += new System.EventHandler(this.EndGameButton_Click);
             // 
             // resLabel
             // 
@@ -96,12 +96,12 @@
             this.startGameButton.TabIndex = 0;
             this.startGameButton.Text = "Start new game";
             this.startGameButton.UseVisualStyleBackColor = true;
-            this.startGameButton.Click += new System.EventHandler(this.startGameButton_Click);
+            this.startGameButton.Click += new System.EventHandler(this.StartGameButton_Click);
             // 
             // snakeBackgroundWorker
             // 
             this.snakeBackgroundWorker.WorkerSupportsCancellation = true;
-            this.snakeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.snakeBackgroundWorker_DoWork);
+            this.snakeBackgroundWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.SnakeBackgroundWorker_DoWork);
             // 
             // SnakeGame
             // 

@@ -9,26 +9,26 @@ namespace childhood_games_pack.snake {
 
     public enum SNAKE_DIRECTION {STOP = 0, LEFT = 1, RIGHT = 2, UP = 3, DOWN = 4 };
 
-    public partial class SnakeGame : Form {
-        private MainMenuForm mainMenu;
+    public partial class SnakeGame : Form 
+    {
+        MainMenuForm mainMenu;
 
-        private Point foodPoint;
-        private List<Point> snakeBlocks;
+        Point foodPoint;
+        List<Point> snakeBlocks;
 
         Random random = new Random();
-        private Graphics snakePanelCanvas;
+        Graphics snakePanelCanvas;
 
-        private int BLOCK_SIZE  = 20;
+        int BLOCK_SIZE  = 20;
+        int initialSnakeSize = 3;
+        bool startGame;
 
-        private int initialSnakeSize = 3;
+        int startSpeed;
+        int score;
+        SNAKE_DIRECTION snakeDirection;
 
-        private bool startGame;
-
-        private int startSpeed;
-        private int score;
-        private SNAKE_DIRECTION snakeDirection;
-
-        public SnakeGame(MainMenuForm mainMenu) {
+        public SnakeGame(MainMenuForm mainMenu)
+        {
             InitializeComponent();
 
             this.mainMenu = mainMenu;
@@ -42,7 +42,8 @@ namespace childhood_games_pack.snake {
             this.DoubleBuffered = true;
         }
 
-        private void startGameButton_Click(object sender, EventArgs e) {
+        void StartGameButton_Click(object sender, EventArgs e)
+        {
             startGameButton.Hide();
 
             snakePanel.Show();
@@ -59,25 +60,28 @@ namespace childhood_games_pack.snake {
             snakePanelCanvas = snakePanel.CreateGraphics();
             snakePanel.Invalidate();
 
-            Point startBlock = createStartSnakeBlocks();
+            Point startBlock = CreateStartSnakeBlocks();
             Rectangle snake;
             snakeBlocks = new List<Point>();
 
-            for (int i = 0; i < initialSnakeSize; i++) {
+            for (int i = 0; i < initialSnakeSize; i++) 
+            {
                 startBlock.X = startBlock.X - BLOCK_SIZE;
                 snakeBlocks.Add(startBlock);//храним координаты блоков
 
                 snake = new Rectangle(startBlock, new Size(BLOCK_SIZE, BLOCK_SIZE));
-                if (i == 0) {
+                if (i == 0)
+                {
                     snakePanelCanvas.FillEllipse(Brushes.DarkCyan, snake);
                     snakePanelCanvas.DrawEllipse(Pens.DarkCyan, snake);
                 }
-                else {
+                else
+                {
                     snakePanelCanvas.DrawEllipse(Pens.DarkCyan, snake);
                 }
             }
 
-            createFood();
+            CreateFood();
             startGame = true; 
 
             snakePanel.Focus();
@@ -85,57 +89,70 @@ namespace childhood_games_pack.snake {
             snakeBackgroundWorker.RunWorkerAsync();
         }
 
-        private void SnakeGame_FormClosing(object sender, FormClosingEventArgs e) {
+        void SnakeGame_FormClosing(object sender, FormClosingEventArgs e)
+        {
             startGame = false;
             snakeBackgroundWorker.CancelAsync();
             mainMenu.Show();
         }
 
-        private bool сheckStartSnake(Point head) {
+        bool СheckStartSnake(Point head) 
+        {
             if (head.X - 2 * BLOCK_SIZE < snakePanel.Left ||
                 head.X + BLOCK_SIZE > snakePanel.Right ||
                 head.Y + BLOCK_SIZE > snakePanel.Bottom ||
-                head.Y < snakePanel.Top) {
+                head.Y < snakePanel.Top)
+            {
                 return false;
             }
             return true;
         }
 
-        private bool checkBorderAndFood(Point block) {
+        bool CheckBorderAndFood(Point block)
+        {
             if (block.X + 3 * BLOCK_SIZE < snakePanel.Left ||
                 block.X + 3 * BLOCK_SIZE > snakePanel.Right ||
                 block.Y + BLOCK_SIZE > snakePanel.Bottom ||
                 block.Y + BLOCK_SIZE < snakePanel.Top ||
-                snakeBlocks.Contains(block)) {
+                snakeBlocks.Contains(block))
+            {
 
-                endGame();
+                EndGame();
 
                 return false;
             }
 
-            if (block == foodPoint) {
+            if (block == foodPoint)
+            {
                 score += 10;
                 this.InvokeIfNeeded(() => resLabel.Text = score.ToString());
 
                 snakeBlocks.Add(snakeBlocks[snakeBlocks.Count - 1]);
-                createFood();
+                CreateFood();
 
-                switch (snakeBlocks.Count) {
-                    case 5:
+                switch (snakeBlocks.Count)
+                {
+                    case 5: {
                         startSpeed = 300;
                         break;
-                    case 10:
+                    }
+
+                    case 10: {
                         startSpeed = 200;
                         break;
-                    case 15:
+                    }
+
+                    case 15: {
                         startSpeed = 100;
                         break;
+                    }
                 }
             }
             return true;
         }
 
-        private void endGame() {
+        void EndGame()
+        {
             startGame = false;
             snakeDirection = (int)SNAKE_DIRECTION.STOP;
 
@@ -147,9 +164,11 @@ namespace childhood_games_pack.snake {
             this.InvokeIfNeeded(() => startGameButton.Show());
         }
 
-        private Point createStartSnakeBlocks() {
+        Point CreateStartSnakeBlocks()
+        {
             Point block = new Point(random.Next() % (snakePanel.Width - BLOCK_SIZE), random.Next() % (snakePanel.Height - BLOCK_SIZE));
-            while (!сheckStartSnake(block) || block.X % BLOCK_SIZE != 0 || block.Y % BLOCK_SIZE != 0) {
+            while (!СheckStartSnake(block) || block.X % BLOCK_SIZE != 0 || block.Y % BLOCK_SIZE != 0)
+            {
                 block.X = random.Next() % snakePanel.Width;
                 block.Y = random.Next() % snakePanel.Height;
             }
@@ -157,10 +176,12 @@ namespace childhood_games_pack.snake {
             return block;
         }
 
-        private void createFood() {
+        void CreateFood()
+        {
             foodPoint = new Point(random.Next() % (snakePanel.Width - BLOCK_SIZE), random.Next() % (snakePanel.Height - BLOCK_SIZE));
 
-            while (snakeBlocks.Contains(foodPoint) || foodPoint.X % BLOCK_SIZE != 0 || foodPoint.Y % BLOCK_SIZE != 0) {
+            while (snakeBlocks.Contains(foodPoint) || foodPoint.X % BLOCK_SIZE != 0 || foodPoint.Y % BLOCK_SIZE != 0)
+            {
                 foodPoint.X = random.Next() % (snakePanel.Width - BLOCK_SIZE);
                 foodPoint.Y = random.Next() % (snakePanel.Height - BLOCK_SIZE);
             }
@@ -169,15 +190,19 @@ namespace childhood_games_pack.snake {
             snakePanel.Invalidate(food);
         }
 
-        private void snakePanel_Paint(object sender, PaintEventArgs e) {
-            for (int i = 0; i < snakeBlocks.Count; i++) {
+        void SnakePanel_Paint(object sender, PaintEventArgs e)
+        {
+            for (int i = 0; i < snakeBlocks.Count; i++)
+            {
                 Rectangle snake = new Rectangle(snakeBlocks[i], new Size(BLOCK_SIZE, BLOCK_SIZE));
 
-                if (i == 0) {
+                if (i == 0)
+                {
                     snakePanelCanvas.FillEllipse(Brushes.DarkCyan, snake);
                     snakePanelCanvas.DrawEllipse(Pens.DarkCyan, snake);
                 }
-                else {
+                else
+                {
                     snakePanelCanvas.DrawEllipse(Pens.DarkCyan, snake);
                 }
             }
@@ -187,80 +212,103 @@ namespace childhood_games_pack.snake {
             snakePanelCanvas.DrawEllipse(Pens.Coral, food);
         }
 
-        private void snakePanel_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e) {
-            switch (e.KeyCode) {
+        void SnakePanel_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
                 case Keys.A:
                 case Keys.Left:
+                { 
                     e.IsInputKey = true;
                     if (snakeDirection == SNAKE_DIRECTION.RIGHT || 
-                        snakeDirection == SNAKE_DIRECTION.STOP) {
+                        snakeDirection == SNAKE_DIRECTION.STOP)
+                    {
                         break;
                     }
 
                     snakeDirection = SNAKE_DIRECTION.LEFT;
                     break;
+                }
 
                 case Keys.D:
                 case Keys.Right:
+                {
                     e.IsInputKey = true;
-                    if (snakeDirection == SNAKE_DIRECTION.LEFT) {
+                    if (snakeDirection == SNAKE_DIRECTION.LEFT)
+                    {
                         break;
                     }
 
                     snakeDirection = SNAKE_DIRECTION.RIGHT;
                     break;
+                }
 
                 case Keys.S:
-                case Keys.Down:
+                case Keys.Down: 
+                { 
                     e.IsInputKey = true;
-                    if (snakeDirection == SNAKE_DIRECTION.UP) {
+                    if (snakeDirection == SNAKE_DIRECTION.UP)
+                    {
                         break;
                     }
 
                     snakeDirection = SNAKE_DIRECTION.DOWN;
                     break;
+                }
 
                 case Keys.W:
-                case Keys.Up:
+                case Keys.Up: 
+                {
                     e.IsInputKey = true;
-                    if (snakeDirection == SNAKE_DIRECTION.DOWN) {
+                    if (snakeDirection == SNAKE_DIRECTION.DOWN)
+                    {
                         break;
                     }
 
                     snakeDirection = SNAKE_DIRECTION.UP;
                     break;
+                }
 
-                default:
+                default: {
                     break;
+                }
             }
         }
 
-        private void reDrawSnake(Point head) {
+        void ReDrawSnake(Point head)
+        {
             List<Point> helpList = new List<Point>();
 
-            if (head == snakeBlocks[1]) {
+            if (head == snakeBlocks[1])
+            {
                 return;
             }
 
             Point topLeft = snakeBlocks[0];
             Point bottonRight = snakeBlocks[0];
-            for (int i = 1; i < snakeBlocks.Count; i++) {
-                if (snakeBlocks[i].X < topLeft.X) {
+            for (int i = 1; i < snakeBlocks.Count; i++)
+            {
+                if (snakeBlocks[i].X < topLeft.X)
+                {
                     topLeft.X = snakeBlocks[i].X;
                 }
-                if (snakeBlocks[i].Y < topLeft.Y) {
+                if (snakeBlocks[i].Y < topLeft.Y)
+                {
                     topLeft.Y = snakeBlocks[i].Y;
                 }
-                if (snakeBlocks[i].X + BLOCK_SIZE > bottonRight.X) {
+                if (snakeBlocks[i].X + BLOCK_SIZE > bottonRight.X)
+                {
                     bottonRight.X = snakeBlocks[i].X + BLOCK_SIZE;
                 }
-                if (snakeBlocks[i].Y + BLOCK_SIZE > bottonRight.Y) {
+                if (snakeBlocks[i].Y + BLOCK_SIZE > bottonRight.Y)
+                {
                     bottonRight.Y = snakeBlocks[i].Y + BLOCK_SIZE;
                 }
             }
 
             helpList.Add(head);
-            for (int i = 1; i < snakeBlocks.Count; i++) {
+            for (int i = 1; i < snakeBlocks.Count; i++)
+            {
                 helpList.Add(snakeBlocks[i - 1]);
             }
             
@@ -270,50 +318,65 @@ namespace childhood_games_pack.snake {
             snakePanel.Invalidate(snakeBlock);
         }
 
-        private void snakeBackgroundWorker_DoWork(object sender, DoWorkEventArgs e) {
+        void SnakeBackgroundWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
             Point head;
-            while (true) {
-                if (snakeBackgroundWorker.CancellationPending) {
+            while (true)
+            {
+                if (snakeBackgroundWorker.CancellationPending)
+                {
                     return;
                 }
 
-                while (startGame) {
+                while (startGame)
+                {
                     switch (snakeDirection) {
-                        case SNAKE_DIRECTION.LEFT:
+                        case SNAKE_DIRECTION.LEFT: {
                             head = new Point(snakeBlocks[0].X - BLOCK_SIZE, snakeBlocks[0].Y);
-                            if (!checkBorderAndFood(head)) {
+                            if (!CheckBorderAndFood(head))
+                            {
                                 continue;
                             }
-                            reDrawSnake(head);
+                            ReDrawSnake(head);
 
                             break;
+                        }
 
-                        case SNAKE_DIRECTION.RIGHT:
+                        case SNAKE_DIRECTION.RIGHT: 
+                        { 
                             head = new Point(snakeBlocks[0].X + BLOCK_SIZE, snakeBlocks[0].Y);
-                            if (!checkBorderAndFood(head)) {
+                            if (!CheckBorderAndFood(head))
+                            {
                                 continue;
                             }
-                            reDrawSnake(head);
+                            ReDrawSnake(head);
 
                             break;
+                        }
 
-                        case SNAKE_DIRECTION.UP:
+                        case SNAKE_DIRECTION.UP: 
+                        { 
                             head = new Point(snakeBlocks[0].X, snakeBlocks[0].Y - BLOCK_SIZE);
-                            if (!checkBorderAndFood(head)) {
+                            if (!CheckBorderAndFood(head))
+                            {
                                 continue;
                             }
-                            reDrawSnake(head);
+                            ReDrawSnake(head);
 
                             break;
+                        }
 
                         case SNAKE_DIRECTION.DOWN:
+                        { 
                             head = new Point(snakeBlocks[0].X, snakeBlocks[0].Y + BLOCK_SIZE);
-                            if (!checkBorderAndFood(head)) {
+                            if (!CheckBorderAndFood(head))
+                            {
                                 continue;
                             }
-                            reDrawSnake(head);
+                            ReDrawSnake(head);
 
                             break;
+                        }
                     }
 
                     Thread.Sleep(startSpeed);
@@ -321,16 +384,20 @@ namespace childhood_games_pack.snake {
             }
         }
 
-        private void endGameButton_Click(object sender, EventArgs e) {
-            endGame();
+        void EndGameButton_Click(object sender, EventArgs e)
+        {
+            EndGame();
         }
 
-        private void pauseGameButton_Click(object sender, EventArgs e) {
-            if (pauseGameButton.Text == "Pause game") {
+        void PauseGameButton_Click(object sender, EventArgs e)
+        {
+            if (pauseGameButton.Text == "Pause game") 
+            {
                 startGame = false;
                 pauseGameButton.Text = "Continue game";
             }
-            else if (pauseGameButton.Text == "Continue game") {
+            else if (pauseGameButton.Text == "Continue game")
+            {
                 startGame = true;
                 snakePanel.Focus();
                 pauseGameButton.Text = "Pause game";
@@ -338,12 +405,16 @@ namespace childhood_games_pack.snake {
         }
     }
 
-    public static class ControlExtentions {
-        public static void InvokeIfNeeded(this Control control, Action doit) {
-            if (control.InvokeRequired) {
+    public static class ControlExtentions
+    {
+        public static void InvokeIfNeeded(this Control control, Action doit)
+        {
+            if (control.InvokeRequired)
+            {
                 control.Invoke(doit);
             }
-            else {
+            else
+            {
                 doit();
             }
         }
