@@ -100,6 +100,9 @@
     <Compile Include="tanks\TanksGame.Designer.cs">
       <DependentUpon>TanksGame.cs</DependentUpon>
     </Compile>
+    <Compile Include="tanks\Unit\Wall.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="tanks\Utils\AtomicList.cs" />
     <Compile Include="tanks\Strategy\BaseKillStrategy.cs" />
     <Compile Include="tanks\Strategy\DummyStrategy.cs" />
@@ -230,6 +233,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="tanks\res\base.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="tanks\res\light_wall.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
