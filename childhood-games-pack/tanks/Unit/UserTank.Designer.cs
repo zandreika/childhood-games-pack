@@ -1,5 +1,7 @@
-﻿namespace childhood_games_pack.tanks {
-    partial class UserBase {
+﻿namespace childhood_games_pack.tanks.Unit
+{
+    partial class UserTank
+    {
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -9,8 +11,10 @@
         /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing) {
-            if (disposing && (components != null)) {
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
                 components.Dispose();
             }
             base.Dispose(disposing);
@@ -22,19 +26,21 @@
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent() {
+        private void InitializeComponent()
+        {
             this.SuspendLayout();
             // 
-            // UserBase
+            // UserTankForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::childhood_games_pack.Properties.Resources._base;
-            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(70, 70);
+            this.BackColor = System.Drawing.SystemColors.Window;
+            this.BackgroundImage = global::childhood_games_pack.Properties.Resources.light_tank;
+            this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.ClientSize = new System.Drawing.Size(60, 60);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Name = "UserBase";
-            this.Text = "UserBase";
+            this.Name = "UserTankForm";
+            this.Text = "TankForm";
             this.ResumeLayout(false);
 
         }

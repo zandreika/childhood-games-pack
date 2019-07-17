@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace childhood_games_pack.tanks.Utils
+namespace childhood_games_pack.tanks.Strategy
 {
     public class DummyStrategy : ICompTankStrategy
     {

@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using childhood_games_pack.tanks.Utils;
+using childhood_games_pack.tanks.Strategy;
 
-namespace childhood_games_pack.tanks
+namespace childhood_games_pack.tanks.Unit
 {
     public partial class CompTank : Form
     {
         public DIRECTION Direction { get; set; }
-        private TANK_TYPE Type { get; set; }
-        private SPEED_LEVEL SpeedLevel { get; set; }
-
         public ICompTankStrategy Strategy { get; set; }
+
+        TANK_TYPE Type { get; set; }
+        SPEED_LEVEL SpeedLevel { get; set; }
 
         public CompTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point location)
         {
