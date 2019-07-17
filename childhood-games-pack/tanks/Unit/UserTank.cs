@@ -2,13 +2,13 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace childhood_games_pack.tanks
+namespace childhood_games_pack.tanks.Unit
 {
     public partial class UserTank : Form
     {
-        private TANK_TYPE Type { get; set; }
-        private SPEED_LEVEL SpeedLevel { get; set; }
         public DIRECTION Direction { get; set; }
+        TANK_TYPE Type { get; set; }
+        SPEED_LEVEL SpeedLevel { get; set; }
 
         public UserTank(TANK_TYPE type, SPEED_LEVEL speedLevel, Point location)
         {

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace childhood_games_pack.tanks
+namespace childhood_games_pack.tanks.Unit
 {
     public partial class UserBase : Form
     {

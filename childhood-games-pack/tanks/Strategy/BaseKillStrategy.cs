@@ -1,23 +1,23 @@
-﻿using System;
+﻿using childhood_games_pack.tanks.Unit;
 
-namespace childhood_games_pack.tanks.Utils
+namespace childhood_games_pack.tanks.Strategy
 {
-    public class UserKillStrategy : ICompTankStrategy
+    public class BaseKillStrategy : ICompTankStrategy
     {
-        UserTank User { get; set; }
+        UserBase UBase { get; set; }
         CompTank Comp { get; set; }
 
-        public UserKillStrategy(CompTank comp, UserTank user)
+        public BaseKillStrategy(CompTank comp, UserBase ubase)
         {
-            User = user;
+            UBase = ubase;
             Comp = comp;
         }
 
         public DIRECTION GetNewDirection()
         {
-            if (Comp.Location.X >= User.Location.X && Comp.Location.X + TanksGame.tankWidth <= User.Location.X + TanksGame.tankWidth)
+            if (Comp.Location.X >= UBase.Location.X && Comp.Location.X + TanksGame.tankWidth <= UBase.Location.X + TanksGame.tankWidth)
             {
-                if (Comp.Location.Y > User.Location.Y)
+                if (Comp.Location.Y > UBase.Location.Y)
                 {
                     return DIRECTION.U;
                 }
@@ -28,7 +28,7 @@ namespace childhood_games_pack.tanks.Utils
             }
             else
             {
-                if (Comp.Location.X < User.Location.X)
+                if (Comp.Location.X < UBase.Location.X)
                 {
                     return DIRECTION.R;
                 }
@@ -41,13 +41,13 @@ namespace childhood_games_pack.tanks.Utils
 
         public bool IsNeedShoot()
         {
-            if (Comp.Location.X >= User.Location.X - 25 && Comp.Location.X + TanksGame.tankWidth <= User.Location.X + TanksGame.tankWidth + 25)
+            if (Comp.Location.X >= UBase.Location.X - 25 && Comp.Location.X + TanksGame.tankWidth <= UBase.Location.X + TanksGame.tankWidth + 25)
             {
-                if (Comp.Location.Y < User.Location.Y && Comp.Direction == DIRECTION.D)
+                if (Comp.Location.Y < UBase.Location.Y && Comp.Direction == DIRECTION.D)
                 {
                     return true;
                 }
-                else if (Comp.Location.Y > User.Location.Y && Comp.Direction == DIRECTION.U)
+                else if (Comp.Location.Y > UBase.Location.Y && Comp.Direction == DIRECTION.U)
                 {
                     return true;
                 }
@@ -56,13 +56,13 @@ namespace childhood_games_pack.tanks.Utils
                     return false;
                 }
             }
-            else if (Comp.Location.Y >= User.Location.Y - 25 && Comp.Location.Y + TanksGame.tankHeight <= User.Location.Y + TanksGame.tankHeight + 25)
+            else if (Comp.Location.Y >= UBase.Location.Y - 25 && Comp.Location.Y + TanksGame.tankHeight <= UBase.Location.Y + TanksGame.tankHeight + 25)
             {
-                if (Comp.Location.X < User.Location.X && Comp.Direction == DIRECTION.R)
+                if (Comp.Location.X < UBase.Location.X && Comp.Direction == DIRECTION.R)
                 {
                     return true;
                 }
-                else if (Comp.Location.X > User.Location.X && Comp.Direction == DIRECTION.L)
+                else if (Comp.Location.X > UBase.Location.X && Comp.Direction == DIRECTION.L)
                 {
                     return true;
                 }
@@ -70,7 +70,7 @@ namespace childhood_games_pack.tanks.Utils
                 {
                     return false;
                 }
-                
+
             }
             else
             {

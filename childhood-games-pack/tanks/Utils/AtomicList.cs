@@ -4,7 +4,7 @@ using System.Threading;
 
 namespace childhood_games_pack.tanks.Utils {
     public class AtomicList<T> : IEnumerable<T> {
-        private List<T> InternalCollection = new List<T>();
+        List<T> InternalCollection = new List<T>();
 
         public int Count() {
             return InternalCollection.Count;

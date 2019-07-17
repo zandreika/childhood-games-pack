@@ -61,28 +61,37 @@
     <Compile Include="snake\SnakeGame.Designer.cs">
       <DependentUpon>SnakeGame.cs</DependentUpon>
     </Compile>
-    <Compile Include="tanks\Bullet.cs">
+    <Compile Include="tanks\TanksGame_Const.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="tanks\Bullet.Designer.cs">
+    <Compile Include="tanks\TanksGame_Levels.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tanks\TanksGame_UnitActions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tanks\Unit\Bullet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="tanks\Unit\Bullet.Designer.cs">
       <DependentUpon>Bullet.cs</DependentUpon>
     </Compile>
-    <Compile Include="tanks\CompTank.cs">
+    <Compile Include="tanks\Unit\CompTank.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="tanks\CompTank.Designer.cs">
+    <Compile Include="tanks\Unit\CompTank.Designer.cs">
       <DependentUpon>CompTank.cs</DependentUpon>
     </Compile>
-    <Compile Include="tanks\UserBase.cs">
+    <Compile Include="tanks\Unit\UserBase.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="tanks\UserBase.Designer.cs">
+    <Compile Include="tanks\Unit\UserBase.Designer.cs">
       <DependentUpon>UserBase.cs</DependentUpon>
     </Compile>
-    <Compile Include="tanks\UserTank.cs">
+    <Compile Include="tanks\Unit\UserTank.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="tanks\UserTank.Designer.cs">
+    <Compile Include="tanks\Unit\UserTank.Designer.cs">
       <DependentUpon>UserTank.cs</DependentUpon>
     </Compile>
     <Compile Include="tanks\TanksGame.cs">
@@ -92,10 +101,10 @@
       <DependentUpon>TanksGame.cs</DependentUpon>
     </Compile>
     <Compile Include="tanks\Utils\AtomicList.cs" />
-    <Compile Include="tanks\Utils\BaseKillStrategy.cs" />
-    <Compile Include="tanks\Utils\DummyStrategy.cs" />
-    <Compile Include="tanks\Utils\ICompTankStrategy.cs" />
-    <Compile Include="tanks\Utils\UserKillStrategy.cs" />
+    <Compile Include="tanks\Strategy\BaseKillStrategy.cs" />
+    <Compile Include="tanks\Strategy\DummyStrategy.cs" />
+    <Compile Include="tanks\Strategy\ICompTankStrategy.cs" />
+    <Compile Include="tanks\Strategy\UserKillStrategy.cs" />
     <Compile Include="tennis\Ball.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -143,16 +152,16 @@
     <EmbeddedResource Include="snake\SnakeGame.resx">
       <DependentUpon>SnakeGame.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="tanks\Bullet.resx">
+    <EmbeddedResource Include="tanks\Unit\Bullet.resx">
       <DependentUpon>Bullet.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="tanks\CompTank.resx">
+    <EmbeddedResource Include="tanks\Unit\CompTank.resx">
       <DependentUpon>CompTank.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="tanks\UserBase.resx">
+    <EmbeddedResource Include="tanks\Unit\UserBase.resx">
       <DependentUpon>UserBase.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="tanks\UserTank.resx">
+    <EmbeddedResource Include="tanks\Unit\UserTank.resx">
       <DependentUpon>UserTank.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="tanks\TanksGame.resx">
