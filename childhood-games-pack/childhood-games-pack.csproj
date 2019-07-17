@@ -237,5 +237,8 @@
   <ItemGroup>
     <None Include="tanks\res\light_wall.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="resources\tetris_logo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
