@@ -58,13 +58,13 @@ namespace childhood_games_pack.tennis
                 case Keys.Up:
                 case Keys.W:
                 {
-                    Shoot();
+                    Serve();
                     break;
                 }
             }
         }
 
-        private void Shoot()
+        private void Serve()
         {
             if (tennisGame.ball.isStay && tennisGame.gameStatus == GAME_STATUS.IN_GAME)
             {

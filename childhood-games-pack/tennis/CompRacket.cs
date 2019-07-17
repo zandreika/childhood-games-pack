@@ -21,7 +21,6 @@ namespace childhood_games_pack.tennis
 
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            //MessageBox.Show("BW");
             Thread.Sleep(200);
             while (tennisGame.gameStatus != GAME_STATUS.END)
             {
