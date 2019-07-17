@@ -7,14 +7,14 @@ namespace childhood_games_pack.tennis
 {
     public partial class CompRacket : Form
     {
-        private TennisGame tennisGame;
+        readonly TennisGame tennisGame;
         public CompRacket(TennisGame tennisGame)
         {
             InitializeComponent();
             SetTopLevel(false);
 
             this.tennisGame = tennisGame;
-            Size = tennisGame.userRacket.Size;
+            Size = tennisGame.UserRacket.Size;
             Location = new Point(tennisGame.TablePanel.Width / 2 - Size.Width / 2, 0);
             backgroundWorker1.RunWorkerAsync();
         }
@@ -22,34 +22,34 @@ namespace childhood_games_pack.tennis
         private void BackgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             Thread.Sleep(200);
-            while (tennisGame.gameStatus != GAME_STATUS.END)
+            while (tennisGame.GameStatus != GAME_STATUS.END)
             {
-                if (!tennisGame.ball.isStay)
+                if (!tennisGame.Ball.isStay)
                 {
-                    if (Location.X + Size.Width / 2 < tennisGame.ball.Location.X)
+                    if (Location.X + Size.Width / 2 < tennisGame.Ball.Location.X)
                     {
-                        if (Right + tennisGame.ball.Width > tennisGame.TablePanel.Width)
+                        if (Right + tennisGame.Ball.Width > tennisGame.TablePanel.Width)
                         {
                             Location = new Point(tennisGame.TablePanel.Width - Size.Width, Location.Y);
                         }
                         else
                         {
-                            Location = new Point(Location.X + tennisGame.ball.Width, Location.Y);
+                            Location = new Point(Location.X + tennisGame.Ball.Width, Location.Y);
                         }
                         if (Location.X + Size.Width / 2 > tennisGame.TablePanel.Width / 2)
                         {
                             BackColor = Color.Black;
                         }
                     }
-                    else if (Location.X + Size.Width / 2 > tennisGame.ball.Location.X)
+                    else if (Location.X + Size.Width / 2 > tennisGame.Ball.Location.X)
                     {
-                        if (Location.X - tennisGame.ball.Width < 0)
+                        if (Location.X - tennisGame.Ball.Width < 0)
                         {
                             Location = new Point(0, Location.Y);
                         }
                         else
                         {
-                            Location = new Point(Location.X - tennisGame.ball.Width, Location.Y);
+                            Location = new Point(Location.X - tennisGame.Ball.Width, Location.Y);
                         }
                         if (Location.X + Size.Width / 2 <= tennisGame.TablePanel.Width / 2)
                         {
@@ -60,10 +60,10 @@ namespace childhood_games_pack.tennis
                 else
                 {
                     Location = new Point(tennisGame.TablePanel.Width / 2 - Size.Width / 2, 0);
-                    if (!tennisGame.ball.userServe)
+                    if (!tennisGame.Ball.userServe)
                     {
                         Thread.Sleep(1000);
-                        tennisGame.ball.isStay = false;
+                        tennisGame.Ball.isStay = false;
                     }
                 }
                 Thread.Sleep(200);
