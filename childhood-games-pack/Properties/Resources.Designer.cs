@@ -193,6 +193,16 @@ namespace childhood_games_pack.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap tennis_logo {
+            get {
+                object obj = ResourceManager.GetObject("tennis_logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap tetris_logo {
             get {
                 object obj = ResourceManager.GetObject("tetris_logo", resourceCulture);

@@ -5,7 +5,7 @@ namespace childhood_games_pack.tennis
 {
     public partial class UserRacket : Form
     {
-        private TennisGame tennisGame;
+        readonly TennisGame tennisGame;
         public int lastKickXTrajectory;
         public UserRacket(TennisGame tennisGame)
         {
@@ -24,7 +24,7 @@ namespace childhood_games_pack.tennis
                 case Keys.Left:
                 case Keys.A:
                 {
-                    Point newLocation = new Point(Location.X - tennisGame.ball.Width / 3, Location.Y);
+                    Point newLocation = new Point(Location.X - tennisGame.Ball.Width / 3, Location.Y);
 
                     if (newLocation.X + Size.Width / 2 < tennisGame.TablePanel.Width / 2)
                     {
@@ -41,7 +41,7 @@ namespace childhood_games_pack.tennis
                 case Keys.Right:
                 case Keys.D:
                 {
-                    Point newLocation = new Point(Location.X + tennisGame.ball.Width / 3, Location.Y);
+                    Point newLocation = new Point(Location.X + tennisGame.Ball.Width / 3, Location.Y);
 
                     if (newLocation.X + Size.Width / 2 >= tennisGame.TablePanel.Width / 2)
                     {
@@ -66,9 +66,9 @@ namespace childhood_games_pack.tennis
 
         private void Shoot()
         {
-            if (tennisGame.ball.isStay && tennisGame.gameStatus == GAME_STATUS.IN_GAME)
+            if (tennisGame.Ball.isStay && tennisGame.GameStatus == GAME_STATUS.IN_GAME)
             {
-                tennisGame.ball.isStay = false;
+                tennisGame.Ball.isStay = false;
                 lastKickXTrajectory = 0;
             }
         }
